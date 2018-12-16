@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "722351385800",
+    "firebase_url": "https://rxjavatest-15f49.firebaseio.com",
+    "project_id": "rxjavatest-15f49",
+    "storage_bucket": "rxjavatest-15f49.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722351385800:android:ea724ed0716a46a0",
+        "android_client_info": {
+          "package_name": "com.cafeteria.free.findcafeteria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "722351385800-ou8n9chh0p1ibmg8gtjeji92r0es3pje.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cafeteria.free.findcafeteria",
+            "certificate_hash": "ccab7da0bdca1c876669673dacb26a8af418842b"
+          }
+        },
+        {
+          "client_id": "722351385800-2ah5hd3eqcst1i0b5fjrnr08oitnuhpv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCokYXiIalXRaAaQ8VufzzE8h7vy3pknPc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "722351385800-2ah5hd3eqcst1i0b5fjrnr08oitnuhpv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
