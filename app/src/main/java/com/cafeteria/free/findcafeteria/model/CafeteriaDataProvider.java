@@ -46,18 +46,12 @@ public class CafeteriaDataProvider {
         });
     }
 
-    public Observable<CafeteriaData> getCafeteriaDataFilteredAddress(String keyword) {
+    public Observable<List<CafeteriaData>> getCafeteriaDataFilteredAddress(String keyword) {
         Logger.d("search from list=" + keyword);
 
         if (TextUtils.isEmpty(keyword)) {
             throw new IllegalArgumentException("Keyword is empty");
         }
-
-//        Observable<CafeteriaData> observable = Observable.fromIterable(cafeteriaDatas);
-//        return observable.filter((data)->
-//           data.getAddress().contains(keyword)
-//                   || data.getAddress2().contains(keyword)
-//        );
 
         List<CafeteriaData> filteredData = cafeteriaDataList.stream().filter( data ->
             data.getAddress().contains(keyword) || data.getAddress2().contains(keyword)
@@ -67,6 +61,6 @@ public class CafeteriaDataProvider {
             throw new IllegalArgumentException("Keyword is invalid : " + keyword);
 
         }
-        return Observable.fromIterable(filteredData);
+        return Observable.just(filteredData);
     }
 }

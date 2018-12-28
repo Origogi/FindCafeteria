@@ -6,13 +6,13 @@ import android.arch.lifecycle.ViewModel;
 
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
 import com.cafeteria.free.findcafeteria.util.Logger;
-import com.jakewharton.rxrelay2.PublishRelay;
 
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 public class CafeteriaViewModel extends ViewModel {
 
@@ -20,7 +20,7 @@ public class CafeteriaViewModel extends ViewModel {
 
     private MutableLiveData<String> cafeteriaInfo;
 
-    private PublishRelay<String> keywordSubject = PublishRelay.create();
+    private PublishSubject<String> keywordSubject = PublishSubject.create();
 
     private Disposable disposable;
 
@@ -40,9 +40,8 @@ public class CafeteriaViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete(()->Logger.d("onComplete()"))
-                .subscribe(data -> {
-                    Logger.d(data.toString());
-                    cafeteriaInfo.setValue(data.toString());
+                .subscribe(cafeteriaDataList -> {
+                    cafeteriaInfo.setValue(cafeteriaDataList.get(0).toString());
                 }, error -> {
                     cafeteriaInfo.setValue(error.getMessage());
                 });
@@ -64,6 +63,6 @@ public class CafeteriaViewModel extends ViewModel {
         }
 
         Logger.d("keyword=" + keyword);
-        keywordSubject.accept(keyword);
+        keywordSubject.onNext(keyword);
     }
 }
