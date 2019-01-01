@@ -16,5 +16,5 @@ public interface KakaoApi {
 
     @GET("/v2/search/image")
     @Headers("Host: dapi.kakao.com")
-    Call<ImageResponse> getImages(@Header("Authorization") String apiKey, @Query("query") String keyword);
+    Observable<ImageResponse> getImages(@Header("Authorization") String apiKey, @Query("query") String keyword);
 }

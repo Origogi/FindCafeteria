@@ -22,9 +22,12 @@ public class ImageResponse {
     }
 
     public static class Meta {
-        int total_count;
-        int pageable_count;
-        boolean is_end;
+        @SerializedName("total_count")
+        int totalCount;
+        @SerializedName("pageable_count")
+        int pageableCount;
+        @SerializedName("is_end")
+        boolean isEnd;
 
         public Meta() {
 
@@ -33,9 +36,9 @@ public class ImageResponse {
         @Override
         public String toString() {
             return "Meta{" +
-                    "total_count=" + total_count +
-                    ", pageable_count=" + pageable_count +
-                    ", is_end=" + is_end +
+                    "totalCount=" + totalCount +
+                    ", pageableCount=" + pageableCount +
+                    ", isEnd=" + isEnd +
                     '}';
         }
     }
@@ -43,12 +46,16 @@ public class ImageResponse {
     public static class ImageInfo {
 
         String collection;
-        String thumbnail_url;
-        String image_url;
-        int  width;
+        @SerializedName("thumbnail_url")
+        String thumbnailUrl;
+        @SerializedName("image_url")
+        String imageUrl;
+        int width;
         int height;
-        String display_sitename;
-        String doc_url;
+        @SerializedName("display_sitename")
+        String displaySitename;
+        @SerializedName("doc_url")
+        String docUrl;
         String datetime;
 
         public ImageInfo() {
@@ -58,12 +65,12 @@ public class ImageResponse {
         public String toString() {
             return "ImageInfo{" +
                     "collection='" + collection + '\'' +
-                    ", thumbnail_url='" + thumbnail_url + '\'' +
-                    ", image_url='" + image_url + '\'' +
+                    ", thumbnailUrl='" + thumbnailUrl + '\'' +
+                    ", imageUrl='" + imageUrl + '\'' +
                     ", width=" + width +
                     ", height=" + height +
-                    ", display_sitename='" + display_sitename + '\'' +
-                    ", doc_url='" + doc_url + '\'' +
+                    ", displaySitename='" + displaySitename + '\'' +
+                    ", docUrl='" + docUrl + '\'' +
                     ", datetime='" + datetime + '\'' +
                     '}';
         }
