@@ -1,47 +1,40 @@
 package com.cafeteria.free.findcafeteria.view;
 
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.KeyListener;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
 import com.cafeteria.free.findcafeteria.R;
+import com.cafeteria.free.findcafeteria.databinding.ActivityTestBinding;
 import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.viewmodel.CafeteriaViewModel;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnTextChanged;
-import io.reactivex.subjects.PublishSubject;
 
 public class TestActivity extends AppCompatActivity {
 
-    private EditText etInput;
-
-   // @BindView(R.id.textView)
-    private TextView tvOutput;
+    // @BindView(R.id.textView)
+    // private EditText etInput;
+    // private TextView tvOutput;
 
     private CafeteriaViewModel viewModel;
-
+    ActivityTestBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
-
+        // FIXME: 2019-01-01 데이터바인딩 추가
+        // setContentView(R.layout.activity_test);
         // ButterKnife.bind(this);
 
-        etInput = findViewById(R.id.editText);
-        tvOutput = findViewById(R.id.textView);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_test);
+        binding.setActivity(this);
 
-        etInput.addTextChangedListener(new TextWatcher() {
+//        etInput = findViewById(R.id.editText);
+//        tvOutput = findViewById(R.id.textView);
+
+        binding.editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -62,7 +55,7 @@ public class TestActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(CafeteriaViewModel.class);
 
         viewModel.getCafeteriaInfo().observe(this, data -> {
-            tvOutput.setText(data);
+            binding.textView.setText(data);
         });
 
 

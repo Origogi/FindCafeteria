@@ -34,15 +34,12 @@ public class CafeteriaDataProvider {
                    Logger.d(cafeteriaData.toString());
                    cafeteriaDataList.add(cafeteriaData);
                 });
-
-            };
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
-
         });
     }
 

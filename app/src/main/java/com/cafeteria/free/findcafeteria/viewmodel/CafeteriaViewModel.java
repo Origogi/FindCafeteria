@@ -28,6 +28,7 @@ public class CafeteriaViewModel extends ViewModel {
 
         cafeteriaDataProvider = new CafeteriaDataProvider();
         initSubject();
+
     }
 
     private void initSubject() {
@@ -65,4 +66,5 @@ public class CafeteriaViewModel extends ViewModel {
         Logger.d("keyword=" + keyword);
         keywordSubject.onNext(keyword);
     }
+
 }
