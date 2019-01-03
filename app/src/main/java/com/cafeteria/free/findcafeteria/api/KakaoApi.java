@@ -2,11 +2,8 @@ package com.cafeteria.free.findcafeteria.api;
 
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
 
-import java.util.Map;
 
 import io.reactivex.Observable;
-import retrofit2.Call;
-import retrofit2.http.FieldMap;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
