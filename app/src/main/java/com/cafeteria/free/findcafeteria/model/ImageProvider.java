@@ -1,7 +1,6 @@
 package com.cafeteria.free.findcafeteria.model;
 
 import com.cafeteria.free.findcafeteria.api.KakaoApi;
-import com.cafeteria.free.findcafeteria.util.Logger;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,7 +41,6 @@ public class ImageProvider {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-               // .subscribe(imageResponse -> Logger.d(imageResponse.toString()));
 
 
     }
