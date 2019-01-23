@@ -35,22 +35,80 @@
 
             <TextView
                 android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/thumbnail"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"
-                android:text="Main title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:text="전국천사무료급식소"
+                android:textColor="@android:color/background_dark"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_below="@id/title"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:text="Sub title"
-                android:layout_marginBottom="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+
+            <GridLayout
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:columnCount="2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/call_img"
+                    android:src="@drawable/ic_place_black_36dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="서울시 용산구"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:src="@drawable/ic_local_phone_black_36dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="010-0000-0000"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="15sp" />
+
+
+                <ImageView
+                    android:src="@drawable/ic_alarm_black_48dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="10:00 ~ 17:00"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="15sp" />
+
+            </GridLayout>
+
+
+
+
+
+
+
 
 
         </RelativeLayout>
