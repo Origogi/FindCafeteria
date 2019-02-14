@@ -14,7 +14,6 @@ import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
 
 import java.util.ArrayList;
 
-import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -47,30 +46,6 @@ public class DetailActivity extends AppCompatActivity {
 
     private void setUiPageViewController() {
 
-        binding.homeslider.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                currentPosition = position;
-                for (int i = 0; i < dotsCount; i++) {
-                    dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
-
-                }
-                if (dots != null) {
-                    dots[currentPosition % 5].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
         dotsCount = images.size();
         dots = new ImageView[dotsCount];
 
@@ -87,5 +62,44 @@ public class DetailActivity extends AppCompatActivity {
             binding.viewPagerCountDots.addView(dots[i], params);
         }
         dots[0].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
+
+        binding.homeslider.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                currentPosition = position;
+                for (int i = 0; i < dotsCount; i++) {
+                    dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
+
+                }
+                if (dots != null) {
+                    dots[currentPosition % dotsCount].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        binding.homeslider.setInterval(5000);
+        binding.homeslider.startAutoScroll(0);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        binding.homeslider.stopAutoScroll();
     }
 }

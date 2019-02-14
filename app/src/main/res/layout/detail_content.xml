@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
                 android:textColor="#000000"
-                android:textSize="8dp"
+                android:textSize="15dp"
                 android:text="제공기관 : 충청북도 청주시"
                 />
 
