@@ -20,24 +20,36 @@ public class CafeteriaDataProvider {
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference().child("records");
 
-    List<CafeteriaData> cafeteriaDataList = new ArrayList<>();
+    private List<CafeteriaData> cafeteriaDataList = new ArrayList<>();
 
-    public CafeteriaDataProvider() {
+    private static CafeteriaDataProvider sCafeteriaDataProvider = new CafeteriaDataProvider();
+
+    private CafeteriaDataProvider() {
+    }
+
+    public static CafeteriaDataProvider getInstance() {
+        return sCafeteriaDataProvider;
+    }
+
+
+    public void startToLoadData(DataLoadListener listener) {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Logger.d("size=" + dataSnapshot.getChildrenCount());
 
-               dataSnapshot.getChildren().forEach((data)-> {
-                   CafeteriaData cafeteriaData = data.getValue(CafeteriaData.class);
-                   Logger.d(cafeteriaData.toString());
-                   cafeteriaDataList.add(cafeteriaData);
+                dataSnapshot.getChildren().forEach((data)-> {
+                    CafeteriaData cafeteriaData = data.getValue(CafeteriaData.class);
+                    Logger.d(cafeteriaData.toString());
+                    cafeteriaDataList.add(cafeteriaData);
+
+                    listener.onComplete(DataLoadState.SUCCESS);
                 });
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                listener.onComplete(DataLoadState.FAIL);
             }
         });
     }

@@ -6,7 +6,6 @@
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
 
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     
@@ -34,7 +33,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/thumbnail"
@@ -42,8 +41,7 @@
                 android:layout_marginTop="10dp"
                 android:text="전국천사무료급식소"
                 android:textColor="@android:color/background_dark"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
 
 
             <GridLayout
@@ -53,13 +51,14 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_below="@+id/title"
+                android:layout_below="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/call_img"
                     android:src="@drawable/ic_place_black_36dp"
+                    android:alpha="0.4"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
 
@@ -68,12 +67,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:id="@+id/address"
                     android:text="서울시 용산구"
-                    android:textColor="@android:color/background_dark"
                     android:textSize="15sp" />
 
                 <ImageView
                     android:src="@drawable/ic_local_phone_black_36dp"
+                    android:alpha="0.4"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
 
@@ -81,13 +81,13 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/phone_number"
                     android:layout_marginLeft="10dp"
                     android:text="010-0000-0000"
-                    android:textColor="@android:color/background_dark"
                     android:textSize="15sp" />
 
-
                 <ImageView
+                    android:alpha="0.4"
                     android:src="@drawable/ic_alarm_black_48dp"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
@@ -97,20 +97,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:id="@+id/time"
                     android:text="10:00 ~ 17:00"
-                    android:textColor="@android:color/background_dark"
                     android:textSize="15sp" />
 
             </GridLayout>
-
-
-
-
-
-
-
-
-
         </RelativeLayout>
 
         

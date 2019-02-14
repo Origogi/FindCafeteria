@@ -27,13 +27,15 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setAdapter(recyclerViewAdapter);
 
 
-        List<CardViewDto> cardViewDtos = new ArrayList<>();
+//        List<CardViewDto> cardViewDtos = new ArrayList<>();
+//
+//        for (int i = 0; i < 3; i++) {
+//            cardViewDtos.add(new CardViewDto(R.drawable.sample, "Main title#" + i , "Sub title#" + i));
+//        }
 
-        for (int i = 0; i < 3; i++) {
-            cardViewDtos.add(new CardViewDto(R.drawable.sample, "Main title#" + i , "Sub title#" + i));
-        }
 
-        recyclerViewAdapter.setCardViewDtos(cardViewDtos);
-        recyclerViewAdapter.notifyDataSetChanged();
+
+//        recyclerViewAdapter.setCardViewDtos(cardViewDtos);
+//        recyclerViewAdapter.notifyDataSetChanged();
     }
 }

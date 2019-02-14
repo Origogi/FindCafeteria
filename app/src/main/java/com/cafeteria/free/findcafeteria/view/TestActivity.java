@@ -53,8 +53,6 @@ public class TestActivity extends AppCompatActivity {
 
         ImageProvider imageProvider = new ImageProvider();
         imageProvider.get("고양이");
-
-
     }
 
 }
