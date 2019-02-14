@@ -37,10 +37,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         CardViewDto cardViewDto = cardViewDtos.get(position);
 
-
         ((CafeViewHolder) holder).imageView.setImageResource(cardViewDto.imageView);
         ((CafeViewHolder) holder).mainTitle.setText(cardViewDto.mainTitle);
-        ((CafeViewHolder) holder).subTitle.setText(cardViewDto.subTitle);
 
     }
 
@@ -52,13 +50,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private class CafeViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView mainTitle;
-        TextView subTitle;
 
         CafeViewHolder(View view) {
             super(view);
             imageView = view.findViewById(R.id.thumbnail);
             mainTitle = view.findViewById(R.id.title);
-            subTitle = view.findViewById(R.id.subtitle);
         }
     }
 
