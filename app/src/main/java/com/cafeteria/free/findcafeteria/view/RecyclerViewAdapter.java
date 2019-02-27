@@ -16,17 +16,12 @@ import java.util.stream.Collectors;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<CardViewDto> cardViewDtos = new ArrayList<>();
+    private List<CafeteriaData> cardViewDtos = new ArrayList<>();
 
     public void setCardViewDtos(List<CafeteriaData> cafeteriaDataList) {
-        this.cardViewDtos = cafeteriaDataList.stream()
-                .map(cafeteriaData -> new CardViewDto(
-                        R.drawable.sample,
-                        cafeteriaData.getFacilityName(),
-                        cafeteriaData.getAddress(),
-                        cafeteriaData.getPhone(),
-                        cafeteriaData.getTime()))
-                .collect(Collectors.toList());
+        this.cardViewDtos = cafeteriaDataList;
+        notifyDataSetChanged();
+
     }
 
     @Override
@@ -39,18 +34,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        CardViewDto cardViewDto = cardViewDtos.get(position);
+        CafeteriaData cardViewDto = cardViewDtos.get(position);
 
-        ((CafeViewHolder) holder).thumbnailIv.setImageResource(cardViewDto.imageView);
-        ((CafeViewHolder) holder).nameTv.setText(cardViewDto.name);
-        ((CafeViewHolder) holder).addressTv.setText(cardViewDto.address);
-        ((CafeViewHolder) holder).phoneNumberTv.setText(cardViewDto.phoneNumber);
-        ((CafeViewHolder) holder).addressTv.setText(cardViewDto.address);
+        //((CafeViewHolder) holder).thumbnailIv.setImageResource(cardViewDto.imageView);
+        ((CafeViewHolder) holder).thumbnailIv.setImageResource(R.drawable.sample);
+        ((CafeViewHolder) holder).nameTv.setText(cardViewDto.getFacilityName());
+        ((CafeViewHolder) holder).addressTv.setText(cardViewDto.getAddress());
+        ((CafeViewHolder) holder).phoneNumberTv.setText(cardViewDto.getPhone());
+        ((CafeViewHolder) holder).timeTv.setText(cardViewDto.getStartTime());
+
     }
 
     @Override
     public int getItemCount() {
         return cardViewDtos.size();
+    }
+
+    public void reset() {
+        cardViewDtos.clear();
+        notifyDataSetChanged();
     }
 
     private class CafeViewHolder extends RecyclerView.ViewHolder {
@@ -65,7 +67,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(view);
             nameTv = view.findViewById(R.id.name);
             thumbnailIv = view.findViewById(R.id.thumbnail);
-            addressTv = view.findViewById(R.id.title);
+            addressTv = view.findViewById(R.id.address);
             phoneNumberTv = view.findViewById(R.id.phone_number);
             timeTv = view.findViewById(R.id.time);
         }

@@ -4,16 +4,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.SearchView;
 
 import com.cafeteria.free.findcafeteria.R;
+import com.cafeteria.free.findcafeteria.model.CafeteriaData;
+import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
+import com.cafeteria.free.findcafeteria.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 
 public class SearchActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +35,29 @@ public class SearchActivity extends AppCompatActivity {
         recyclerViewAdapter = new RecyclerViewAdapter();
         recyclerView.setAdapter(recyclerViewAdapter);
 
+        searchView = findViewById(R.id.searchView);
 
-//        List<CardViewDto> cardViewDtos = new ArrayList<>();
-//
-//        for (int i = 0; i < 3; i++) {
-//            cardViewDtos.add(new CardViewDto(R.drawable.sample, "Main title#" + i , "Sub title#" + i));
-//        }
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Logger.d(query);
 
+                Observable<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(query);
+                observable
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(list -> updateRecycleView(list));
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
 
-//        recyclerViewAdapter.setCardViewDtos(cardViewDtos);
-//        recyclerViewAdapter.notifyDataSetChanged();
+    private void updateRecycleView(List<CafeteriaData> list) {
+        recyclerViewAdapter.reset();
+        recyclerViewAdapter.setCardViewDtos(list);
     }
 }
