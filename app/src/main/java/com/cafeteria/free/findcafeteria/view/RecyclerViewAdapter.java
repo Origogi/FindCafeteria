@@ -1,5 +1,6 @@
 package com.cafeteria.free.findcafeteria.view;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.CafeteriaData;
+import com.cafeteria.free.findcafeteria.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         CafeteriaData cardViewDto = cardViewDtos.get(position);
 
+        ((CafeViewHolder) holder).position = position;
         //((CafeViewHolder) holder).thumbnailIv.setImageResource(cardViewDto.imageView);
         ((CafeViewHolder) holder).thumbnailIv.setImageResource(R.drawable.sample);
         ((CafeViewHolder) holder).nameTv.setText(cardViewDto.getFacilityName());
@@ -63,6 +66,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView phoneNumberTv;
         TextView timeTv;
 
+        int position;
+
         CafeViewHolder(View view) {
             super(view);
             nameTv = view.findViewById(R.id.name);
@@ -70,6 +75,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             addressTv = view.findViewById(R.id.address);
             phoneNumberTv = view.findViewById(R.id.phone_number);
             timeTv = view.findViewById(R.id.time);
+
+            view.setOnClickListener(v ->{
+                Logger.d("clicked" + cardViewDtos.get(position).toString());
+                Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                intent.putExtra("data", cardViewDtos.get(position));
+                v.getContext().startActivity(intent);
+            });
         }
     }
 

@@ -10,7 +10,9 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityDetailBinding;
+import com.cafeteria.free.findcafeteria.model.CafeteriaData;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
+import com.cafeteria.free.findcafeteria.util.Logger;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,9 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_detail);
         binding.setActivity(this);
+
+        CafeteriaData cafeteriaData = getIntent().getParcelableExtra("data");
+        Logger.d(cafeteriaData.toString());
 
         imageSliderAdapter = new ImageSliderAdapter(this, images, Glide.with(this));
 

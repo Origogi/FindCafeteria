@@ -1,5 +1,8 @@
 package com.cafeteria.free.findcafeteria.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 //    address:
 //            "충청북도 청주시 상당구 원봉로 52(용암동)"
 //    address2:
@@ -32,7 +35,7 @@ package com.cafeteria.free.findcafeteria.model;
 //            "저소득층 노인"
 //    time:
 //            "11:30~12:30"
-public class CafeteriaData {
+public class CafeteriaData implements Parcelable {
 
     private String address = "";
     private String address2 = "";
@@ -88,6 +91,35 @@ public class CafeteriaData {
     public CafeteriaData() {
     }
 
+
+    protected CafeteriaData(Parcel in) {
+        address = in.readString();
+        address2 = in.readString();
+        date = in.readString();
+        date2 = in.readString();
+        endTime = in.readString();
+        facilityName = in.readString();
+        latitude = in.readString();
+        longitude = in.readString();
+        offerName = in.readString();
+        operatingName = in.readString();
+        phone = in.readString();
+        startTime = in.readString();
+        target = in.readString();
+        time = in.readString();
+    }
+
+    public static final Creator<CafeteriaData> CREATOR = new Creator<CafeteriaData>() {
+        @Override
+        public CafeteriaData createFromParcel(Parcel in) {
+            return new CafeteriaData(in);
+        }
+
+        @Override
+        public CafeteriaData[] newArray(int size) {
+            return new CafeteriaData[size];
+        }
+    };
 
     public String getAddress() {
         return address;
@@ -163,5 +195,28 @@ public class CafeteriaData {
                 ", target='" + target + '\'' +
                 ", time='" + time + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(address);
+        dest.writeString(address2);
+        dest.writeString(date);
+        dest.writeString(date2);
+        dest.writeString(endTime);
+        dest.writeString(facilityName);
+        dest.writeString(latitude);
+        dest.writeString(longitude);
+        dest.writeString(offerName);
+        dest.writeString(operatingName);
+        dest.writeString(phone);
+        dest.writeString(startTime);
+        dest.writeString(target);
+        dest.writeString(time);
     }
 }
