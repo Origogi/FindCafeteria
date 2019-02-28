@@ -16,6 +16,10 @@ public class MapActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_map);
         binding.setActivity(this);
 
+
+        //경도, 위도 값이
+
+
     }
 
 }

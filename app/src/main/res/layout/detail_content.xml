@@ -28,7 +28,7 @@
                 android:layout_gravity="center|center_vertical"
                 android:textColor="#000000"
                 android:textSize="15dp"
-                android:text="제공기관 : 충청북도 청주시"
+                android:id="@+id/offerName"
                 />
 
         </LinearLayout>
@@ -53,7 +53,7 @@
                 android:layout_gravity="center|center_vertical"
                 android:textColor="#000000"
                 android:textSize="12dp"
-                android:text="충청북도 청주시 상암구 용암동"/>
+                android:id="@+id/address"/>
         </LinearLayout>
 
         <LinearLayout
@@ -76,7 +76,7 @@
                 android:layout_marginLeft="10dp"
                 android:textColor="#000000"
                 android:textSize="12dp"
-                android:text="2018-06-01"
+                android:id="@+id/date"
                 />
         </LinearLayout>
 
@@ -100,7 +100,7 @@
                 android:layout_gravity="center|center_vertical"
                 android:textColor="#000000"
                 android:textSize="12dp"
-                android:text="11:30 ~ 12:30"
+                android:id="@+id/time"
                 />
 
         </LinearLayout>
@@ -124,7 +124,7 @@
                 android:layout_gravity="center|center_vertical"
                 android:textColor="#000000"
                 android:textSize="12dp"
-                android:text="043-222-3322"
+                android:id="@+id/phone"
                 />
 
         </LinearLayout>
@@ -148,27 +148,27 @@
                 android:layout_gravity="center|center_vertical"
                 android:textColor="#000000"
                 android:textSize="12dp"
-                android:text="저소득층 노인"
+                android:id="@+id/target"
                 />
 
         </LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            android:background="#FFF"
-            android:padding="5dp">
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="1dp"-->
+            <!--android:background="#FFF"-->
+            <!--android:padding="5dp">-->
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="시각"
-                android:textColor="#65B5A5"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="시각"-->
+                <!--android:textColor="#65B5A5"-->
+                <!--android:textSize="20sp"-->
+                <!--android:textStyle="bold"-->
+                <!--/>-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

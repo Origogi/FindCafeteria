@@ -12,15 +12,16 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#d0d0d0"
         android:fitsSystemWindows="true"
         tools:context=".view.DetailActivity">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:fitsSystemWindows="true">
+            android:layout_height="380dp"
+            android:fitsSystemWindows="true"
+
+            >
             <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -28,22 +29,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
+                app:contentScrim="#fff"
                 app:expandedTitleGravity="bottom|center_horizontal"
                 app:expandedTitleTextAppearance="@android:color/transparent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
+                <include layout="@layout/layout_titlebar" />
                 <RelativeLayout
                     android:id="@+id/viewPagerIndicator"
                     android:layout_width="match_parent"
-                    android:layout_height="245dp"
+                    android:layout_height="330dp"
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="center"
-                    android:gravity="center">
+                    android:background="#fff"
+                    android:gravity="center"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.5"
+                    >
 
                     <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
                         android:id="@+id/homeslider"
                         android:layout_width="match_parent"
-                        android:layout_height="245dp"
+                        android:layout_height="240dp"
                         android:fitsSystemWindows="true"
                         tools:listitem="@layout/viewpager_image" />
 
@@ -55,7 +62,11 @@
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:paddingBottom="10dp" />
+                        android:paddingBottom="95dp">
+
+                    </LinearLayout>
+
+
                 </RelativeLayout>
 
                 <android.support.v7.widget.Toolbar
@@ -76,7 +87,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
 
-        <include layout="@layout/detail_content" />
+        <include layout="@layout/detail_content"    />
     </android.support.design.widget.CoordinatorLayout>
 
 

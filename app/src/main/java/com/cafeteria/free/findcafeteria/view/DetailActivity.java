@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
@@ -25,7 +26,7 @@ public class DetailActivity extends AppCompatActivity {
     private int dotsCount;
     private ImageView[] dots;
     private ImageSliderAdapter imageSliderAdapter;
-    private int currentPosition;
+    private CafeteriaData cafeteriaData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +34,9 @@ public class DetailActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_detail);
         binding.setActivity(this);
 
-        CafeteriaData cafeteriaData = getIntent().getParcelableExtra("data");
-        Logger.d(cafeteriaData.toString());
+        binding.collapsingToolbar.setTitle("급식소");
+        binding.collapsingToolbar.setExpandedTitleTextAppearance(R.style.CollapsedAppBar);
+        binding.collapsingToolbar.setExpandedTitleMargin(0, 10, 0, 5);
 
         imageSliderAdapter = new ImageSliderAdapter(this, images, Glide.with(this));
 
@@ -47,6 +49,8 @@ public class DetailActivity extends AppCompatActivity {
         binding.homeslider.setAdapter(imageSliderAdapter);
 
         setUiPageViewController();
+        setData();
+
     }
 
     private void setUiPageViewController() {
@@ -76,13 +80,12 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                currentPosition = position;
                 for (int i = 0; i < dotsCount; i++) {
                     dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
 
                 }
                 if (dots != null) {
-                    dots[currentPosition % dotsCount].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
+                    dots[position % dotsCount].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
                 }
             }
 
@@ -91,6 +94,28 @@ public class DetailActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void setData() {
+
+        cafeteriaData = getIntent().getParcelableExtra("data");
+        if(cafeteriaData==null)
+            return;
+
+        TextView offerName = findViewById(R.id.offerName);
+        TextView address = findViewById(R.id.address);
+        TextView date = findViewById(R.id.date);
+        TextView time = findViewById(R.id.time);
+        TextView phone = findViewById(R.id.phone);
+        TextView target = findViewById(R.id.target);
+
+        offerName.setText(cafeteriaData.getOfferName());
+        address.setText(cafeteriaData.getAddress());
+        date.setText(cafeteriaData.getDate());
+        time.setText(cafeteriaData.getStartTime() + " ~ " + cafeteriaData.getEndTime());
+        phone.setText(cafeteriaData.getPhone());
+        target.setText(cafeteriaData.getTarget());
 
     }
 
