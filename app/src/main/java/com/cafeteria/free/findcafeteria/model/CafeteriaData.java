@@ -3,38 +3,38 @@ package com.cafeteria.free.findcafeteria.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-//    address:
-//            "충청북도 청주시 상당구 원봉로 52(용암동)"
-//    address2:
-//            "충청북도 청주시 상당구 용암동 2108, 용암주공@ 1,2단지"
-//    date:
-//            "월~금"
-//    date2:
-//            "2018-06-18"
-//    endTime:
-//            ""
-//    facilityName:
-//            "용암종합사회복지관"
-//    latitude:
-//            "36.614349"
-//    location:
-//            "용암종합사회복지관"
-//    longitude:
-//            "127.509664"
-//    offerCode:
-//            "5710000"
-//    offerName:
-//            "충청북도 청주시"
-//    operatingName:
-//            "용암종합사회복지관"
-//    phone:
-//            "043-293-9193"
-//    startTime:
-//            ""
-//    target:
-//            "저소득층 노인"
-//    time:
-//            "11:30~12:30"
+  /*  address:
+            "충청북도 청주시 상당구 원봉로 52(용암동)"
+    address2:
+            "충청북도 청주시 상당구 용암동 2108, 용암주공@ 1,2단지"
+    date:
+            "월~금"
+    date2:
+            "2018-06-18"
+    endTime:
+            ""
+    facilityName:
+            "용암종합사회복지관"
+    latitude:
+            "36.614349"
+    location:
+            "용암종합사회복지관"
+    longitude:
+            "127.509664"
+    offerCode:
+            "5710000"
+    offerName:
+            "충청북도 청주시"
+    operatingName:
+            "용암종합사회복지관"
+    phone:
+            "043-293-9193"
+    startTime:
+            ""
+    target:
+            "저소득층 노인"
+    time:
+            "11:30~12:30"*/
 public class CafeteriaData implements Parcelable {
 
     private String address = "";

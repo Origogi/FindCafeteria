@@ -17,10 +17,10 @@ public class ImageSliderAdapter extends PagerAdapter {
 
     Context mContext;
     LayoutInflater mLayoutInflater;
-    ArrayList<Integer> mResources;
+    ArrayList<String> mResources;
     private final RequestManager glide;
 
-    public ImageSliderAdapter(Context context, ArrayList<Integer> mResources, RequestManager glide) {
+    public ImageSliderAdapter(Context context, ArrayList<String> mResources, RequestManager glide) {
         this.glide = glide;
         mContext = context;
         this.mResources = mResources;
