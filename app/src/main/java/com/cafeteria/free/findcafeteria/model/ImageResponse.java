@@ -11,7 +11,7 @@ public class ImageResponse {
     Meta meta;
 
     @SerializedName("documents")
-    List<ImageInfo> imageInfos = new ArrayList<>();
+    public List<ImageInfo> imageInfos = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -49,7 +49,7 @@ public class ImageResponse {
         @SerializedName("thumbnail_url")
         String thumbnailUrl;
         @SerializedName("image_url")
-        String imageUrl;
+        public String imageUrl;
         int width;
         int height;
         @SerializedName("display_sitename")

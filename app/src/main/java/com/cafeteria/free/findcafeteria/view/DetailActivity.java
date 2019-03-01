@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,17 +13,22 @@ import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityDetailBinding;
 import com.cafeteria.free.findcafeteria.model.CafeteriaData;
+import com.cafeteria.free.findcafeteria.model.ImageProvider;
+import com.cafeteria.free.findcafeteria.model.ImageResponse;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
-import com.cafeteria.free.findcafeteria.util.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 
 public class DetailActivity extends AppCompatActivity {
 
     ActivityDetailBinding binding;
 
-    private ArrayList<Integer> images = new ArrayList<>();
+    private ArrayList<String> images = new ArrayList<>();
     private int dotsCount;
     private ImageView[] dots;
     private ImageSliderAdapter imageSliderAdapter;
@@ -39,13 +45,6 @@ public class DetailActivity extends AppCompatActivity {
         binding.collapsingToolbar.setExpandedTitleMargin(0, 10, 0, 5);
 
         imageSliderAdapter = new ImageSliderAdapter(this, images, Glide.with(this));
-
-        // TODO: 2019-02-10 파이어베이스에 저장된 URL경로를 가져오는 걸로 변경 (Integer -> String)
-        images.add(R.drawable.common_google_signin_btn_icon_dark);
-        images.add(R.drawable.common_full_open_on_phone);
-        images.add(R.drawable.common_google_signin_btn_icon_dark_normal_background);
-        images.add(R.drawable.loadingimage);
-
         binding.homeslider.setAdapter(imageSliderAdapter);
 
         setUiPageViewController();
@@ -55,7 +54,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void setUiPageViewController() {
 
-        dotsCount = images.size();
+        dotsCount = 3;
         dots = new ImageView[dotsCount];
 
         for (int i = 0; i < dotsCount; i++) {
@@ -113,10 +112,31 @@ public class DetailActivity extends AppCompatActivity {
         offerName.setText(cafeteriaData.getOfferName());
         address.setText(cafeteriaData.getAddress());
         date.setText(cafeteriaData.getDate());
-        time.setText(cafeteriaData.getStartTime() + " ~ " + cafeteriaData.getEndTime());
+        time.setText(cafeteriaData.getTime());
         phone.setText(cafeteriaData.getPhone());
         target.setText(cafeteriaData.getTarget());
 
+        //이미지 추가
+        images.clear();
+        ImageProvider imageProvider = new ImageProvider();
+        Observable<ImageResponse> obser = imageProvider.get(cafeteriaData.getFacilityName());
+        obser
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(it -> updateImage(it));
+    }
+
+    private void updateImage(ImageResponse imageResponse) {
+
+        Log.d("dd", "updateImage: "+ imageResponse.imageInfos.size());
+//        for(int i=0;i<imageResponse.imageInfos.size();i++){
+//            images.add(imageResponse.imageInfos.get(i).imageUrl);
+//        }
+
+        //3개만 가져오는걸로 변경
+        images.add(imageResponse.imageInfos.get(0).imageUrl);
+        images.add(imageResponse.imageInfos.get(1).imageUrl);
+        images.add(imageResponse.imageInfos.get(2).imageUrl);
+        imageSliderAdapter.notifyDataSetChanged();
     }
 
     @Override
