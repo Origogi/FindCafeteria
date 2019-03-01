@@ -32,8 +32,10 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recyclerViewAdapter = new RecyclerViewAdapter();
+        recyclerViewAdapter = new RecyclerViewAdapter(this);
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        recyclerView.setNestedScrollingEnabled(false);
 
         searchView = findViewById(R.id.searchView);
 
