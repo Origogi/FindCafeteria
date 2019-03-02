@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/img_viewpager_childimage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:src="@drawable/loadingimage"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"

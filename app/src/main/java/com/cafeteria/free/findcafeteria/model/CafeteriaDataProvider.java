@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.reactivex.Observable;
+import io.reactivex.Maybe;
 
 public class CafeteriaDataProvider {
 
@@ -54,7 +54,7 @@ public class CafeteriaDataProvider {
         });
     }
 
-    public Observable<List<CafeteriaData>> getCafeteriaDataFilteredAddress(String keyword) {
+    public Maybe<List<CafeteriaData>> getCafeteriaDataFilteredAddress(String keyword) {
         Logger.d("search from list=" + keyword);
 
         if (TextUtils.isEmpty(keyword)) {
@@ -66,9 +66,8 @@ public class CafeteriaDataProvider {
         ).collect(Collectors.toList());
 
         if ( filteredData.isEmpty() ) {
-            throw new IllegalArgumentException("Keyword is invalid : " + keyword);
-
+            return Maybe.empty();
         }
-        return Observable.just(filteredData);
+        return Maybe.just(filteredData);
     }
 }

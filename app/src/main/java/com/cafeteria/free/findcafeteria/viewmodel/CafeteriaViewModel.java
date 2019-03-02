@@ -32,20 +32,20 @@ public class CafeteriaViewModel extends ViewModel {
     }
 
     private void initSubject() {
-        disposable = keywordSubject
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .doOnNext(keyword -> Logger.d("search=" + keyword))
-                .switchMap(keyword ->
-                        cafeteriaDataProvider.getCafeteriaDataFilteredAddress(keyword)
-                )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete(()->Logger.d("onComplete()"))
-                .subscribe(cafeteriaDataList -> {
-                    cafeteriaInfo.setValue(cafeteriaDataList.get(0).toString());
-                }, error -> {
-                    cafeteriaInfo.setValue(error.getMessage());
-                });
+//        disposable = keywordSubject
+//                .debounce(500, TimeUnit.MILLISECONDS)
+//                .doOnNext(keyword -> Logger.d("search=" + keyword))
+//                .switchMap(keyword ->
+//                        cafeteriaDataProvider.getCafeteriaDataFilteredAddress(keyword)
+//                )
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .doOnComplete(()->Logger.d("onComplete()"))
+//                .subscribe(cafeteriaDataList -> {
+//                    cafeteriaInfo.setValue(cafeteriaDataList.get(0).toString());
+//                }, error -> {
+//                    cafeteriaInfo.setValue(error.getMessage());
+//                });
     }
 
     public LiveData<String> getCafeteriaInfo() {

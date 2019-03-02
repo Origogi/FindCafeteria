@@ -21,23 +21,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
+            <com.cafeteria.free.findcafeteria.view.CustomViewPager
                 android:id="@+id/homeslider"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 tools:listitem="@layout/viewpager_image" />
-
-
-
-            <!--<ImageView-->
-                <!--android:src="@drawable/sample"-->
-                <!--android:background="@drawable/corner"-->
-                <!--android:id="@+id/thumbnail"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="170dp" />-->
 
             <ImageView
                 android:layout_width="wrap_content"

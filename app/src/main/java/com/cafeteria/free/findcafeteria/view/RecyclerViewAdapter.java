@@ -2,26 +2,30 @@ package com.cafeteria.free.findcafeteria.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.CafeteriaData;
+import com.cafeteria.free.findcafeteria.model.ImageProvider;
+import com.cafeteria.free.findcafeteria.model.ImageResponse;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
 import com.cafeteria.free.findcafeteria.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -52,20 +56,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         ((CafeViewHolder) holder).position = position;
 
-        ArrayList<Integer> images = new ArrayList<>();
-        ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, images, Glide.with(context));
-
-        // TODO: 2019-02-10 파이어베이스에 저장된 URL경로를 가져오는 걸로 변경 (Integer -> String)
-        images.add(R.drawable.common_google_signin_btn_icon_dark);
-        images.add(R.drawable.common_full_open_on_phone);
-        images.add(R.drawable.common_google_signin_btn_icon_dark_normal_background);
-        images.add(R.drawable.loadingimage);
-        ((CafeViewHolder) holder).autoScrollViewPager.setAdapter(imageSliderAdapter);
-
         ((CafeViewHolder) holder).nameTv.setText(cardViewDto.getFacilityName());
         ((CafeViewHolder) holder).addressTv.setText(cardViewDto.getAddress());
         ((CafeViewHolder) holder).phoneNumberTv.setText(cardViewDto.getPhone());
         ((CafeViewHolder) holder).timeTv.setText(cardViewDto.getStartTime());
+        ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, Glide.with(context));
+        ((CafeViewHolder) holder).viewPager.setAdapter(imageSliderAdapter);
+
+        ImageProvider imageProvider = new ImageProvider();
+        Observable<ImageResponse> observable = imageProvider.get(cardViewDto.getFacilityName());
+        observable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(it -> updateImage(imageSliderAdapter,it));
+    }
+
+    private void updateImage(ImageSliderAdapter imageSliderAdapter, ImageResponse imageResponse) {
+        ArrayList<String> images = new ArrayList<>();
+
+        for (int i = 0;i<3 && i<imageResponse.imageInfos.size();i++) {
+            images.add(imageResponse.imageInfos.get(i).imageUrl);
+        }
+        imageSliderAdapter.addImageUri(images);
+        imageSliderAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -78,10 +90,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyDataSetChanged();
     }
 
-    private class CafeViewHolder extends RecyclerView.ViewHolder {
-        //ImageView thumbnailIv;
+    public CafeteriaData get(int position) {
+        return cardViewDtos.get(position);
+    }
 
-        AutoScrollViewPager autoScrollViewPager;
+    private class CafeViewHolder extends RecyclerView.ViewHolder {
+        CustomViewPager viewPager;
 
         TextView nameTv;
         TextView addressTv;
@@ -93,20 +107,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         CafeViewHolder(View view) {
             super(view);
             nameTv = view.findViewById(R.id.name);
-            autoScrollViewPager = view.findViewById(R.id.homeslider);
+            viewPager = (CustomViewPager) view.findViewById(R.id.homeslider);
             addressTv = view.findViewById(R.id.address);
             phoneNumberTv = view.findViewById(R.id.phone_number);
             timeTv = view.findViewById(R.id.time);
-
-            view.setOnClickListener(v ->{
-                Logger.d("clicked" + cardViewDtos.get(position).toString());
-                Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                intent.putExtra("data", cardViewDtos.get(position));
-                v.getContext().startActivity(intent);
-            });
-
-
         }
+
     }
+
+
 
 }

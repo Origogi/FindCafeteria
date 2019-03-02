@@ -28,7 +28,6 @@ public class DetailActivity extends AppCompatActivity {
 
     ActivityDetailBinding binding;
 
-    private ArrayList<String> images = new ArrayList<>();
     private int dotsCount;
     private ImageView[] dots;
     private ImageSliderAdapter imageSliderAdapter;
@@ -44,7 +43,7 @@ public class DetailActivity extends AppCompatActivity {
         binding.collapsingToolbar.setExpandedTitleTextAppearance(R.style.CollapsedAppBar);
         binding.collapsingToolbar.setExpandedTitleMargin(0, 10, 0, 5);
 
-        imageSliderAdapter = new ImageSliderAdapter(this, images, Glide.with(this));
+        imageSliderAdapter = new ImageSliderAdapter(this, Glide.with(this));
         binding.homeslider.setAdapter(imageSliderAdapter);
 
         setUiPageViewController();
@@ -116,8 +115,6 @@ public class DetailActivity extends AppCompatActivity {
         phone.setText(cafeteriaData.getPhone());
         target.setText(cafeteriaData.getTarget());
 
-        //이미지 추가
-        images.clear();
         ImageProvider imageProvider = new ImageProvider();
         Observable<ImageResponse> obser = imageProvider.get(cafeteriaData.getFacilityName());
         obser
@@ -133,9 +130,12 @@ public class DetailActivity extends AppCompatActivity {
 //        }
 
         //3개만 가져오는걸로 변경
+        List<String> images = new ArrayList<>();
+
         images.add(imageResponse.imageInfos.get(0).imageUrl);
         images.add(imageResponse.imageInfos.get(1).imageUrl);
         images.add(imageResponse.imageInfos.get(2).imageUrl);
+        imageSliderAdapter.addImageUri(images);
         imageSliderAdapter.notifyDataSetChanged();
     }
 

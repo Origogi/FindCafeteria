@@ -12,18 +12,18 @@ import com.bumptech.glide.RequestManager;
 import com.cafeteria.free.findcafeteria.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ImageSliderAdapter extends PagerAdapter {
 
     Context mContext;
     LayoutInflater mLayoutInflater;
-    ArrayList<String> mResources;
+    ArrayList<String> mResources = new ArrayList<>();
     private final RequestManager glide;
 
-    public ImageSliderAdapter(Context context, ArrayList<String> mResources, RequestManager glide) {
+    public ImageSliderAdapter(Context context, RequestManager glide) {
         this.glide = glide;
         mContext = context;
-        this.mResources = mResources;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -41,8 +41,20 @@ public class ImageSliderAdapter extends PagerAdapter {
         return view == ((LinearLayout) object);
     }
 
+    public void clear() {
+        mResources.clear();
+    }
+
+    public void addImageUri(List<String> uris) {
+        mResources.addAll(uris);
+    }
+
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+
+        if (mResources.isEmpty()) {
+            return null;
+        }
 
         View itemView = mLayoutInflater.inflate(R.layout.viewpager_image, container, false);
 
