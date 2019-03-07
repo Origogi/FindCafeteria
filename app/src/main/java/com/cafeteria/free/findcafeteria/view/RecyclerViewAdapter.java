@@ -1,14 +1,8 @@
 package com.cafeteria.free.findcafeteria.view;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,7 +13,6 @@ import com.cafeteria.free.findcafeteria.model.CafeteriaData;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
-import com.cafeteria.free.findcafeteria.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +29,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.context = context;
     }
 
-
     public void setCardViewDtos(List<CafeteriaData> cafeteriaDataList) {
         this.cardViewDtos = cafeteriaDataList;
         notifyDataSetChanged();
@@ -45,17 +37,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_cafeteria, parent, false);
-
         return new CafeViewHolder(view);
     }
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         CafeteriaData cardViewDto = cardViewDtos.get(position);
 
         ((CafeViewHolder) holder).position = position;
-
         ((CafeViewHolder) holder).nameTv.setText(cardViewDto.getFacilityName());
         ((CafeViewHolder) holder).addressTv.setText(cardViewDto.getAddress());
         ((CafeViewHolder) holder).phoneNumberTv.setText(cardViewDto.getPhone());
@@ -107,14 +96,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         CafeViewHolder(View view) {
             super(view);
             nameTv = view.findViewById(R.id.name);
-            viewPager = (CustomViewPager) view.findViewById(R.id.homeslider);
+            viewPager = view.findViewById(R.id.homeslider);
             addressTv = view.findViewById(R.id.address);
             phoneNumberTv = view.findViewById(R.id.phone_number);
             timeTv = view.findViewById(R.id.time);
         }
-
     }
-
-
-
 }

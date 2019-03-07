@@ -18,7 +18,11 @@ import io.reactivex.Maybe;
 public class CafeteriaDataProvider {
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference().child("records");
+    private DatabaseReference recordsRefer = firebaseDatabase.getReference().child("records");
+    private DatabaseReference versionRefer = firebaseDatabase.getReference().child("version");
+
+    private int version;
+
 
     private List<CafeteriaData> cafeteriaDataList = new ArrayList<>();
 
@@ -27,13 +31,31 @@ public class CafeteriaDataProvider {
     private CafeteriaDataProvider() {
     }
 
+    private void loadVersion() {
+        versionRefer.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                dataSnapshot.getChildren().forEach((data)-> {
+                    version = data.getValue(Integer.class);
+                    Logger.d("version=" + version);
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //TODO
+                //Error Handling
+            }
+        });
+    }
+
     public static CafeteriaDataProvider getInstance() {
         return sCafeteriaDataProvider;
     }
 
-
     public void startToLoadData(DataLoadListener listener) {
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        recordsRefer.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Logger.d("size=" + dataSnapshot.getChildrenCount());
@@ -42,9 +64,8 @@ public class CafeteriaDataProvider {
                     CafeteriaData cafeteriaData = data.getValue(CafeteriaData.class);
                     Logger.d(cafeteriaData.toString());
                     cafeteriaDataList.add(cafeteriaData);
-
-                    listener.onComplete(DataLoadState.SUCCESS);
                 });
+                listener.onComplete(DataLoadState.SUCCESS);
             }
 
             @Override
