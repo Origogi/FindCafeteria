@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.cafeteria.free.findcafeteria.view.DetailActivity"
     tools:showIn="@layout/activity_detail">
@@ -23,13 +24,12 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|center_vertical"
-                android:textColor="#000000"
-                android:textSize="15dp"
                 android:id="@+id/offerName"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center_vertical"
+                android:textColor="#000000"
+                android:textSize="15dp" />
 
         </LinearLayout>
 
@@ -42,18 +42,18 @@
             android:padding="5dp">
 
             <ImageView
-                android:src="@drawable/ic_place_black_36dp"
                 android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_height="30dp"
+                android:src="@drawable/ic_place_black_36dp" />
 
             <TextView
-                android:layout_marginLeft="10dp"
+                android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
+                android:layout_marginLeft="10dp"
                 android:textColor="#000000"
-                android:textSize="12dp"
-                android:id="@+id/address"/>
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -65,19 +65,18 @@
             android:padding="5dp">
 
             <ImageView
-                android:src="@drawable/ic_event_black_48dp"
                 android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_height="30dp"
+                android:src="@drawable/ic_event_black_48dp" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|center_vertical"
-                android:layout_marginLeft="10dp"
-                android:textColor="#000000"
-                android:textSize="12dp"
                 android:id="@+id/date"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -89,21 +88,21 @@
             android:padding="5dp">
 
             <ImageView
-                android:src="@drawable/ic_alarm_black_48dp"
                 android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_height="30dp"
+                android:src="@drawable/ic_alarm_black_48dp" />
 
             <TextView
-                android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|center_vertical"
-                android:textColor="#000000"
-                android:textSize="12dp"
                 android:id="@+id/time"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:textSize="12dp" />
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,19 +112,18 @@
             android:padding="5dp">
 
             <ImageView
-                android:src="@drawable/ic_local_phone_black_36dp"
                 android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_height="30dp"
+                android:src="@drawable/ic_local_phone_black_36dp" />
 
             <TextView
-                android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|center_vertical"
-                android:textColor="#000000"
-                android:textSize="12dp"
                 android:id="@+id/phone"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center_vertical"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:textSize="12dp" />
 
         </LinearLayout>
 
@@ -138,37 +136,29 @@
             android:padding="5dp">
 
             <ImageView
-                android:src="@drawable/ic_supervisor_account_black_48dp"
                 android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_height="30dp"
+                android:src="@drawable/ic_supervisor_account_black_48dp" />
+
             <TextView
-                android:layout_marginLeft="10dp"
+                android:id="@+id/target"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
+                android:layout_marginLeft="10dp"
                 android:textColor="#000000"
-                android:textSize="12dp"
-                android:id="@+id/target"
-                />
+                android:textSize="12dp" />
 
         </LinearLayout>
-        <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="1dp"-->
-            <!--android:background="#FFF"-->
-            <!--android:padding="5dp">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="시각"-->
-                <!--android:textColor="#65B5A5"-->
-                <!--android:textSize="20sp"-->
-                <!--android:textStyle="bold"-->
-                <!--/>-->
-
-        <!--</RelativeLayout>-->
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/detail_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            />
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

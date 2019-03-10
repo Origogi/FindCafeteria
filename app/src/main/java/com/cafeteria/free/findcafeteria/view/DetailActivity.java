@@ -1,9 +1,9 @@
 package com.cafeteria.free.findcafeteria.view;
 
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +16,13 @@ import com.cafeteria.free.findcafeteria.model.CafeteriaData;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
+import com.cafeteria.free.findcafeteria.util.Logger;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +31,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ActivityDetailBinding binding;
 
@@ -33,21 +40,47 @@ public class DetailActivity extends AppCompatActivity {
     private ImageSliderAdapter imageSliderAdapter;
     private CafeteriaData cafeteriaData;
 
+    private GoogleMap mMap;
+    String longitude;
+    String latitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_detail);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         binding.setActivity(this);
-
-        binding.collapsingToolbar.setTitle("급식소");
-        binding.collapsingToolbar.setExpandedTitleTextAppearance(R.style.CollapsedAppBar);
-        binding.collapsingToolbar.setExpandedTitleMargin(0, 10, 0, 5);
 
         imageSliderAdapter = new ImageSliderAdapter(this, Glide.with(this));
         binding.homeslider.setAdapter(imageSliderAdapter);
 
-        setUiPageViewController();
         setData();
+        setUiPageViewController();
+
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        mMap = googleMap;
+
+        // Add a marker in Sydney, Australia, and move the camera.
+
+        LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(cafeteriaData.getFacilityName());
+        mMap.addMarker(markerOptions);
+
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 
@@ -98,7 +131,7 @@ public class DetailActivity extends AppCompatActivity {
     private void setData() {
 
         cafeteriaData = getIntent().getParcelableExtra("data");
-        if(cafeteriaData==null)
+        if (cafeteriaData == null)
             return;
 
         TextView offerName = findViewById(R.id.offerName);
@@ -115,19 +148,27 @@ public class DetailActivity extends AppCompatActivity {
         phone.setText(cafeteriaData.getPhone());
         target.setText(cafeteriaData.getTarget());
 
+        latitude = cafeteriaData.getLatitude();
+        longitude = cafeteriaData.getLongitude();
+
         ImageProvider imageProvider = new ImageProvider();
         Observable<ImageResponse> obser = imageProvider.get(cafeteriaData.getFacilityName());
         obser
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(it -> updateImage(it));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(it -> updateImage(it));
+
+        binding.collapsingToolbar.setTitle(cafeteriaData.getFacilityName());
+        binding.collapsingToolbar.setExpandedTitleTextAppearance(R.style.CollapsedAppBar);
+        binding.collapsingToolbar.setExpandedTitleMargin(0, 10, 0, 5);
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.detail_map);
+        mapFragment.getMapAsync(this);
+
     }
 
     private void updateImage(ImageResponse imageResponse) {
-
-        Log.d("dd", "updateImage: "+ imageResponse.imageInfos.size());
-//        for(int i=0;i<imageResponse.imageInfos.size();i++){
-//            images.add(imageResponse.imageInfos.get(i).imageUrl);
-//        }
 
         //3개만 가져오는걸로 변경
         List<String> images = new ArrayList<>();
@@ -153,4 +194,5 @@ public class DetailActivity extends AppCompatActivity {
         super.onPause();
         binding.homeslider.stopAutoScroll();
     }
+
 }

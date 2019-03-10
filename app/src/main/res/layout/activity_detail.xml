@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
     <data>
+
         <variable
             name="activity"
             type="com.cafeteria.free.findcafeteria.view.DetailActivity" />
@@ -20,9 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="380dp"
             android:fitsSystemWindows="true"
-
             >
-            <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">-->
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
@@ -33,19 +31,20 @@
                 app:expandedTitleGravity="bottom|center_horizontal"
                 app:expandedTitleTextAppearance="@android:color/transparent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
                 <include layout="@layout/layout_titlebar" />
+
                 <RelativeLayout
                     android:id="@+id/viewPagerIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="330dp"
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="center"
+                    android:layout_marginTop="?attr/actionBarSize"
                     android:background="#fff"
                     android:gravity="center"
-                    android:layout_marginTop="?attr/actionBarSize"
                     app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.5"
-                    >
+                    app:layout_collapseParallaxMultiplier="0.5">
 
                     <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
                         android:id="@+id/homeslider"
@@ -81,14 +80,12 @@
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
-        <include layout="@layout/detail_content"    />
+        <include layout="@layout/detail_content" />
     </android.support.design.widget.CoordinatorLayout>
-
 
 </layout>

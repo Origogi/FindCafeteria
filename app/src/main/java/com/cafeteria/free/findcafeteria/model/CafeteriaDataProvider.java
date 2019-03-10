@@ -61,8 +61,9 @@ public class CafeteriaDataProvider {
                 Logger.d("size=" + dataSnapshot.getChildrenCount());
 
                 dataSnapshot.getChildren().forEach((data)-> {
+
                     CafeteriaData cafeteriaData = data.getValue(CafeteriaData.class);
-                    Logger.d(cafeteriaData.toString());
+//                    Logger.d(cafeteriaData.toString());
                     cafeteriaDataList.add(cafeteriaData);
                 });
                 listener.onComplete(DataLoadState.SUCCESS);

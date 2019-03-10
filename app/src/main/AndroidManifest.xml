@@ -21,6 +21,10 @@
         <activity android:name=".view.DetailActivity" />
         <activity android:name=".view.LoadingActivity"></activity>
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCJTwvFLl4_PHUaTVM33fh6DOgiQrPfxV0" />
+
     </application>
 
 </manifest>

@@ -57,6 +57,9 @@ public class CafeteriaData implements Parcelable {
     private String target;
     private String time;
 
+    private String offerCode;
+    private String location;
+
     public CafeteriaData(String address,
                          String address2,
                          String date,
@@ -107,6 +110,8 @@ public class CafeteriaData implements Parcelable {
         startTime = in.readString();
         target = in.readString();
         time = in.readString();
+        offerCode = in.readString();
+        location = in.readString();
     }
 
     public static final Creator<CafeteriaData> CREATOR = new Creator<CafeteriaData>() {
@@ -121,7 +126,23 @@ public class CafeteriaData implements Parcelable {
         }
     };
 
-    public String getAddress() {
+      public String getOfferCode() {
+          return offerCode;
+      }
+
+      public void setOfferCode(String offerCode) {
+          this.offerCode = offerCode;
+      }
+
+      public String getLocation() {
+          return location;
+      }
+
+      public void setLocation(String location) {
+          this.location = location;
+      }
+
+      public String getAddress() {
         return address;
     }
 
@@ -218,5 +239,7 @@ public class CafeteriaData implements Parcelable {
         dest.writeString(startTime);
         dest.writeString(target);
         dest.writeString(time);
+        dest.writeString(offerCode);
+        dest.writeString(location);
     }
 }

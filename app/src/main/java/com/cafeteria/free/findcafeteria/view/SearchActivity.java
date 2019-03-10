@@ -119,15 +119,12 @@ public class SearchActivity extends AppCompatActivity {
         mapFab = findViewById(R.id.map_fab);
         mapFab.setVisibility(View.GONE);
 
-        mapFab.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (gestureDetector.onTouchEvent(event)) {
-                    startMapActivity(searchView.getQuery().toString());
-                    return false;
-                } else {
-                    return true;
-                }
+        mapFab.setOnTouchListener((v, event) -> {
+            if (gestureDetector.onTouchEvent(event)) {
+                startMapActivity(searchView.getQuery().toString());
+                return false;
+            } else {
+                return true;
             }
         });
     }
@@ -141,11 +138,7 @@ public class SearchActivity extends AppCompatActivity {
         new AlertDialog.Builder(SearchActivity.this)
                 .setTitle("잘못된 검색어")
                 .setMessage(keyword + " 을 찾을 수 없습니다.")
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).show();
+                .setPositiveButton("확인", (dialog, id) -> dialog.cancel()).show();
     }
 
     private void startDetailActivity(CafeteriaData data) {
