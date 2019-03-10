@@ -23,9 +23,11 @@ import com.cafeteria.free.findcafeteria.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -45,15 +47,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_cafeteria, parent, false);
-
         return new CafeViewHolder(view);
     }
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         CafeteriaData cardViewDto = cardViewDtos.get(position);
 
+        ((CafeViewHolder) holder).stopAutoScroll();
         ((CafeViewHolder) holder).position = position;
 
         ((CafeViewHolder) holder).nameTv.setText(cardViewDto.getFacilityName());
@@ -66,8 +67,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ImageProvider imageProvider = new ImageProvider();
         Observable<ImageResponse> observable = imageProvider.get(cardViewDto.getFacilityName());
         observable
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(it -> updateImage(imageSliderAdapter,it));
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(it -> {
+                updateImage(imageSliderAdapter,it);
+                if(imageSliderAdapter.getCount() > 0) {
+                    ((CafeViewHolder) holder).startAutoScroll(imageSliderAdapter.getCount());
+                }
+            });
     }
 
     private void updateImage(ImageSliderAdapter imageSliderAdapter, ImageResponse imageResponse) {
@@ -95,7 +101,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private class CafeViewHolder extends RecyclerView.ViewHolder {
-        CustomViewPager viewPager;
+        ViewPager viewPager;
 
         TextView nameTv;
         TextView addressTv;
@@ -103,14 +109,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView timeTv;
 
         int position;
+        boolean isRunning = false;
+        Disposable disposable;
 
         CafeViewHolder(View view) {
             super(view);
             nameTv = view.findViewById(R.id.name);
-            viewPager = (CustomViewPager) view.findViewById(R.id.homeslider);
+            viewPager = view.findViewById(R.id.homeslider);
             addressTv = view.findViewById(R.id.address);
             phoneNumberTv = view.findViewById(R.id.phone_number);
             timeTv = view.findViewById(R.id.time);
+        }
+
+        void stopAutoScroll() {
+            if (disposable != null) {
+                disposable.dispose();
+            }
+            isRunning = false;
+        }
+
+        void startAutoScroll(int imageCount) {
+            if (isRunning) {
+                return;
+            }
+            isRunning = true;
+
+            disposable = Observable.interval(2000L, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(idx ->{
+                        Logger.d("Auto slider=" + idx);
+                        int currentIdx = (int)(idx % imageCount);
+                        viewPager.setCurrentItem(currentIdx);
+                    });
         }
 
     }

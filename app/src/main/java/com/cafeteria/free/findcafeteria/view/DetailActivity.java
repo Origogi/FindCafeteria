@@ -132,9 +132,10 @@ public class DetailActivity extends AppCompatActivity {
         //3개만 가져오는걸로 변경
         List<String> images = new ArrayList<>();
 
-        images.add(imageResponse.imageInfos.get(0).imageUrl);
-        images.add(imageResponse.imageInfos.get(1).imageUrl);
-        images.add(imageResponse.imageInfos.get(2).imageUrl);
+        for (int i = 0;i<3 && i< imageResponse.imageInfos.size();i++) {
+            images.add(imageResponse.imageInfos.get(i).imageUrl);
+        }
+
         imageSliderAdapter.addImageUri(images);
         imageSliderAdapter.notifyDataSetChanged();
     }
