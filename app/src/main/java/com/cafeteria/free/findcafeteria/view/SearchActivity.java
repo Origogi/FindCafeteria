@@ -2,6 +2,7 @@ package com.cafeteria.free.findcafeteria.view;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,13 +22,13 @@ import java.util.List;
 
 import io.reactivex.Maybe;
 import io.reactivex.observers.DisposableMaybeObserver;
-
-
 public class SearchActivity extends AppCompatActivity {
+
 
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     SearchView searchView;
+    FloatingActionButton mapFab;
 
     GestureDetector gestureDetector;
 
@@ -49,8 +50,8 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) { }
-    };
 
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +91,7 @@ public class SearchActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(List<CafeteriaData> result) {
+                        mapFab.setVisibility(View.VISIBLE);
                         updateRecycleView(result);
                     }
 
@@ -101,6 +103,7 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void onComplete() {
                         showErrorDialog(query);
+                        mapFab.setVisibility(View.GONE);
                         recyclerViewAdapter.reset();
                     }
                 });
@@ -110,6 +113,21 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
+            }
+        });
+
+        mapFab = findViewById(R.id.map_fab);
+        mapFab.setVisibility(View.GONE);
+
+        mapFab.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (gestureDetector.onTouchEvent(event)) {
+                    startMapActivity(searchView.getQuery().toString());
+                    return false;
+                } else {
+                    return true;
+                }
             }
         });
     }
@@ -128,7 +146,6 @@ public class SearchActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 }).show();
-
     }
 
     private void startDetailActivity(CafeteriaData data) {
@@ -138,5 +155,12 @@ public class SearchActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void startMapActivity(String query) {
+        Logger.d("clicked" + query);
 
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra("query", query);
+        startActivity(intent);
+
+    }
 }
