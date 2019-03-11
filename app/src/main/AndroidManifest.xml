@@ -9,17 +9,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NoActionBarAppTheme">
-        <activity android:name=".view.MainActivity">
+
+        <activity android:name=".view.TestActivity" />
+        <activity android:name=".view.SearchActivity"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <activity android:name=".view.MapActivity" />
+        <activity android:name=".view.DetailActivity" />
+        <activity android:name=".view.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.TestActivity" />
-        <activity android:name=".view.SearchActivity" />
-        <activity android:name=".view.MapActivity" />
-        <activity android:name=".view.DetailActivity" />
-        <activity android:name=".view.LoadingActivity"></activity>
+
+        <provider
+            android:name=".model.MySuggestionProvider"
+            android:authorities="com.cafeteria.free.findcafeteria.model.MySuggestionProvider" />
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

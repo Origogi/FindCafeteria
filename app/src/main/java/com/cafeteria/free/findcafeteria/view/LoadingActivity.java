@@ -26,6 +26,7 @@ public class LoadingActivity extends AppCompatActivity {
         viewModel.isLoadedComplete().observe(this, result -> {
             if (result == DataLoadState.SUCCESS) {
                 startActivity(new Intent(LoadingActivity.this, SearchActivity.class));
+                finish();
             }
             else if (result == DataLoadState.FAIL) {
                 //Error popup
