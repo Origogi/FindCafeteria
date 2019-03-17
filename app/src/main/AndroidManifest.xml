@@ -33,7 +33,6 @@
             android:name=".model.MySuggestionProvider"
             android:authorities="com.cafeteria.free.findcafeteria.model.MySuggestionProvider" />
 
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCJTwvFLl4_PHUaTVM33fh6DOgiQrPfxV0" />
