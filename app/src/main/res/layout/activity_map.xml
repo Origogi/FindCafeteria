@@ -2,7 +2,6 @@
 <layout>
 
     <data>
-
         <variable
             name="activity"
             type="com.cafeteria.free.findcafeteria.view.MapActivity" />
