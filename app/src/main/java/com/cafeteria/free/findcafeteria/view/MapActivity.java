@@ -1,5 +1,6 @@
 package com.cafeteria.free.findcafeteria.view;
 
+import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -27,7 +28,7 @@ import java.util.List;
 import io.reactivex.Maybe;
 import io.reactivex.observers.DisposableMaybeObserver;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     public ArrayList<Marker> markers = new ArrayList<>();
     public Marker selectedMarker;  // 현재 선택 돼 있는 마커를 지정
@@ -42,6 +43,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map);
         binding.setActivity(this);
+
+        getData();
+        initView();
+    }
+
+    @SuppressLint("CheckResult")
+    private void getData() {
         String query = getIntent().getStringExtra("query");
 
         // TODO: 2019-03-10 getData
@@ -67,14 +75,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
         });
+    }
+
+    private void initView() {
 
         mapPagerAdapter = new MapPagerAdapter(this, cafeteriaList);
-
         binding.mapindicator.setAdapter(mapPagerAdapter);
         binding.mapindicator.setClipToPadding(false);
         binding.mapindicator.setPageMargin(20);
-        binding.mapindicator.setPadding(0,0,40,0);
-
+        binding.mapindicator.setPadding(0, 0, 40, 0);
 
         //슬라이드 할때 마커 이동,카메라 이동
         binding.mapindicator.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -84,22 +93,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             @Override
             public void onPageSelected(int position) {
-                //카메라 해당 가게로 이동
                 LatLng loc = new LatLng(Double.parseDouble(cafeteriaList.get(position).getLatitude()), Double.parseDouble(cafeteriaList.get(position).getLongitude()));
-                CameraUpdate center = CameraUpdateFactory.newLatLng(loc);
+                CameraUpdate center = CameraUpdateFactory.newLatLngZoom(loc, 14);
                 gMap.animateCamera(center);
 
-                // 마커 이미지 변경  ->  스니펫으로 마커들마다 인덱스 지정한 후 가져오는데 사실은 스니펫 이렇게 사용하는건 아님 / 플래그 넣은 효과
                 if (selectedMarker != null) {
-                    int index = Integer.parseInt(selectedMarker.getSnippet());      // TODO: 2019-03-21 마커 인덱스
-                    selectedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_black_36dp));
+                    selectedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_pin_drop_black_18dp));
                     selectedMarker.setZIndex(0);
                 }
 
+                //선택한 마커 이미지 변경
                 if (markers.size() != 0) {
                     selectedMarker = markers.get(position);
                     selectedMarker.setZIndex(99);
-                    selectedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_black_36dp));
+                    selectedMarker.setIcon(null);
                 }
             }
 
@@ -113,39 +120,58 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(MapActivity.this::onMapReady);
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        this.gMap = googleMap;
+        //초기 카메라 설정
+        gMap = googleMap;
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.565953, 126.976852), 10)); //기본 서울시청
-        updateCamera();
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.565953, 126.976852), 11)); //기본 서울시청
+
+        // 마커 추가
+        List<LatLng> latLngList = new ArrayList<>();
+        for (int i = 0; i < cafeteriaList.size(); i++) {
+
+            CafeteriaData cafeteria = cafeteriaList.get(i);
+            LatLng latLng = new LatLng(Double.parseDouble(cafeteria.getLatitude()), Double.parseDouble(cafeteria.getLongitude()));
+            latLngList.add(latLng);
+            markers.add(addMarker(cafeteria, i));
+        }
+
+        updateCamera(latLngList);
+        gMap.setOnMarkerClickListener(this);
+
     }
 
-    public void updateCamera() {
+    private Marker addMarker(CafeteriaData cafeteria, int index) {
 
-        List<LatLng> latLngList = new ArrayList<>();
+        LatLng position = new LatLng(Double.parseDouble(cafeteria.getLatitude()), Double.parseDouble(cafeteria.getLongitude()));
 
-        for (CafeteriaData data : cafeteriaList) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.title(cafeteria.getFacilityName());
+        markerOptions.position(position);
+        markerOptions.snippet(String.valueOf(index));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_pin_drop_black_18dp));
 
-            LatLng latLng = new LatLng(Double.parseDouble(data.getLatitude()), Double.parseDouble(data.getLongitude()));
+        return gMap.addMarker(markerOptions);
+    }
 
-            latLngList.add(latLng);
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            markerOptions.title(data.getFacilityName());
-            gMap.addMarker(markerOptions);
-        }
-        //카메라 중앙으로 이동
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        //해당 뷰페이지 이동 -> 스니펫에 인덱스를 넣어 태그로 이용함. ( 마커를 클릭할때와 뷰페이지를 연결 )
+        binding.mapindicator.setCurrentItem(Integer.parseInt(marker.getSnippet()));
+        return true;
+    }
+
+    //카메라 중앙으로 이동
+    public void updateCamera(List<LatLng> latLngList) {
         LatLng center = getCenterLatLng(latLngList);
-
-        System.out.println(center.latitude + " / " + center.longitude);
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 10));
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 11));
     }
 
     /**
      * 여러개의 포인트중 가운데 포인트 리턴
-     * 로직이 틀릴 수 있음 FIXME
      */
     public LatLng getCenterLatLng(List<LatLng> latLng) {
 
@@ -169,11 +195,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         minLon = Double.parseDouble(String.format("%.6f", minLon));
 
         return new LatLng((maxLat + minLat) / 2.0, (maxLon + minLon) / 2.0);
-
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 }

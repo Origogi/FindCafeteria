@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import com.cafeteria.free.findcafeteria.model.CafeteriaData;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
-import com.cafeteria.free.findcafeteria.util.Logger;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,15 +32,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ActivityDetailBinding binding;
-
+    String longitude;
+    String latitude;
     private int dotsCount;
     private ImageView[] dots;
     private ImageSliderAdapter imageSliderAdapter;
     private CafeteriaData cafeteriaData;
-
     private GoogleMap mMap;
-    String longitude;
-    String latitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +60,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         mMap = googleMap;
 
-        // Add a marker in Sydney, Australia, and move the camera.
-
         LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 
         MarkerOptions markerOptions = new MarkerOptions();
@@ -75,7 +69,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
 
     }
 
@@ -153,8 +147,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         ImageProvider imageProvider = new ImageProvider();
         Observable<ImageResponse> obser = imageProvider.get(cafeteriaData.getFacilityName());
-        obser
-                .observeOn(AndroidSchedulers.mainThread())
+        obser.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(it -> updateImage(it));
 
         binding.collapsingToolbar.setTitle(cafeteriaData.getFacilityName());
@@ -173,7 +166,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         //3개만 가져오는걸로 변경
         List<String> images = new ArrayList<>();
 
-        for (int i = 0;i<3 && i< imageResponse.imageInfos.size();i++) {
+        for (int i = 0; i < 3 && i < imageResponse.imageInfos.size(); i++) {
             images.add(imageResponse.imageInfos.get(i).imageUrl);
         }
 

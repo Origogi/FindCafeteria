@@ -2,13 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    >
 
     <ImageView
         android:id="@+id/mapinfo_thumbnail"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:src="@drawable/loadingimage"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +32,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/mapinfo_truckname"
+                android:id="@+id/mapinfo_cafename"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/mapinfo_index"
@@ -37,15 +40,7 @@
                 android:textSize="19sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/mapinfo_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textSize="16sp" />
-
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,14 +49,10 @@
             android:orientation="horizontal">
 
             <TextView
-                android:text="서울시 "
                 android:id="@+id/mapinfo_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp" />
-
-
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>
