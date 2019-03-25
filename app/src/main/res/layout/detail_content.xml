@@ -157,8 +157,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
-            />
+            android:layout_height="200dp" />
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
