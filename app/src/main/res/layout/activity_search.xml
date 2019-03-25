@@ -27,12 +27,22 @@
         android:id="@+id/map_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_above="@+id/bottom_navigation"
         app:elevation="12dp"
         app:borderWidth="0dp"
         app:backgroundTint="@color/common_google_signin_btn_text_dark_default"
         android:src="@drawable/ic_place_black_36dp"
         android:layout_margin="16dp" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/colorPrimary"
+        app:itemIconTint="@color/common_google_signin_btn_text_dark_pressed"
+        app:itemTextColor="@color/common_google_signin_btn_text_dark_pressed"
+        app:menu="@menu/bottom_nav_items" />
 
 </RelativeLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_explore"
+        android:icon="@drawable/ic_youtube_searched_for_black_48dp"
+        android:title="탐색하기"/>
+
+    <item
+        android:id="@+id/action_favorite"
+        android:icon="@drawable/ic_star_black_48dp"
+        android:title="즐가찾기" />
+
+    <item
+        android:id="@+id/action_setting"
+        android:icon="@drawable/ic_settings_black_48dp"
+        android:title="설정하기" />
+
+
+
+</menu>

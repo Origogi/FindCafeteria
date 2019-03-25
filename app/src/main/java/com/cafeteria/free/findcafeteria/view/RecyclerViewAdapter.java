@@ -2,6 +2,7 @@ package com.cafeteria.free.findcafeteria.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -61,6 +63,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((CafeViewHolder) holder).addressTv.setText(cardViewDto.getAddress());
         ((CafeViewHolder) holder).phoneNumberTv.setText(cardViewDto.getPhone());
         ((CafeViewHolder) holder).timeTv.setText(cardViewDto.getStartTime());
+
+        ((CafeViewHolder) holder).favorite.setOnTouchListener(new View.OnTouchListener() {
+            boolean checked = false;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+                    if (checked) {
+                        ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.favorite_unchecked));
+                        checked = false;
+                    }
+                    else {
+                        ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.favorite_checked));
+                        checked = true;
+                    }
+                    return false;
+                }
+                return true;
+            }
+        });
+        
         ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, Glide.with(context));
         ((CafeViewHolder) holder).viewPager.setAdapter(imageSliderAdapter);
 
@@ -102,11 +125,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private class CafeViewHolder extends RecyclerView.ViewHolder {
         ViewPager viewPager;
-
         TextView nameTv;
         TextView addressTv;
         TextView phoneNumberTv;
         TextView timeTv;
+        ImageView favorite;
 
         int position;
         boolean isRunning = false;
@@ -119,6 +142,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             addressTv = view.findViewById(R.id.address);
             phoneNumberTv = view.findViewById(R.id.phone_number);
             timeTv = view.findViewById(R.id.time);
+            favorite = view.findViewById(R.id.favorite_img);
         }
 
         void stopAutoScroll() {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.SearchRecentSuggestions;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.CafeteriaData;
@@ -30,12 +32,11 @@ import io.reactivex.observers.DisposableMaybeObserver;
 
 public class SearchActivity extends AppCompatActivity {
 
-
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     SearchView searchView;
     FloatingActionButton mapFab;
-
+    BottomNavigationView bottomNavigationView;
     GestureDetector gestureDetector;
 
     String currentQuery;
@@ -117,7 +118,6 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        //setIntent(intent);
         handleIntent(intent);
     }
 
@@ -160,6 +160,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
@@ -184,7 +185,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void startDetailActivity(CafeteriaData data) {
-        Logger.d("clicked" + data.toString());
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("data", data);
         startActivity(intent);
