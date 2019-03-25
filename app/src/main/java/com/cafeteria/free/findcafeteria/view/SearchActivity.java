@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -11,12 +12,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.*;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.CafeteriaData;
@@ -45,10 +50,17 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
             View childView = rv.findChildViewUnder(e.getX(),e.getY());
+
             if(childView != null && gestureDetector.onTouchEvent(e)){
+
                 Logger.d("");
-                int currentPosition = rv.getChildAdapterPosition(childView);
-                startDetailActivity(recyclerViewAdapter.get(currentPosition));
+                ImageView favorite=  childView.findViewById(R.id.favorite_img);
+
+                if (TextUtils.isEmpty((String)favorite.getTag())) {
+                    int currentPosition = rv.getChildAdapterPosition(childView);
+                    startDetailActivity(recyclerViewAdapter.get(currentPosition));
+                }
+                favorite.setTag("");
                 return true;
             }
             return false;

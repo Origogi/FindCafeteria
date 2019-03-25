@@ -57,7 +57,6 @@ public class CafeteriaViewModel extends ViewModel {
 
     public void onKeywordChanged(String keyword) {
         if (disposable != null) {
-            Logger.d("Dispose=" + disposable.isDisposed());
             if (disposable.isDisposed()) {
                 initSubject();
             }

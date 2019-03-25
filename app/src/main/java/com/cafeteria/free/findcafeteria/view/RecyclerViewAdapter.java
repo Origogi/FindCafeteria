@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,25 +65,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((CafeViewHolder) holder).phoneNumberTv.setText(cardViewDto.getPhone());
         ((CafeViewHolder) holder).timeTv.setText(cardViewDto.getStartTime());
 
+        ((CafeViewHolder) holder).favorite.setTag("");
         ((CafeViewHolder) holder).favorite.setOnTouchListener(new View.OnTouchListener() {
             boolean checked = false;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
                     if (checked) {
                         ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.favorite_unchecked));
+                        v.setTag("touched");
                         checked = false;
                     }
                     else {
                         ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.favorite_checked));
+                        v.setTag("touched");
                         checked = true;
                     }
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }
+
         });
+
         
         ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, Glide.with(context));
         ((CafeViewHolder) holder).viewPager.setAdapter(imageSliderAdapter);
@@ -161,7 +167,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             disposable = Observable.interval(2000L, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(idx ->{
-                        Logger.d("Auto slider=" + idx);
                         int currentIdx = (int)(idx % imageCount);
                         viewPager.setCurrentItem(currentIdx);
                     });
