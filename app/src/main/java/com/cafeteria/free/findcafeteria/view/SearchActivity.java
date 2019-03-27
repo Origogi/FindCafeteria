@@ -176,6 +176,8 @@ public class SearchActivity extends AppCompatActivity {
 
         Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         handleIntent(getIntent());
     }

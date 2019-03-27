@@ -6,19 +6,17 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.DataLoadState;
 import com.cafeteria.free.findcafeteria.viewmodel.LoadingViewModel;
 
 public class LoadingActivity extends AppCompatActivity {
 
     private LoadingViewModel viewModel;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
-
         viewModel = ViewModelProviders.of(this).get(LoadingViewModel.class);
         viewModel.startToLoad();
         showProgressDialog();
@@ -26,6 +24,7 @@ public class LoadingActivity extends AppCompatActivity {
         viewModel.isLoadedComplete().observe(this, result -> {
             if (result == DataLoadState.SUCCESS) {
                 startActivity(new Intent(LoadingActivity.this, SearchActivity.class));
+                dialog.dismiss();
                 finish();
             }
             else if (result == DataLoadState.FAIL) {
@@ -36,7 +35,8 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void showProgressDialog() {
-        ProgressDialog.show(LoadingActivity.this,"데이터 로드 중",
+
+        dialog = ProgressDialog.show(LoadingActivity.this,"데이터 로드 중",
                 "잠시만 기다려 주세요.",true);
     }
 

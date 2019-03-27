@@ -128,19 +128,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         if (cafeteriaData == null)
             return;
 
-        TextView offerName = findViewById(R.id.offerName);
-        TextView address = findViewById(R.id.address);
-        TextView date = findViewById(R.id.date);
-        TextView time = findViewById(R.id.time);
-        TextView phone = findViewById(R.id.phone);
-        TextView target = findViewById(R.id.target);
 
-        offerName.setText(cafeteriaData.getOfferName());
-        address.setText(cafeteriaData.getAddress());
-        date.setText(cafeteriaData.getDate());
-        time.setText(cafeteriaData.getTime());
-        phone.setText(cafeteriaData.getPhone());
-        target.setText(cafeteriaData.getTarget());
+        binding.address.setText(cafeteriaData.getAddress());
+        binding.date.setText(cafeteriaData.getDate());
+        binding.time.setText(cafeteriaData.getTime());
+        binding.phone.setText(cafeteriaData.getPhone());
+        binding.target.setText(cafeteriaData.getTarget());
+        binding.tvTitlebar.setText(cafeteriaData.getFacilityName());
 
         latitude = cafeteriaData.getLatitude();
         longitude = cafeteriaData.getLongitude();
@@ -150,9 +144,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         obser.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(it -> updateImage(it));
 
-        binding.collapsingToolbar.setTitle(cafeteriaData.getFacilityName());
-        binding.collapsingToolbar.setExpandedTitleTextAppearance(R.style.CollapsedAppBar);
-        binding.collapsingToolbar.setExpandedTitleMargin(0, 10, 0, 5);
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

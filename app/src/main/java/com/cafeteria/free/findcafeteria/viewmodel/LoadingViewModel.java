@@ -17,6 +17,7 @@ public class LoadingViewModel extends ViewModel {
     MutableLiveData<DataLoadState> loadedComplete;
 
     public LoadingViewModel () {
+
     }
 
     public void startToLoad() {
