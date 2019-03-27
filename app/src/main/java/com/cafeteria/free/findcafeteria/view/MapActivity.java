@@ -168,8 +168,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void updateCamera(List<LatLng> latLngList) {
         LatLng center = getCenterLatLng(latLngList);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 11));
-    }
 
+    }
     /**
      * 여러개의 포인트중 가운데 포인트 리턴
      */
