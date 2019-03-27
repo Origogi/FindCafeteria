@@ -1,5 +1,7 @@
-package com.cafeteria.free.findcafeteria.model;
+package com.cafeteria.free.findcafeteria.model.room.entity;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -35,7 +37,12 @@ import android.os.Parcelable;
             "저소득층 노인"
     time:
             "11:30~12:30"*/
+
+@Entity(tableName = "cafeteria_table")
 public class CafeteriaData implements Parcelable {
+
+    @PrimaryKey(autoGenerate = true)
+    private long id;
 
     private String address = "";
     private String address2 = "";
@@ -59,6 +66,142 @@ public class CafeteriaData implements Parcelable {
 
     private String offerCode;
     private String location;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDate2() {
+        return date2;
+    }
+
+    public void setDate2(String date2) {
+        this.date2 = date2;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getFacilityName() {
+        return facilityName;
+    }
+
+    public void setFacilityName(String facilityName) {
+        this.facilityName = facilityName;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getOfferName() {
+        return offerName;
+    }
+
+    public void setOfferName(String offerName) {
+        this.offerName = offerName;
+    }
+
+    public String getOperatingName() {
+        return operatingName;
+    }
+
+    public void setOperatingName(String operatingName) {
+        this.operatingName = operatingName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getOfferCode() {
+        return offerCode;
+    }
+
+    public void setOfferCode(String offerCode) {
+        this.offerCode = offerCode;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public CafeteriaData(String address,
                          String address2,
@@ -126,77 +269,7 @@ public class CafeteriaData implements Parcelable {
         }
     };
 
-      public String getOfferCode() {
-          return offerCode;
-      }
 
-      public void setOfferCode(String offerCode) {
-          this.offerCode = offerCode;
-      }
-
-      public String getLocation() {
-          return location;
-      }
-
-      public void setLocation(String location) {
-          this.location = location;
-      }
-
-      public String getAddress() {
-        return address;
-    }
-
-    public String getAddress2() {
-        return address2;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getDate2() {
-        return date2;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public String getFacilityName() {
-        return facilityName;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public String getOfferName() {
-        return offerName;
-    }
-
-    public String getOperatingName() {
-        return operatingName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public String getTime() {
-        return time;
-    }
 
     @Override
     public String toString() {

@@ -1,24 +1,18 @@
 package com.cafeteria.free.findcafeteria.view;
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
-import com.cafeteria.free.findcafeteria.model.CafeteriaData;
+import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
@@ -65,30 +59,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((CafeViewHolder) holder).phoneNumberTv.setText(cardViewDto.getPhone());
         ((CafeViewHolder) holder).timeTv.setText(cardViewDto.getStartTime());
 
-        ((CafeViewHolder) holder).favorite.setTag("");
         ((CafeViewHolder) holder).favorite.setOnTouchListener(new View.OnTouchListener() {
             boolean checked = false;
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
                     if (checked) {
                         ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.favorite_unchecked));
-                        v.setTag("touched");
                         checked = false;
                     }
                     else {
                         ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.favorite_checked));
-                        v.setTag("touched");
                         checked = true;
                     }
-                    return true;
+                    return false;
                 }
-                return false;
+                return true;
             }
-
         });
-
         
         ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, Glide.with(context));
         ((CafeViewHolder) holder).viewPager.setAdapter(imageSliderAdapter);
@@ -165,13 +154,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             isRunning = true;
 
             disposable = Observable.interval(2000L, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(idx ->{
-                        int currentIdx = (int)(idx % imageCount);
-                        viewPager.setCurrentItem(currentIdx);
-                    });
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(idx ->{
+                    Logger.d("Auto slider=" + idx);
+                    int currentIdx = (int)(idx % imageCount);
+                    viewPager.setCurrentItem(currentIdx);
+                });
         }
-
     }
 
 

@@ -2,6 +2,7 @@ package com.cafeteria.free.findcafeteria.model;
 
 import android.text.TextUtils;
 
+import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.util.Logger;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 public class CafeteriaDataProvider {
 
@@ -21,8 +24,9 @@ public class CafeteriaDataProvider {
     private DatabaseReference recordsRefer = firebaseDatabase.getReference().child("records");
     private DatabaseReference versionRefer = firebaseDatabase.getReference().child("version");
 
-    private int version;
+    private PublishSubject<Integer> subject =  PublishSubject.create();
 
+    private int version;
 
     private List<CafeteriaData> cafeteriaDataList = new ArrayList<>();
 
@@ -31,15 +35,15 @@ public class CafeteriaDataProvider {
     private CafeteriaDataProvider() {
     }
 
-    private void loadVersion() {
+    public Observable<Integer> getVersion() {
+
         versionRefer.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                dataSnapshot.getChildren().forEach((data)-> {
-                    version = data.getValue(Integer.class);
-                    Logger.d("version=" + version);
-                });
+                version = dataSnapshot.getValue(Integer.class);
+                Logger.d("version=" + version);
+                subject.onNext(version);
             }
 
             @Override
@@ -48,6 +52,8 @@ public class CafeteriaDataProvider {
                 //Error Handling
             }
         });
+
+        return subject;
     }
 
     public static CafeteriaDataProvider getInstance() {
