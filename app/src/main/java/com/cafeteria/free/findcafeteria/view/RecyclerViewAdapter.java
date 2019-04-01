@@ -64,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
+                    v.setTag("touched");
                     if (checked) {
                         ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.favorite_unchecked));
                         checked = false;
