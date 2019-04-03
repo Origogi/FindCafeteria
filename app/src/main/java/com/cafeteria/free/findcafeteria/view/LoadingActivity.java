@@ -18,7 +18,6 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(LoadingViewModel.class);
-        viewModel.startToLoad();
         showProgressDialog();
 
         viewModel.isLoadedComplete().observe(this, result -> {
@@ -35,7 +34,6 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void showProgressDialog() {
-
         dialog = ProgressDialog.show(LoadingActivity.this,"데이터 로드 중",
                 "잠시만 기다려 주세요.",true);
     }

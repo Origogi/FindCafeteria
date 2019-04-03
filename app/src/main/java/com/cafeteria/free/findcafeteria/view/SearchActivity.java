@@ -48,8 +48,6 @@ public class SearchActivity extends AppCompatActivity {
             View childView = rv.findChildViewUnder(e.getX(),e.getY());
 
             if(childView != null && gestureDetector.onTouchEvent(e)){
-
-                Logger.d("");
                 ImageView favorite=  childView.findViewById(R.id.favorite_img);
 
                 if (TextUtils.isEmpty((String)favorite.getTag())) {

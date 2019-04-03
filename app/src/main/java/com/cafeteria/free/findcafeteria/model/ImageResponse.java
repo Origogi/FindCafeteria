@@ -30,7 +30,6 @@ public class ImageResponse {
         boolean isEnd;
 
         public Meta() {
-
         }
 
         @Override

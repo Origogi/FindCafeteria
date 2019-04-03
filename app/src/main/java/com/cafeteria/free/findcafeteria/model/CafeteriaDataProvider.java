@@ -24,11 +24,8 @@ public class CafeteriaDataProvider {
     private DatabaseReference recordsRefer = firebaseDatabase.getReference().child("records");
     private DatabaseReference versionRefer = firebaseDatabase.getReference().child("version");
 
-    private PublishSubject<Integer> subject =  PublishSubject.create();
 
     private int version;
-
-    private List<CafeteriaData> cafeteriaDataList = new ArrayList<>();
 
     private static CafeteriaDataProvider sCafeteriaDataProvider = new CafeteriaDataProvider();
 
@@ -36,6 +33,8 @@ public class CafeteriaDataProvider {
     }
 
     public Observable<Integer> getVersion() {
+
+        PublishSubject<Integer> subject =  PublishSubject.create();
 
         versionRefer.addValueEventListener(new ValueEventListener() {
             @Override
@@ -60,26 +59,33 @@ public class CafeteriaDataProvider {
         return sCafeteriaDataProvider;
     }
 
-    public void startToLoadData(DataLoadListener listener) {
+    public Observable<List<CafeteriaData>> getCafeteriaObservable() {
+
+        PublishSubject<List<CafeteriaData>> subject =  PublishSubject.create();
+
         recordsRefer.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Logger.d("size=" + dataSnapshot.getChildrenCount());
+                List<CafeteriaData> cafeteriaDataList = new ArrayList<>();
 
                 dataSnapshot.getChildren().forEach((data)-> {
 
                     CafeteriaData cafeteriaData = data.getValue(CafeteriaData.class);
-//                    Logger.d(cafeteriaData.toString());
                     cafeteriaDataList.add(cafeteriaData);
                 });
-                listener.onComplete(DataLoadState.SUCCESS);
+
+                subject.onNext(cafeteriaDataList);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                listener.onComplete(DataLoadState.FAIL);
+
+                //TODO error Handling
             }
         });
+
+        return subject;
     }
 
     public Maybe<List<CafeteriaData>> getCafeteriaDataFilteredAddress(String keyword) {

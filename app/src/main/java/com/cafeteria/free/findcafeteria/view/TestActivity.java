@@ -50,7 +50,6 @@ public class TestActivity extends AppCompatActivity {
             binding.textView.setText(data);
         });
 
-
         ImageProvider imageProvider = new ImageProvider();
         imageProvider.get("고양이");
     }
