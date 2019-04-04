@@ -8,8 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityMapBinding;
-import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
+import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
+import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.util.MapPagerAdapter;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableMaybeObserver;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -45,7 +47,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         binding.setActivity(this);
 
         getData();
-        initView();
+
     }
 
     @SuppressLint("CheckResult")
@@ -54,7 +56,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // TODO: 2019-03-10 getData
         Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(this, query);
-        observable.subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
+        observable.observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
             @Override
             public void onStart() {
                 cafeteriaList = new ArrayList<>();
@@ -63,6 +65,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onSuccess(List<CafeteriaData> result) {
                 cafeteriaList = result;
+                initView();
             }
 
             @Override
@@ -170,6 +173,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 11));
 
     }
+
     /**
      * 여러개의 포인트중 가운데 포인트 리턴
      */

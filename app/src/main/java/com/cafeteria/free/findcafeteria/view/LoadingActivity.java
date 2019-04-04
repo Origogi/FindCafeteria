@@ -30,7 +30,6 @@ public class LoadingActivity extends AppCompatActivity {
                 //Error popup
             }
         });
-
     }
 
     private void showProgressDialog() {
