@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityMapBinding;
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
+import com.cafeteria.free.findcafeteria.model.ImageResponse;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
-import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.util.MapPagerAdapter;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,7 +47,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         binding.setActivity(this);
 
         getData();
-
     }
 
     @SuppressLint("CheckResult")
@@ -199,6 +198,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         minLon = Double.parseDouble(String.format("%.6f", minLon));
 
         return new LatLng((maxLat + minLat) / 2.0, (maxLon + minLon) / 2.0);
-
     }
+
 }
