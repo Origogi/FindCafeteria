@@ -85,7 +85,7 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 Logger.d(query);
 
-                Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(query);
+                Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(SearchActivity.this, query);
 
                 observable.subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
                     @Override

@@ -6,14 +6,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityDetailBinding;
-import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
+import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -57,7 +56,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
 
         LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
@@ -66,8 +64,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         markerOptions.position(latLng);
         markerOptions.title(cafeteriaData.getFacilityName());
         mMap.addMarker(markerOptions);
-
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
 

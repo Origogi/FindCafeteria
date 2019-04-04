@@ -1,7 +1,10 @@
 package com.cafeteria.free.findcafeteria.model;
 
+import android.content.Context;
 import android.text.TextUtils;
 
+import com.cafeteria.free.findcafeteria.model.room.dao.CafeteriaDataDao;
+import com.cafeteria.free.findcafeteria.model.room.db.AppDatabase;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.util.Logger;
 import com.google.firebase.database.DataSnapshot;
@@ -24,9 +27,6 @@ public class CafeteriaDataProvider {
     private DatabaseReference recordsRefer = firebaseDatabase.getReference().child("records");
     private DatabaseReference versionRefer = firebaseDatabase.getReference().child("version");
 
-
-    private int version;
-
     private static CafeteriaDataProvider sCafeteriaDataProvider = new CafeteriaDataProvider();
 
     private CafeteriaDataProvider() {
@@ -40,7 +40,7 @@ public class CafeteriaDataProvider {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                version = dataSnapshot.getValue(Integer.class);
+                int version = dataSnapshot.getValue(Integer.class);
                 Logger.d("version=" + version);
                 subject.onNext(version);
             }
@@ -88,14 +88,16 @@ public class CafeteriaDataProvider {
         return subject;
     }
 
-    public Maybe<List<CafeteriaData>> getCafeteriaDataFilteredAddress(String keyword) {
+    public Maybe<List<CafeteriaData>> getCafeteriaDataFilteredAddress(Context context, String keyword) {
         Logger.d("search from list=" + keyword);
 
         if (TextUtils.isEmpty(keyword)) {
             throw new IllegalArgumentException("Keyword is empty");
         }
 
-        List<CafeteriaData> filteredData = cafeteriaDataList.stream().filter( data ->
+        CafeteriaDataDao cafeteriaDataDao = AppDatabase.getInstance(context).getCafeteriaDataDao();
+
+        List<CafeteriaData> filteredData = cafeteriaDataDao.getAllCafeteria().stream().filter( data ->
             data.getAddress().contains(keyword) || data.getAddress2().contains(keyword)
         ).collect(Collectors.toList());
 

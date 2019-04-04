@@ -53,7 +53,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         String query = getIntent().getStringExtra("query");
 
         // TODO: 2019-03-10 getData
-        Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(query);
+        Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(this, query);
         observable.subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
             @Override
             public void onStart() {

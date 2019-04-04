@@ -53,7 +53,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         ((CafeViewHolder) holder).stopAutoScroll();
         ((CafeViewHolder) holder).position = position;
-
         ((CafeViewHolder) holder).nameTv.setText(cardViewDto.getFacilityName());
         ((CafeViewHolder) holder).addressTv.setText(cardViewDto.getAddress());
         ((CafeViewHolder) holder).phoneNumberTv.setText(cardViewDto.getPhone());
