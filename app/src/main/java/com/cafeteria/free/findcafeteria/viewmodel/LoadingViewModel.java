@@ -51,11 +51,14 @@ public class LoadingViewModel extends AndroidViewModel {
                 .getVersion()
                 .observeOn(Schedulers.io())
                 .switchMap(version->getCafeteria(version))
-                .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(cafeteriaDataList -> {
-                    cafeteriaDataDao.deleteAll();
-                    cafeteriaDataDao.insertAll(cafeteriaDataList);
-                    loadedComplete.postValue(DataLoadState.SUCCESS);
+                    Logger.d(cafeteriaDataList.size() + "");
+
+                    if (!cafeteriaDataList.isEmpty()) {
+                        cafeteriaDataDao.deleteAll();
+                        cafeteriaDataDao.insertAll(cafeteriaDataList);
+                        loadedComplete.postValue(DataLoadState.SUCCESS);
+                    }
                 });
     }
 
@@ -63,11 +66,18 @@ public class LoadingViewModel extends AndroidViewModel {
         DBVersion dbVersion = dbVersionDao.get();
 
         if (null != dbVersion && version != dbVersion.getVersion()) {
+            dbVersionDao.deleteAll();
             dbVersionDao.insert(new DBVersion());
             return CafeteriaDataProvider.getInstance().getCafeteriaObservable();
         }
         else {
-            return Observable.just(cafeteriaDataDao.getAllCafeteria());
+            List<CafeteriaData> cafeteriaDataList = cafeteriaDataDao.getAllCafeteria();
+            if (cafeteriaDataList.isEmpty()) {
+                return CafeteriaDataProvider.getInstance()
+                        .getCafeteriaObservable();
+            }
+            return Observable
+                    .just(cafeteriaDataDao.getAllCafeteria());
         }
 
     }

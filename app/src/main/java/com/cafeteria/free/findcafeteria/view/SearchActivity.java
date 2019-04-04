@@ -28,6 +28,7 @@ import com.cafeteria.free.findcafeteria.util.Logger;
 import java.util.List;
 
 import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableMaybeObserver;
 
 
@@ -45,12 +46,12 @@ public class SearchActivity extends AppCompatActivity {
     RecyclerView.OnItemTouchListener itemTouchListener = new RecyclerView.OnItemTouchListener() {
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View childView = rv.findChildViewUnder(e.getX(),e.getY());
+            View childView = rv.findChildViewUnder(e.getX(), e.getY());
 
-            if(childView != null && gestureDetector.onTouchEvent(e)){
-                ImageView favorite=  childView.findViewById(R.id.favorite_img);
+            if (childView != null && gestureDetector.onTouchEvent(e)) {
+                ImageView favorite = childView.findViewById(R.id.favorite_img);
 
-                if (TextUtils.isEmpty((String)favorite.getTag())) {
+                if (TextUtils.isEmpty((String) favorite.getTag())) {
                     int currentPosition = rv.getChildAdapterPosition(childView);
                     startDetailActivity(recyclerViewAdapter.get(currentPosition));
                 }
@@ -61,10 +62,12 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) { }
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
 
         @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) { }
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        }
 
     };
 
@@ -87,29 +90,31 @@ public class SearchActivity extends AppCompatActivity {
 
                 Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(SearchActivity.this, query);
 
-                observable.subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
-                    @Override
-                    public void onStart() {
-                    }
+                observable
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
+                            @Override
+                            public void onStart() {
+                            }
 
-                    @Override
-                    public void onSuccess(List<CafeteriaData> result) {
-                        mapFab.setVisibility(View.VISIBLE);
-                        updateRecycleView(result);
-                    }
+                            @Override
+                            public void onSuccess(List<CafeteriaData> result) {
+                                mapFab.setVisibility(View.VISIBLE);
+                                updateRecycleView(result);
+                            }
 
-                    @Override
-                    public void onError(Throwable error) {
-                        error.printStackTrace();
-                    }
+                            @Override
+                            public void onError(Throwable error) {
+                                error.printStackTrace();
+                            }
 
-                    @Override
-                    public void onComplete() {
-                        showErrorDialog(query);
-                        mapFab.setVisibility(View.GONE);
-                        recyclerViewAdapter.reset();
-                    }
-                });
+                            @Override
+                            public void onComplete() {
+                                showErrorDialog(query);
+                                mapFab.setVisibility(View.GONE);
+                                recyclerViewAdapter.reset();
+                            }
+                        });
                 return false;
             }
 
@@ -142,7 +147,7 @@ public class SearchActivity extends AppCompatActivity {
         recyclerViewAdapter = new RecyclerViewAdapter(this);
         recyclerView.setAdapter(recyclerViewAdapter);
 
-        gestureDetector= new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
+        gestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 return true;

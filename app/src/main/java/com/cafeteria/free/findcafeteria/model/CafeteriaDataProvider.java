@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.MaybeSubject;
 import io.reactivex.subjects.PublishSubject;
 
@@ -68,15 +69,18 @@ public class CafeteriaDataProvider {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Logger.d("size=" + dataSnapshot.getChildrenCount());
-                List<CafeteriaData> cafeteriaDataList = new ArrayList<>();
 
-                dataSnapshot.getChildren().forEach((data)-> {
+                new Thread(()->{
+                    List<CafeteriaData> cafeteriaDataList = new ArrayList<>();
 
-                    CafeteriaData cafeteriaData = data.getValue(CafeteriaData.class);
-                    cafeteriaDataList.add(cafeteriaData);
-                });
+                    dataSnapshot.getChildren().forEach((data)-> {
 
-                subject.onNext(cafeteriaDataList);
+                        CafeteriaData cafeteriaData = data.getValue(CafeteriaData.class);
+                        cafeteriaDataList.add(cafeteriaData);
+                    });
+
+                    subject.onNext(cafeteriaDataList);
+                }).start();
             }
 
             @Override
@@ -100,15 +104,15 @@ public class CafeteriaDataProvider {
 
         new Thread(()-> {
             CafeteriaDataDao cafeteriaDataDao = AppDatabase.getInstance(context).getCafeteriaDataDao();
-
-            Logger.d(cafeteriaDataDao.getAllCafeteria().size() + "");
-
             List<CafeteriaData> filteredData = cafeteriaDataDao.getAllCafeteria().stream().filter( data ->
                     data.getAddress().contains(keyword) || data.getAddress2().contains(keyword)
             ).collect(Collectors.toList());
 
             if ( filteredData.isEmpty() ) {
-//                maybeSubject.onComplete();
+                maybeSubject.onComplete();
+            }
+            else {
+                maybeSubject.onSuccess(filteredData);
             }
         }).start();
 
