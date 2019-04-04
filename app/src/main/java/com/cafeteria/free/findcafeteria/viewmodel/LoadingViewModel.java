@@ -21,6 +21,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -48,19 +49,20 @@ public class LoadingViewModel extends AndroidViewModel {
         CafeteriaDataProvider
                 .getInstance()
                 .getVersion()
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .switchMap(version->getCafeteria(version))
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(cafeteriaDataList -> {
                     cafeteriaDataDao.deleteAll();
                     cafeteriaDataDao.insertAll(cafeteriaDataList);
-                    loadedComplete.setValue(DataLoadState.SUCCESS);
+                    loadedComplete.postValue(DataLoadState.SUCCESS);
                 });
     }
 
     private Observable<List<CafeteriaData>> getCafeteria(Integer version) {
         DBVersion dbVersion = dbVersionDao.get();
 
-        if (null == dbVersion && version != dbVersion.getVersion()) {
+        if (null != dbVersion && version != dbVersion.getVersion()) {
             dbVersionDao.insert(new DBVersion());
             return CafeteriaDataProvider.getInstance().getCafeteriaObservable();
         }

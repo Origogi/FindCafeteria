@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.subjects.MaybeSubject;
 import io.reactivex.subjects.PublishSubject;
 
 public class CafeteriaDataProvider {
@@ -91,19 +92,26 @@ public class CafeteriaDataProvider {
     public Maybe<List<CafeteriaData>> getCafeteriaDataFilteredAddress(Context context, String keyword) {
         Logger.d("search from list=" + keyword);
 
+        MaybeSubject<List<CafeteriaData>> maybeSubject = MaybeSubject.create();
+
         if (TextUtils.isEmpty(keyword)) {
             throw new IllegalArgumentException("Keyword is empty");
         }
 
-        CafeteriaDataDao cafeteriaDataDao = AppDatabase.getInstance(context).getCafeteriaDataDao();
+        new Thread(()-> {
+            CafeteriaDataDao cafeteriaDataDao = AppDatabase.getInstance(context).getCafeteriaDataDao();
 
-        List<CafeteriaData> filteredData = cafeteriaDataDao.getAllCafeteria().stream().filter( data ->
-            data.getAddress().contains(keyword) || data.getAddress2().contains(keyword)
-        ).collect(Collectors.toList());
+            Logger.d(cafeteriaDataDao.getAllCafeteria().size() + "");
 
-        if ( filteredData.isEmpty() ) {
-            return Maybe.empty();
-        }
-        return Maybe.just(filteredData);
+            List<CafeteriaData> filteredData = cafeteriaDataDao.getAllCafeteria().stream().filter( data ->
+                    data.getAddress().contains(keyword) || data.getAddress2().contains(keyword)
+            ).collect(Collectors.toList());
+
+            if ( filteredData.isEmpty() ) {
+//                maybeSubject.onComplete();
+            }
+        }).start();
+
+        return maybeSubject;
     }
 }
