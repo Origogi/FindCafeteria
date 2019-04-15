@@ -50,7 +50,7 @@ public class CafeteriaDataProvider {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 //TODO
-                //Error Handling
+
             }
         });
 

@@ -65,11 +65,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     v.setTag("touched");
                     if (checked) {
-                        ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.favorite_unchecked));
+                        ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.ic_favorite_red));
                         checked = false;
                     }
                     else {
-                        ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.favorite_checked));
+                        ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.ic_not_favorite_red));
                         checked = true;
                     }
                     return false;
