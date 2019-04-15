@@ -1,8 +1,14 @@
 package com.cafeteria.free.findcafeteria.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -17,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -99,7 +106,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 gMap.animateCamera(center);
 
                 if (selectedMarker != null) {
-                    selectedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_pin_drop_black_18dp));
+                    selectedMarker.setIcon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_restaurant_menu));
                     selectedMarker.setZIndex(0);
                 }
 
@@ -153,9 +160,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         markerOptions.title(cafeteria.getFacilityName());
         markerOptions.position(position);
         markerOptions.snippet(String.valueOf(index));
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_pin_drop_black_18dp));
+
+        markerOptions.icon(bitmapDescriptorFromVector(this, R.drawable.ic_restaurant_menu));
 
         return gMap.addMarker(markerOptions);
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorDrawableResourceId) {
+        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     //카메라 중앙으로 이동
