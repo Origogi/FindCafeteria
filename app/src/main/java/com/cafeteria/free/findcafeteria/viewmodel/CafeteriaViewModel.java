@@ -28,7 +28,6 @@ public class CafeteriaViewModel extends ViewModel {
 
         cafeteriaDataProvider = CafeteriaDataProvider.getInstance();
         initSubject();
-
     }
 
     private void initSubject() {

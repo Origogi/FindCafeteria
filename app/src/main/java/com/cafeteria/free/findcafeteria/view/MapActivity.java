@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityMapBinding;
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
-import com.cafeteria.free.findcafeteria.model.ImageResponse;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
+import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.util.MapPagerAdapter;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,7 +53,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getData() {
         String query = getIntent().getStringExtra("query");
 
-        // TODO: 2019-03-10 getData
         Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(this, query);
         observable.observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
             @Override
@@ -62,22 +61,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onSuccess(List<CafeteriaData> result) {
-                cafeteriaList = result;
+            public void onSuccess(List<CafeteriaData> cafeteriaData) {
+                cafeteriaList = cafeteriaData;
                 initView();
             }
 
             @Override
-            public void onError(Throwable error) {
-                error.printStackTrace();
+            public void onError(Throwable e) {
+
             }
 
             @Override
             public void onComplete() {
-
             }
         });
     }
+
 
     private void initView() {
 
@@ -159,13 +158,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return gMap.addMarker(markerOptions);
     }
 
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        //해당 뷰페이지 이동 -> 스니펫에 인덱스를 넣어 태그로 이용함. ( 마커를 클릭할때와 뷰페이지를 연결 )
-        binding.mapindicator.setCurrentItem(Integer.parseInt(marker.getSnippet()));
-        return true;
-    }
-
     //카메라 중앙으로 이동
     public void updateCamera(List<LatLng> latLngList) {
         LatLng center = getCenterLatLng(latLngList);
@@ -198,6 +190,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         minLon = Double.parseDouble(String.format("%.6f", minLon));
 
         return new LatLng((maxLat + minLat) / 2.0, (maxLon + minLon) / 2.0);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        //해당 뷰페이지 이동 -> 스니펫에 인덱스를 넣어 태그로 이용함. ( 마커를 클릭할때와 뷰페이지를 연결 )
+        binding.mapindicator.setCurrentItem(Integer.parseInt(marker.getSnippet()));
+        return true;
     }
 
 }

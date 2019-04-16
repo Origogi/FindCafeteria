@@ -1,5 +1,6 @@
 package com.cafeteria.free.findcafeteria.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
@@ -10,10 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
-import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
+import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.view.DetailActivity;
 
 import java.util.ArrayList;
@@ -54,6 +56,7 @@ public class MapPagerAdapter extends PagerAdapter {
         return view == (object);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         View itemView = mLayoutInflater.inflate(R.layout.viewpager_mapinfo, container, false);
@@ -66,16 +69,13 @@ public class MapPagerAdapter extends PagerAdapter {
         CafeteriaData cafeteria = cafeteriaDataList.get(position);
 
         //썸네일용 이미지 한개 가져옴
-        thumbnailList=new ArrayList<>();
+        thumbnailList = new ArrayList<>();
         ImageProvider imageProvider = new ImageProvider();
         Observable<ImageResponse> obser = imageProvider.get(cafeteria.getFacilityName());
         obser.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        it -> thumbnailList.add(it.imageInfos.get(0).imageUrl)
-                );
-
-        // FIXME: 2019-03-24 썸네일 이미지를 가져온후에 하는 방법?
-//        Glide.with(mContext).load(thumbnailList.get(position)).placeholder(R.drawable.loadingimage).into(mapinfo_thumbnail);
+                .subscribe(it -> {
+                    Glide.with(mContext).load(it.imageInfos.get(0).imageUrl).placeholder(R.drawable.loadingimage).error(R.drawable.loadingimage).into(mapinfo_thumbnail);
+                });
 
         mapinfo_index.setText(String.valueOf(position + 1) + ". ");
         mapinfo_cafename.setText(cafeteria.getFacilityName());
@@ -83,8 +83,6 @@ public class MapPagerAdapter extends PagerAdapter {
 
         itemView.setOnClickListener(v -> startDetailActivity(cafeteria));
 
-
-        // TODO: 2019-03-21 맵 요소들 넣기
         container.addView(itemView);
         return itemView;
     }
