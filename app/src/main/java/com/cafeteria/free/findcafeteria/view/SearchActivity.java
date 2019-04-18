@@ -34,7 +34,7 @@ public class SearchActivity extends AppCompatActivity {
     private MenuItem prevMenuItem;
     private SearchView searchView;
 
-    String currentQuery;
+    private String currentQuery;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -98,6 +98,8 @@ public class SearchActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        viewPager.setOffscreenPageLimit(ViewPager.AUTOFILL_TYPE_TOGGLE);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
