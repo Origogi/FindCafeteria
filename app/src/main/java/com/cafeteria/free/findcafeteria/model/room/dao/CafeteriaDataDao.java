@@ -1,5 +1,6 @@
 package com.cafeteria.free.findcafeteria.model.room.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -21,6 +22,9 @@ public interface CafeteriaDataDao {
 
     @Query("SELECT * FROM cafeteria_table")
     public List<CafeteriaData> getAllCafeteria();
+
+    @Query("SELECT * FROM cafeteria_table WHERE isFavorite = 1")
+    public LiveData<List<CafeteriaData>> getFavoriteCafeteria();
 
     @Query("DELETE FROM cafeteria_table")
     public void deleteAll();

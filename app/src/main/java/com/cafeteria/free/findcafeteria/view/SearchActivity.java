@@ -96,7 +96,7 @@ public class SearchActivity extends AppCompatActivity {
                     result = true;
                     break;
             }
-            return false;
+            return result;
         });
 
         viewPager.setOffscreenPageLimit(ViewPager.AUTOFILL_TYPE_TOGGLE);
@@ -147,14 +147,6 @@ public class SearchActivity extends AppCompatActivity {
         adapter.addFragment(favoriteFragment);
         adapter.addFragment(settingFragment);
         viewPager.setAdapter(adapter);
-    }
-
-    private void startMapActivity(String query) {
-        Logger.d("clicked" + query);
-
-        Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra("query", query);
-        startActivity(intent);
     }
 
     private void handleIntent(Intent intent) {

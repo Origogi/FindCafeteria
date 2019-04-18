@@ -54,9 +54,9 @@ public class SearchFragment extends Fragment {
     private FloatingActionButton mapFab;
     private GestureDetector gestureDetector;
 
-    String currentQuery;
+    private String currentQuery;
 
-    RecyclerView.OnItemTouchListener itemTouchListener = new RecyclerView.OnItemTouchListener() {
+    private RecyclerView.OnItemTouchListener itemTouchListener = new RecyclerView.OnItemTouchListener() {
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
             View childView = rv.findChildViewUnder(e.getX(), e.getY());
