@@ -67,6 +67,16 @@ public class CafeteriaData implements Parcelable {
     private String offerCode;
     private String location;
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    private boolean isFavorite;
+
     public long getId() {
         return id;
     }

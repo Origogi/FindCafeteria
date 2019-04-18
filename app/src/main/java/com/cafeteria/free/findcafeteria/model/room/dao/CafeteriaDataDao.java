@@ -25,4 +25,7 @@ public interface CafeteriaDataDao {
     @Query("DELETE FROM cafeteria_table")
     public void deleteAll();
 
+    @Update
+    public int update(CafeteriaData cafeteriaData);
+
 }

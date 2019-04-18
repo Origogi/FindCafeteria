@@ -15,20 +15,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.cafeteria.free.findcafeteria.R;
-import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
 import com.cafeteria.free.findcafeteria.model.MySuggestionProvider;
-import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.view.fragment.FavoriteFragment;
 import com.cafeteria.free.findcafeteria.view.fragment.SearchFragment;
 import com.cafeteria.free.findcafeteria.view.fragment.SettingFragment;
-
-import java.util.List;
-
-import io.reactivex.Maybe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableMaybeObserver;
-
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -43,7 +34,6 @@ public class SearchActivity extends AppCompatActivity {
     private MenuItem prevMenuItem;
     private SearchView searchView;
 
-
     String currentQuery;
 
     @Override
@@ -52,8 +42,10 @@ public class SearchActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_activity_actions, menu);
 
+        // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -155,6 +147,13 @@ public class SearchActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+    private void startMapActivity(String query) {
+        Logger.d("clicked" + query);
+
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra("query", query);
+        startActivity(intent);
+    }
 
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {

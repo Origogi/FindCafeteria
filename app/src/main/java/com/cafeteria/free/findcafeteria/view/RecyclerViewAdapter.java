@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
+import com.cafeteria.free.findcafeteria.model.room.dao.CafeteriaDataDao;
+import com.cafeteria.free.findcafeteria.model.room.db.AppDatabase;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
@@ -26,7 +28,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.CafeViewHolder> {
 
     private List<CafeteriaData> cardViewDtos = new ArrayList<>();
     private Context context;
@@ -42,24 +44,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerViewAdapter.CafeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_cafeteria, parent, false);
         return new CafeViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerViewAdapter.CafeViewHolder holder, int position) {
         CafeteriaData cardViewDto = cardViewDtos.get(position);
 
-        ((CafeViewHolder) holder).stopAutoScroll();
-        ((CafeViewHolder) holder).position = position;
-        ((CafeViewHolder) holder).nameTv.setText(cardViewDto.getFacilityName());
-        ((CafeViewHolder) holder).addressTv.setText(cardViewDto.getAddress());
-        ((CafeViewHolder) holder).phoneNumberTv.setText(cardViewDto.getPhone());
-        ((CafeViewHolder) holder).timeTv.setText(cardViewDto.getStartTime());
+        holder.stopAutoScroll();
+        holder.position = position;
+        holder.nameTv.setText(cardViewDto.getFacilityName());
+        holder.addressTv.setText(cardViewDto.getAddress());
+        holder.phoneNumberTv.setText(cardViewDto.getPhone());
+        holder.timeTv.setText(cardViewDto.getStartTime());
 
-        ((CafeViewHolder) holder).favorite.setOnTouchListener(new View.OnTouchListener() {
-            boolean checked = false;
+        if (cardViewDto.isFavorite()) {
+            holder.favorite.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_red));
+        }
+        else {
+            holder.favorite.setImageDrawable(context.getDrawable(R.drawable.ic_not_favorite_red));
+        }
+
+        holder.favorite.setOnTouchListener(new View.OnTouchListener() {
+            boolean checked = cardViewDto.isFavorite();
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -72,6 +81,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.ic_not_favorite_red));
                         checked = true;
                     }
+
+                    new Thread(()->{
+                        CafeteriaDataDao dao = AppDatabase.getInstance(context).getCafeteriaDataDao();
+                        cardViewDto.setFavorite(checked);
+                        int result = dao.update(cardViewDto);
+                        Logger.d("" + result);
+                    }).start();
+
                     return false;
                 }
                 return true;
@@ -79,7 +96,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
         
         ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, Glide.with(context));
-        ((CafeViewHolder) holder).viewPager.setAdapter(imageSliderAdapter);
+        holder.viewPager.setAdapter(imageSliderAdapter);
 
         ImageProvider imageProvider = new ImageProvider();
         Observable<ImageResponse> observable = imageProvider.get(cardViewDto.getFacilityName());
@@ -88,7 +105,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             .subscribe(it -> {
                 updateImage(imageSliderAdapter,it);
                 if(imageSliderAdapter.getCount() > 0) {
-                    ((CafeViewHolder) holder).startAutoScroll(imageSliderAdapter.getCount());
+                    holder.startAutoScroll(imageSliderAdapter.getCount());
                 }
             });
     }
@@ -117,7 +134,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return cardViewDtos.get(position);
     }
 
-    private class CafeViewHolder extends RecyclerView.ViewHolder {
+    class CafeViewHolder extends RecyclerView.ViewHolder {
         ViewPager viewPager;
         TextView nameTv;
         TextView addressTv;
@@ -155,7 +172,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             disposable = Observable.interval(2000L, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(idx ->{
-                    Logger.d("Auto slider=" + idx);
                     int currentIdx = (int)(idx % imageCount);
                     viewPager.setCurrentItem(currentIdx);
                 });
