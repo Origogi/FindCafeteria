@@ -99,7 +99,7 @@ public class SearchActivity extends AppCompatActivity {
             return result;
         });
 
-        viewPager.setOffscreenPageLimit(ViewPager.AUTOFILL_TYPE_TOGGLE);
+        viewPager.setOffscreenPageLimit(3);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

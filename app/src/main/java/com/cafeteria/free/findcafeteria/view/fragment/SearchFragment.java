@@ -53,6 +53,7 @@ public class SearchFragment extends Fragment {
     private RecyclerViewAdapter recyclerViewAdapter;
     private FloatingActionButton mapFab;
     private GestureDetector gestureDetector;
+    private View noItemLayout;
 
     private String currentQuery;
 
@@ -133,6 +134,8 @@ public class SearchFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycle_view);
         recyclerView.setLayoutManager(layoutManager);
 
+        noItemLayout = view.findViewById(R.id.no_item_layout);
+
         recyclerViewAdapter = new RecyclerViewAdapter(getContext());
         recyclerView.setAdapter(recyclerViewAdapter);
 
@@ -204,6 +207,7 @@ public class SearchFragment extends Fragment {
                     public void onSuccess(List<CafeteriaData> result) {
                         mapFab.setVisibility(View.VISIBLE);
                         updateRecycleView(result);
+                        noItemLayout.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -215,6 +219,7 @@ public class SearchFragment extends Fragment {
                     public void onComplete() {
                         showErrorDialog(query);
                         mapFab.setVisibility(View.GONE);
+                        noItemLayout.setVisibility(View.VISIBLE);
                         recyclerViewAdapter.reset();
                     }
                 });

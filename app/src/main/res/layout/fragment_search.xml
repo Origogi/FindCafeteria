@@ -27,6 +27,29 @@
         android:src="@drawable/ic_place_black_36dp"
         android:layout_margin="16dp" />
 
+    <LinearLayout
+        android:id="@+id/no_item_layout"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_search"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="검색 창에 기관 명 또는"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="위치(예: 서울시 금천구)를 입력해주세요."/>
+    </LinearLayout>
 
 
 </RelativeLayout>

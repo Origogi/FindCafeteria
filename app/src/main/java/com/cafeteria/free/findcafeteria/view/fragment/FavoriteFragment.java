@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ public class FavoriteFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
     private GestureDetector gestureDetector;
+    private View noItemLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -119,6 +121,8 @@ public class FavoriteFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycle_view);
         recyclerView.setLayoutManager(layoutManager);
 
+        noItemLayout = view.findViewById(R.id.no_item_layout);
+
         recyclerViewAdapter = new RecyclerViewAdapter(getContext());
         recyclerView.setAdapter(recyclerViewAdapter);
 
@@ -134,6 +138,13 @@ public class FavoriteFragment extends Fragment {
         SearchViewModel viewModel = ViewModelProviders.of(getActivity()).get(SearchViewModel.class);
 
         viewModel.getFavoriteCafeteriaLiveData().observe(this, favorites -> {
+            if (favorites.isEmpty()) {
+                noItemLayout.setVisibility(View.VISIBLE);
+            }
+            else {
+                noItemLayout.setVisibility(View.GONE);
+            }
+
             recyclerViewAdapter.setCardViewDtos(favorites);
             recyclerViewAdapter.notifyDataSetChanged();
         });
