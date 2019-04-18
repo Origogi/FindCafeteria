@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +8,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         app:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
@@ -17,8 +16,8 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
-        android:layout_above="@+id/bottom_navigation"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/bottom_navigation"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.BottomNavigationView
@@ -27,9 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/button"
-        app:itemBackground="@color/colorPrimary"
-        app:itemIconTint="@color/common_google_signin_btn_text_dark_pressed"
-        app:itemTextColor="@color/common_google_signin_btn_text_dark_pressed"
+        app:itemBackground="@color/colorWhite"
+        app:itemIconTint="@color/naviColor"
+        app:itemTextColor="@color/naviColor"
         app:menu="@menu/bottom_nav_items" />
 
 </RelativeLayout>
