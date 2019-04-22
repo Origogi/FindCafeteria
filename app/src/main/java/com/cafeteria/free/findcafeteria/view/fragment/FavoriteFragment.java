@@ -1,15 +1,12 @@
 package com.cafeteria.free.findcafeteria.view.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -22,7 +19,7 @@ import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.view.DetailActivity;
 import com.cafeteria.free.findcafeteria.view.RecyclerViewAdapter;
-import com.cafeteria.free.findcafeteria.viewmodel.SearchViewModel;
+import com.cafeteria.free.findcafeteria.viewmodel.MainViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -135,7 +132,7 @@ public class FavoriteFragment extends Fragment {
 
         recyclerView.addOnItemTouchListener(itemTouchListener);
 
-        SearchViewModel viewModel = ViewModelProviders.of(getActivity()).get(SearchViewModel.class);
+        MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
 
         viewModel.getFavoriteCafeteriaLiveData().observe(this, favorites -> {
             if (favorites.isEmpty()) {

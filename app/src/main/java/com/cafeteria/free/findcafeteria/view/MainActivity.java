@@ -1,7 +1,9 @@
 package com.cafeteria.free.findcafeteria.view;
 
 
+import android.app.FragmentManager;
 import android.app.SearchManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,11 +24,13 @@ import android.widget.LinearLayout;
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.MySuggestionProvider;
 import com.cafeteria.free.findcafeteria.model.room.db.AppDatabase;
+import com.cafeteria.free.findcafeteria.model.room.entity.SearchHistory;
 import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.view.fragment.FavoriteFragment;
 import com.cafeteria.free.findcafeteria.view.fragment.HistoryFragment;
 import com.cafeteria.free.findcafeteria.view.fragment.SearchFragment;
 import com.cafeteria.free.findcafeteria.view.fragment.SettingFragment;
+import com.cafeteria.free.findcafeteria.viewmodel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
 
     private String currentQuery;
+
+    private MainViewModel viewModel;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,13 +87,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Logger.d(query);
-                searchFragment.updateView(query);
-                searchView.clearFocus();
+
+
+                viewModel.submit(query);
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                viewModel.change(newText);
                 return false;
             }
         });
@@ -98,26 +108,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                //start search dialog
-//                //super.onSearchRequested();
-//                //startActivityForResult(new Intent(MainActivity.this, SearchableActivity.class), 101);
-//
-//
-//
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,9 +175,23 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
+        viewModel = ViewModelProviders.of(MainActivity.this).get(MainViewModel.class);
 
-        handleIntent(getIntent());
+        viewModel.getSubmitKeywordLiveData().observe(this, keyword-> {
+            viewPager.setCurrentItem(0);
+
+            if (!TextUtils.isEmpty(keyword)) {
+
+                searchFragment.updateView(keyword);
+
+                searchView.setQuery(keyword, false);
+                searchView.clearFocus();
+            }
+
+        });
+
     }
+
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -200,23 +204,5 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(favoriteFragment);
         adapter.addFragment(settingFragment);
         viewPager.setAdapter(adapter);
-    }
-
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-
-            if (query.equals(currentQuery)) {
-                return;
-            }
-            currentQuery = query;
-            Logger.d("query=" + query);
-
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
-            suggestions.saveRecentQuery(currentQuery, null);
-
-            searchView.setQuery(currentQuery, true);
-        }
     }
 }

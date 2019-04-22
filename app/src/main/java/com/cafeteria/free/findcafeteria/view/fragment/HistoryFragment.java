@@ -1,19 +1,29 @@
 package com.cafeteria.free.findcafeteria.view.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.cafeteria.free.findcafeteria.R;
+import com.cafeteria.free.findcafeteria.model.room.db.AppDatabase;
+import com.cafeteria.free.findcafeteria.model.room.entity.SearchHistory;
 import com.cafeteria.free.findcafeteria.view.RecyclerViewAdapter;
+import com.cafeteria.free.findcafeteria.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,13 +44,46 @@ public class HistoryFragment extends Fragment {
     private String mParam2;
 
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private HistoryViewAdapter historyViewAdapter;
 
     private OnFragmentInteractionListener mListener;
+
+    private MainViewModel viewModel;
 
     public HistoryFragment() {
         // Required empty public constructor
     }
+
+    private GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return true;
+        }
+    });
+
+
+    private RecyclerView.OnItemTouchListener itemTouchListener = new RecyclerView.OnItemTouchListener() {
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View childView = rv.findChildViewUnder(e.getX(), e.getY());
+
+            if (childView != null && gestureDetector.onTouchEvent(e)) {
+                TextView textView = childView.findViewById(R.id.history_textView);
+                viewModel.submit(textView.getText().toString());
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        }
+
+    };
 
     /**
      * Use this factory method to create a new instance of
@@ -73,20 +116,53 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=  inflater.inflate(R.layout.fragment_history, container, false);
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
 
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
         layoutManager.setAutoMeasureEnabled(true);
 
+
         recyclerView = view.findViewById(R.id.recycle_view);
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerViewAdapter = new RecyclerViewAdapter(getContext());
-        recyclerView.setAdapter(recyclerViewAdapter);
+        historyViewAdapter = new HistoryViewAdapter();
+        recyclerView.setAdapter(historyViewAdapter);
+
+        recyclerView.addOnItemTouchListener(itemTouchListener);
+
+
+        viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+
+        viewModel.getChangeKeywordLiveData().observe(this, keyword -> {
+            updateRecyclerView(keyword);
+        });
 
         return view;
+    }
+
+    private void updateRecyclerView(String filter) {
+
+        new Thread(()-> {
+            List<SearchHistory> histories = AppDatabase.getInstance(getContext()).getSearchHistoryDao().getAll();
+            List<String> keywords = histories.stream()
+                    .filter(history-> {
+                        if (TextUtils.isEmpty(filter)) {
+                            return true;
+                        }
+                        else {
+                            return history.getKeyword().contains(filter);
+                        }
+                    })
+                    .map(history-> history.getKeyword())
+                    .collect(Collectors.toList());
+
+            getActivity().runOnUiThread(()-> {
+                historyViewAdapter.setKeywords(keywords);
+            });
+
+        }).start();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -130,28 +206,39 @@ public class HistoryFragment extends Fragment {
 
     private class HistoryViewAdapter extends RecyclerView.Adapter<HistoryHolder> {
 
-        private List<String> keywords = new ArrayList<String>();
+        private List<String> keywords = new ArrayList<>();
+
+        public void setKeywords(List<String> keywords) {
+            this.keywords = keywords;
+            notifyDataSetChanged();
+        }
 
         @Override
         public HistoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_item, parent, false);
+            return new HistoryHolder(view);
         }
 
         @Override
         public void onBindViewHolder(HistoryHolder holder, int position) {
-
+            String keyword = keywords.get(position);
+            holder.keywordTv.setText(keyword);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return keywords.size();
         }
     }
 
     private class HistoryHolder extends RecyclerView.ViewHolder {
 
+        TextView keywordTv;
+
         public HistoryHolder(View itemView) {
+
             super(itemView);
+            keywordTv = itemView.findViewById(R.id.history_textView);
         }
     }
 
