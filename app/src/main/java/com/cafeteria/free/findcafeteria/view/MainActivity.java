@@ -1,11 +1,13 @@
 package com.cafeteria.free.findcafeteria.view;
 
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -13,21 +15,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.MySuggestionProvider;
+import com.cafeteria.free.findcafeteria.model.room.db.AppDatabase;
 import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.view.fragment.FavoriteFragment;
+import com.cafeteria.free.findcafeteria.view.fragment.HistoryFragment;
 import com.cafeteria.free.findcafeteria.view.fragment.SearchFragment;
 import com.cafeteria.free.findcafeteria.view.fragment.SettingFragment;
 
-public class SearchActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
 
     private SearchFragment searchFragment;
     private SettingFragment settingFragment;
     private FavoriteFragment favoriteFragment;
+
+    private HistoryFragment historyFragment;
 
     private ViewPager viewPager;
 
@@ -46,13 +54,34 @@ public class SearchActivity extends AppCompatActivity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+        searchView.setBackgroundResource(R.drawable.corner);
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.history, historyFragment);
+                    ft.commit();
+                    bottomNavigationView.setVisibility(View.GONE);
+
+                }
+                else {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.remove(historyFragment).commit();
+                    bottomNavigationView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Logger.d(query);
                 searchFragment.updateView(query);
+                searchView.clearFocus();
                 return false;
             }
 
@@ -62,8 +91,28 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(15, 15, 15, 15);
+        searchView.setLayoutParams(lp);
+
         return super.onCreateOptionsMenu(menu);
     }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_search:
+//                //start search dialog
+//                //super.onSearchRequested();
+//                //startActivityForResult(new Intent(MainActivity.this, SearchableActivity.class), 101);
+//
+//
+//
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -126,13 +175,16 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        historyFragment = new HistoryFragment();
+
         setupViewPager(viewPager);
 
         Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
 
         handleIntent(getIntent());
     }
@@ -163,6 +215,7 @@ public class SearchActivity extends AppCompatActivity {
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
                     MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
             suggestions.saveRecentQuery(currentQuery, null);
+
             searchView.setQuery(currentQuery, true);
         }
     }

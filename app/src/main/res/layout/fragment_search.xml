@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 
-    tools:context="com.cafeteria.free.findcafeteria.view.SearchActivity">
+    tools:context="com.cafeteria.free.findcafeteria.view.MainActivity">
 
 
     <android.support.v7.widget.RecyclerView

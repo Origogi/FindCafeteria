@@ -22,7 +22,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         viewModel.isLoadedComplete().observe(this, result -> {
             if (result == DataLoadState.SUCCESS) {
-                startActivity(new Intent(LoadingActivity.this, SearchActivity.class));
+                startActivity(new Intent(LoadingActivity.this, MainActivity.class));
                 dialog.dismiss();
                 finish();
             }
