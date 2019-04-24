@@ -24,9 +24,8 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/homeslider"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:alpha="0.7"
                 tools:listitem="@layout/viewpager_image" />
 
             <ImageView
@@ -39,12 +38,11 @@
 
             <TextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/homeslider"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:textStyle="bold"
+                android:layout_alignBottom="@id/homeslider"
+                android:textColor="@color/colorWhite"
+                android:background="#5E000000"
                 android:text="전국천사무료급식소"
                 android:textSize="20dp" />
 
@@ -63,7 +61,6 @@
                 <ImageView
                     android:id="@+id/call_img"
                     android:src="@drawable/ic_place_black_36dp"
-                    android:alpha="0.4"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
 
@@ -78,7 +75,6 @@
 
                 <ImageView
                     android:src="@drawable/ic_local_phone_black_36dp"
-                    android:alpha="0.4"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />
 
@@ -92,7 +88,6 @@
                     android:textSize="15sp" />
 
                 <ImageView
-                    android:alpha="0.4"
                     android:src="@drawable/ic_alarm_black_48dp"
                     android:layout_width="20dp"
                     android:layout_height="20dp" />

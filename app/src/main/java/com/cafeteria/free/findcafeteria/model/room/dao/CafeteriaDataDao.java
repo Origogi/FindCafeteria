@@ -29,6 +29,10 @@ public interface CafeteriaDataDao {
     @Query("DELETE FROM cafeteria_table")
     public void deleteAll();
 
+    @Query("DELETE FROM cafeteria_table WHERE isFavorite = 1")
+    public void deleteFavoriteAll();
+
+
     @Update
     public int update(CafeteriaData cafeteriaData);
 
