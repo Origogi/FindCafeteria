@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem prevMenuItem;
     private SearchView searchView;
 
-    private String currentQuery;
-
     private MainViewModel viewModel;
 
     @Override
@@ -60,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        // Assumes current activity is the searchable activity
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
         searchView.setBackgroundResource(R.drawable.corner);
@@ -154,9 +150,9 @@ public class MainActivity extends AppCompatActivity {
                     bottomNavigationView.getMenu().getItem(0).setChecked(false);
                 }
                 Logger.d("onPageSelected: " + position);
+
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigationView.getMenu().getItem(position);
-
             }
 
             @Override
@@ -187,9 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 searchView.setQuery(keyword, false);
                 searchView.clearFocus();
             }
-
         });
-
     }
 
 

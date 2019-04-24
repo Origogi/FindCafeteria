@@ -24,7 +24,7 @@ public interface CafeteriaDataDao {
     public List<CafeteriaData> getAllCafeteria();
 
     @Query("SELECT * FROM cafeteria_table WHERE isFavorite = 1")
-    public LiveData<List<CafeteriaData>> getFavoriteCafeteria();
+    public LiveData<List<CafeteriaData>> getFavoriteCafeteriaLiveData();
 
     @Query("DELETE FROM cafeteria_table")
     public void deleteAll();

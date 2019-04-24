@@ -1,5 +1,7 @@
 package com.cafeteria.free.findcafeteria.view.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,6 +26,7 @@ import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.view.DetailActivity;
 import com.cafeteria.free.findcafeteria.view.MapActivity;
 import com.cafeteria.free.findcafeteria.view.RecyclerViewAdapter;
+import com.cafeteria.free.findcafeteria.viewmodel.MainViewModel;
 
 import java.util.List;
 
@@ -122,8 +125,6 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
@@ -163,6 +164,13 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+
+        viewModel.getFavoriteCafeteriaLiveData().observe(this, favorites -> {
+            if (!TextUtils.isEmpty(currentQuery)) {
+                updateView(currentQuery);
+            }
+        });
 
         return view;
     }
@@ -173,17 +181,6 @@ public class SearchFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
 
     @Override
     public void onDetach() {
@@ -226,7 +223,6 @@ public class SearchFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 

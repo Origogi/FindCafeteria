@@ -23,7 +23,7 @@ public class MainViewModel extends AndroidViewModel {
     public MainViewModel(@NonNull Application application) {
         super(application);
 
-        favoriteCafeteriaLiveData = AppDatabase.getInstance(application).getCafeteriaDataDao().getFavoriteCafeteria();
+        favoriteCafeteriaLiveData = AppDatabase.getInstance(application).getCafeteriaDataDao().getFavoriteCafeteriaLiveData();
         submitKeywordLiveData = new MutableLiveData<>();
         changeKeywordLiveData = new MutableLiveData<>();
         context = application;

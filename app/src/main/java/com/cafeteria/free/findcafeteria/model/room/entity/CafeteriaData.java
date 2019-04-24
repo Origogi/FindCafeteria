@@ -67,6 +67,9 @@ public class CafeteriaData implements Parcelable {
     private String offerCode;
     private String location;
 
+    private boolean isFavorite;
+
+
     public boolean isFavorite() {
         return isFavorite;
     }
@@ -75,7 +78,6 @@ public class CafeteriaData implements Parcelable {
         isFavorite = favorite;
     }
 
-    private boolean isFavorite;
 
     public long getId() {
         return id;
@@ -249,6 +251,7 @@ public class CafeteriaData implements Parcelable {
 
 
     protected CafeteriaData(Parcel in) {
+        id = in.readLong();
         address = in.readString();
         address2 = in.readString();
         date = in.readString();
@@ -265,6 +268,7 @@ public class CafeteriaData implements Parcelable {
         time = in.readString();
         offerCode = in.readString();
         location = in.readString();
+        isFavorite = in.readInt() == 1;
     }
 
     public static final Creator<CafeteriaData> CREATOR = new Creator<CafeteriaData>() {
@@ -284,7 +288,8 @@ public class CafeteriaData implements Parcelable {
     @Override
     public String toString() {
         return "CafeteriaData{" +
-                "address='" + address + '\'' +
+                "id='" + id + '\'' +
+                ", address='" + address + '\'' +
                 ", address2='" + address2 + '\'' +
                 ", date='" + date + '\'' +
                 ", date2='" + date2 + '\'' +
@@ -308,6 +313,7 @@ public class CafeteriaData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeString(address);
         dest.writeString(address2);
         dest.writeString(date);
@@ -324,5 +330,6 @@ public class CafeteriaData implements Parcelable {
         dest.writeString(time);
         dest.writeString(offerCode);
         dest.writeString(location);
+        dest.writeInt(isFavorite? 1:0);
     }
 }

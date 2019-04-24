@@ -4,6 +4,8 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -12,8 +14,11 @@ import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityDetailBinding;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
+import com.cafeteria.free.findcafeteria.model.room.dao.CafeteriaDataDao;
+import com.cafeteria.free.findcafeteria.model.room.db.AppDatabase;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
+import com.cafeteria.free.findcafeteria.util.Logger;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,6 +56,47 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         setData();
         setUiPageViewController();
 
+        binding.backButton.setOnClickListener(v-> {
+            finish();
+        });
+
+        Logger.d(cafeteriaData.toString());
+        if (cafeteriaData.isFavorite()) {
+            binding.favoriteButton.setImageDrawable(getApplication().getDrawable(R.drawable.ic_favorite_red));
+        }
+        else {
+            binding.favoriteButton.setImageDrawable(getApplication().getDrawable(R.drawable.ic_not_favorite_red));
+        }
+
+
+        binding.favoriteButton.setOnTouchListener(new View.OnTouchListener() {
+            boolean checked = cafeteriaData.isFavorite();
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    v.setTag("touched");
+                    if (checked) {
+                        ((ImageView)v).setImageDrawable(getApplication().getDrawable(R.drawable.ic_not_favorite_red));
+                        checked = false;
+                    }
+                    else {
+                        ((ImageView)v).setImageDrawable(getApplication().getDrawable(R.drawable.ic_favorite_red));
+                        checked = true;
+                    }
+
+                    new Thread(()->{
+                        CafeteriaDataDao dao = AppDatabase.getInstance(getApplication()).getCafeteriaDataDao();
+                        cafeteriaData.setFavorite(checked);
+                        int result = dao.update(cafeteriaData);
+                        Logger.d("" + result);
+                    }).start();
+
+                    return false;
+                }
+                return true;
+            }
+        });
+
     }
 
 
@@ -58,6 +104,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        //TODO crash~~~~
+        //latitude 이게 null인 case가 존재하는 거 같음
         LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 
         MarkerOptions markerOptions = new MarkerOptions();
