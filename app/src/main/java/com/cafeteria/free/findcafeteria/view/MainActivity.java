@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.cafeteria.free.findcafeteria.R;
@@ -49,60 +50,60 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Logger.d("");
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_activity_actions, menu);
-
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-
-        searchView.setBackgroundResource(R.drawable.corner);
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.history, historyFragment);
-                    ft.commit();
-                    bottomNavigationView.setVisibility(View.GONE);
-
-                }
-                else {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.remove(historyFragment).commit();
-                    bottomNavigationView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Logger.d(query);
-
-
-                viewModel.submit(query);
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                viewModel.change(newText);
-                return false;
-            }
-        });
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(15, 15, 15, 15);
-        searchView.setLayoutParams(lp);
-
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        Logger.d("");
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.search_activity_actions, menu);
+//
+//        // Get the SearchView and set the searchable configuration
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+//
+//        searchView.setBackgroundResource(R.drawable.corner);
+//        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if (b) {
+//                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                    ft.replace(R.id.history, historyFragment);
+//                    ft.commit();
+//                    bottomNavigationView.setVisibility(View.GONE);
+//
+//                }
+//                else {
+//                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                    ft.remove(historyFragment).commit();
+//                    bottomNavigationView.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Logger.d(query);
+//
+//
+//                viewModel.submit(query);
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                viewModel.change(newText);
+//                return false;
+//            }
+//        });
+//
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        lp.setMargins(15, 15, 15, 15);
+//        searchView.setLayoutParams(lp);
+//
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
 
     @Override
@@ -113,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+
+        ImageButton searchButton = findViewById(R.id.searchButton);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
 
@@ -165,11 +168,11 @@ public class MainActivity extends AppCompatActivity {
 
         setupViewPager(viewPager);
 
-        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolBar);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        Toolbar toolBar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolBar);
+//        getSupportActionBar().setDisplayShowCustomEnabled(true);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         viewModel = ViewModelProviders.of(MainActivity.this).get(MainViewModel.class);
 
@@ -183,6 +186,11 @@ public class MainActivity extends AppCompatActivity {
                 searchView.setQuery(keyword, false);
                 searchView.clearFocus();
             }
+        });
+
+        searchButton.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivityForResult(intent, 100);
         });
     }
 

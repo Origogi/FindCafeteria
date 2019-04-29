@@ -32,4 +32,15 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+    <!-- Gets rid of the search icon -->
+    <item name="searchIcon">@null</item>
+    <!-- Gets rid of the "underline" in the text -->
+    <item name="queryBackground">@null</item>
+    <!-- Gets rid of the search icon when the SearchView is expanded -->
+    <item name="searchHintIcon">@null</item>
+    <!-- The hint text that appears when the user has not typed anything -->
+    <item name="queryHint">@string/app_name</item>
+    </style>
+
 </resources>

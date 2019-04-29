@@ -22,6 +22,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        <activity android:name=".view.SearchActivity"></activity>
         <activity android:name=".view.MapActivity" />
         <activity android:name=".view.DetailActivity" />
         <activity android:name=".view.LoadingActivity">
