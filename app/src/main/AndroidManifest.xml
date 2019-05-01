@@ -9,26 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NoActionBarAppTheme">
-        <activity android:name=".view.TestActivity" />
-        <activity
-            android:launchMode="singleTop"
-            android:name=".view.MainActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
-        <activity android:name=".view.SearchActivity"></activity>
+        <activity android:name=".view.MainActivity"/>
+        <activity android:name=".view.SearchBarActivity"/>
         <activity android:name=".view.MapActivity" />
         <activity android:name=".view.DetailActivity" />
         <activity android:name=".view.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

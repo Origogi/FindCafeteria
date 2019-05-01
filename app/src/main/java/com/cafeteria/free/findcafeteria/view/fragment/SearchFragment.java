@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
@@ -57,6 +58,7 @@ public class SearchFragment extends Fragment {
     private FloatingActionButton mapFab;
     private GestureDetector gestureDetector;
     private View noItemLayout;
+    private ProgressBar progressBar;
 
     private String currentQuery;
 
@@ -172,6 +174,8 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        progressBar = view.findViewById(R.id.progressBar);
+
         return view;
     }
 
@@ -194,32 +198,38 @@ public class SearchFragment extends Fragment {
         Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(getContext(), query);
 
         observable
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
-                    @Override
-                    public void onStart() {
-                    }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
+                @Override
+                public void onStart() {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
 
-                    @Override
-                    public void onSuccess(List<CafeteriaData> result) {
-                        mapFab.setVisibility(View.VISIBLE);
-                        updateRecycleView(result);
-                        noItemLayout.setVisibility(View.GONE);
-                    }
 
-                    @Override
-                    public void onError(Throwable error) {
-                        error.printStackTrace();
-                    }
+                @Override
+                public void onSuccess(List<CafeteriaData> result) {
+                    updateRecycleView(result);
+                    mapFab.setVisibility(View.VISIBLE);
+                    noItemLayout.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
 
-                    @Override
-                    public void onComplete() {
-                        showErrorDialog(query);
-                        mapFab.setVisibility(View.GONE);
-                        noItemLayout.setVisibility(View.VISIBLE);
-                        recyclerViewAdapter.reset();
-                    }
-                });
+                }
+
+                @Override
+                public void onError(Throwable error) {
+                    error.printStackTrace();
+                }
+
+                @Override
+                public void onComplete() {
+                    showErrorDialog(query);
+                    mapFab.setVisibility(View.GONE);
+                    noItemLayout.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+
+                    recyclerViewAdapter.reset();
+                }
+            });
     }
 
     public interface OnFragmentInteractionListener {

@@ -22,9 +22,9 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
             android:padding="8dp"
-            android:text="Cafeteria"
+            android:layout_marginStart="10dp"
+            android:text="@string/app_name"
             android:textColor="@color/cardview_dark_background"
             android:textSize="20dp" />
 
@@ -37,7 +37,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
             android:background="#00000000"
-            android:src="@drawable/ic_search"/>
+            android:src="@drawable/ic_search_black"/>
 
         <View
             android:layout_alignParentBottom="true"
@@ -68,10 +68,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/button"
-        app:itemBackground="@color/colorWhite"
-        app:itemIconTint="@color/naviColor"
-        app:itemTextColor="@color/naviColor"
+        android:background="@color/colorWhite"
+        app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
+        app:itemTextColor="@drawable/bottom_nav_icon_color_selector"
         app:menu="@menu/bottom_nav_items" />
 
 </RelativeLayout>

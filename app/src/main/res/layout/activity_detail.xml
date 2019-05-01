@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
+                android:layout_toRightOf="@+id/backButton"
                 android:padding="8dp"
                 android:text="Cafeteria"
                 android:textColor="@color/cardview_dark_background"
