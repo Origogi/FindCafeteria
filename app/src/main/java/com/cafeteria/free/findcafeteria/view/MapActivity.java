@@ -6,7 +6,6 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -16,7 +15,6 @@ import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityMapBinding;
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
-import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.util.MapPagerAdapter;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,9 +39,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public ArrayList<Marker> markers = new ArrayList<>();
     public Marker selectedMarker;  // 현재 선택 돼 있는 마커를 지정
-    GoogleMap gMap;
-    List<CafeteriaData> cafeteriaList;
-    ActivityMapBinding binding;
+    private GoogleMap gMap;
+    private List<CafeteriaData> cafeteriaList;
+    private ActivityMapBinding binding;
 
     private MapPagerAdapter mapPagerAdapter;
 
