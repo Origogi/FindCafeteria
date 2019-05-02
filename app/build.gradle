@@ -38,7 +38,8 @@ dependencies {
 
     implementation "androidx.concurrent:concurrent-futures:$futures_version"
     implementation 'android.arch.lifecycle:extensions:1.0.0'
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+//    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
+    implementation "android.arch.lifecycle:common-java8:1.0.0"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
@@ -65,6 +66,10 @@ dependencies {
     }
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'gun0912.ted:tedpermission:1.0.2'
+
+
 }
 
 

@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
+import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.databinding.ActivityDetailBinding;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;

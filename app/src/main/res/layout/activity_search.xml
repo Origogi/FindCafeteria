@@ -32,6 +32,7 @@
             android:layout_toLeftOf="@+id/clearButton"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
+            android:singleLine="true"
             android:layout_marginEnd="5dp" />\
 
         <ImageButton
