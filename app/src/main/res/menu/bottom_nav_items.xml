@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_search_menu"
-        android:icon="@drawable/ic_youtube_searched_for_black_48dp"
+        android:icon="@drawable/ic_search"
         android:title="탐색하기"/>
 
     <item
@@ -15,7 +15,5 @@
         android:id="@+id/action_setting_menu"
         android:icon="@drawable/ic_settings_black_48dp"
         android:title="설정하기" />
-
-
 
 </menu>
