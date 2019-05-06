@@ -1,5 +1,6 @@
 package com.cafeteria.free.findcafeteria.view.fragment;
 
+import android.app.ActivityOptions;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,7 +8,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
@@ -29,6 +33,7 @@ import com.cafeteria.free.findcafeteria.view.MapActivity;
 import com.cafeteria.free.findcafeteria.view.RecyclerViewAdapter;
 import com.cafeteria.free.findcafeteria.viewmodel.MainViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Maybe;
@@ -72,7 +77,7 @@ public class SearchFragment extends Fragment {
 
                 if (TextUtils.isEmpty((String) favorite.getTag())) {
                     int currentPosition = rv.getChildAdapterPosition(childView);
-                    startDetailActivity(recyclerViewAdapter.get(currentPosition));
+                    startDetailActivity(childView, recyclerViewAdapter.get(currentPosition));
                 }
                 favorite.setTag("");
                 return true;
@@ -254,10 +259,27 @@ public class SearchFragment extends Fragment {
                 }).show();
     }
 
-    private void startDetailActivity(CafeteriaData data) {
+    private void startDetailActivity(View childView, CafeteriaData data) {
         Intent intent = new Intent(getActivity(), DetailActivity.class);
         intent.putExtra("data", data);
-        startActivity(intent);
+
+
+        View time = childView.findViewById(R.id.timeLayout);
+        View location = childView.findViewById(R.id.locationLayout);
+        View phone = childView.findViewById(R.id.phoneLayout);
+        View cardLayout = childView.findViewById(R.id.cardLayout);
+
+        Pair[] pairs = new Pair[4];
+
+        pairs[0] = new Pair<>(time, getString(R.string.timeTransition));
+        pairs[1] = new Pair<>(location, getString(R.string.locationTransition));
+        pairs[2] = new Pair<>(phone, getString(R.string.phoneTransition));
+        pairs[3] = new Pair<>(cardLayout, getString(R.string.cardTransition));
+        
+        ActivityOptionsCompat options = (ActivityOptionsCompat) ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), pairs);
+
+        startActivity(intent, options.toBundle());
     }
 
     private void startMapActivity(String query) {

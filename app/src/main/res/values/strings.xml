@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">무료급식소를 찾아줘</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nameTransition">nameTransition</string>
+    <string name="imageTransition">imageTransition</string>
+    <string name="locationTransition">locationTransition</string>
+    <string name="timeTransition">timeTransition</string>
+    <string name="phoneTransition">phoneTransition</string>
+    <string name="cardTransition">cardTransition</string>
 </resources>

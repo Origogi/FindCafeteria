@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:layout_margin="5dp"
-        card_view:cardElevation="5dp"
-        card_view:cardCornerRadius="3dp"
+        android:id="@+id/cardLayout"
+        android:transitionName="@string/cardTransition"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        card_view:cardCornerRadius="3dp"
+        card_view:cardElevation="5dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -26,86 +25,103 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
+                android:transitionName="@string/imageTransition"
                 tools:listitem="@layout/viewpager_image" />
 
             <ImageView
                 android:id="@+id/favorite_img"
-                android:layout_margin="12dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_not_favorite_red"
-                />
+                android:layout_margin="12dp"
+                android:src="@drawable/ic_not_favorite_red" />
 
             <TextView
                 android:id="@+id/name"
-                android:padding="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/homeslider"
-                android:textColor="@color/colorWhite"
                 android:background="#5E000000"
+                android:padding="5dp"
                 android:text="전국천사무료급식소"
-                android:textSize="20dp" />
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp"
+                android:transitionName="@string/nameTransition" />
 
 
-            <GridLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
                 android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:columnCount="2"
-                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_below="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/call_img"
-                    android:src="@drawable/ic_place_black_36dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp" />
+                <LinearLayout
+                    android:id="@+id/locationLayout"
+                    style="@style/InformationLayout"
+                    android:transitionName="@string/locationTransition">
 
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:id="@+id/address"
-                    android:text="서울시 용산구"
-                    android:textSize="15sp" />
+                    <ImageView
+                        android:id="@+id/call_img"
+                        style="@style/IconStyle"
+                        android:src="@drawable/ic_place_black_36dp" />
 
-                <ImageView
-                    android:src="@drawable/ic_local_phone_black_36dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp" />
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="서울시 용산구"
+                        android:textSize="12dp" />
 
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/phone_number"
-                    android:layout_marginLeft="5dp"
-                    android:text="010-0000-0000"
-                    android:textSize="15sp" />
+                </LinearLayout>
 
-                <ImageView
-                    android:src="@drawable/ic_alarm_black_48dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp" />
+                <LinearLayout
+                    android:id="@+id/phoneLayout"
+                    android:transitionName="@string/phoneTransition"
+                    style="@style/InformationLayout"
+>
 
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:id="@+id/time"
-                    android:text="10:00 ~ 17:00"
-                    android:textSize="15sp" />
+                    <ImageView
+                        style="@style/IconStyle"
+                        android:src="@drawable/ic_local_phone_black_36dp" />
 
-            </GridLayout>
+                    <TextView
+                        android:id="@+id/phone_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="010-0000-0000"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/timeLayout"
+                    android:transitionName="@string/timeTransition"
+                    style="@style/InformationLayout">
+
+                    <ImageView
+                        style="@style/IconStyle"
+                        android:src="@drawable/ic_alarm_black_48dp" />
+
+                    <TextView
+                        android:id="@+id/time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="10:00 ~ 17:00"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
         </RelativeLayout>
 
-        
+
     </android.support.v7.widget.CardView>
 
 </RelativeLayout>

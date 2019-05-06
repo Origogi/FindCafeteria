@@ -32,6 +32,21 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="IconStyle">
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_width">20dp</item>
+    </style>
+
+    <style name="InformationLayout">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginBottom">1dp</item>
+        <item name="android:background">#fff</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">5dp</item>
+
+    </style>
+
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
     <!-- Gets rid of the search icon -->
     <item name="searchIcon">@null</item>
