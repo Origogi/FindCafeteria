@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -106,6 +107,10 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         //TODO crash~~~~
         //latitude 이게 null인 case가 존재하는 거 같음
+        Logger.d(latitude + "/" + longitude);
+        //2019-05-06 16:46:20.341 21325-21325/com.cafeteria.free.findcafeteria D/CAFETERIA: [DetailActivity_110]: /
+        //2019-05-06 16:46:18.665 21325-21325/com.cafeteria.free.findcafeteria D/CAFETERIA: [DetailActivity_110]: 37.672452/126.761677
+
         LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
 
         MarkerOptions markerOptions = new MarkerOptions();
