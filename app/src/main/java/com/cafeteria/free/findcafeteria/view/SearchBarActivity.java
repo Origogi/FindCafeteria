@@ -15,18 +15,23 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.*;
+import android.view.GestureDetector;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.room.db.AppDatabase;
 import com.cafeteria.free.findcafeteria.model.room.entity.SearchHistory;
 import com.cafeteria.free.findcafeteria.util.Logger;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -99,18 +104,22 @@ public class SearchBarActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0 && s.subSequence(s.length() - 1, s.length()).toString().equalsIgnoreCase("\n")) {
-                    summitKeyword(s.subSequence(0, s.length() - 1).toString());
-                }
-                else {
-                    updateRecyclerView(s.toString());
-                }
+                updateRecyclerView(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
             }
+        });
+
+        searchEditText.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                summitKeyword(searchEditText.getText().toString());
+                return true;
+            }
+
+            return false;
         });
 
 
@@ -202,7 +211,7 @@ public class SearchBarActivity extends AppCompatActivity {
     }
 
 
-    public String getCurrentAddress( double latitude, double longitude) {
+    public String getCurrentAddress(double latitude, double longitude) {
 
         //지오코더... GPS를 주소로 변환
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -231,7 +240,20 @@ public class SearchBarActivity extends AppCompatActivity {
 
         Address address = addresses.get(0);
 
-        return address.getLocality() + " " + address.getSubLocality();
+        Logger.d(address.toString());
+
+        String result = "";
+
+        if (TextUtils.isEmpty(address.getLocality())) {
+            result += address.getAdminArea();
+        }
+        else {
+            result += address.getLocality();
+        }
+
+        result += " " + address.getSubLocality();
+
+        return result;
     }
 
     private void summitKeyword(String keyword) {
@@ -244,21 +266,20 @@ public class SearchBarActivity extends AppCompatActivity {
 
     private void updateRecyclerView(String filter) {
 
-        new Thread(()-> {
+        new Thread(() -> {
             List<SearchHistory> histories = AppDatabase.getInstance(this).getSearchHistoryDao().getAll();
             List<String> keywords = histories.stream()
-                    .filter(history-> {
+                    .filter(history -> {
                         if (TextUtils.isEmpty(filter)) {
                             return true;
-                        }
-                        else {
+                        } else {
                             return history.getKeyword().contains(filter);
                         }
                     })
-                    .map(history-> history.getKeyword())
+                    .map(history -> history.getKeyword())
                     .collect(Collectors.toList());
 
-            runOnUiThread(()-> {
+            runOnUiThread(() -> {
                 historyViewAdapter.setKeywords(keywords);
             });
 

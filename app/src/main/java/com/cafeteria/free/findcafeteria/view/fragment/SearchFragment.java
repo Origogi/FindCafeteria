@@ -137,6 +137,9 @@ public class SearchFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycle_view);
         recyclerView.setLayoutManager(layoutManager);
 
+        progressBar = view.findViewById(R.id.progressBar);
+
+
         noItemLayout = view.findViewById(R.id.no_item_layout);
 
         recyclerViewAdapter = new RecyclerViewAdapter(getContext());
@@ -174,7 +177,6 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        progressBar = view.findViewById(R.id.progressBar);
 
         return view;
     }

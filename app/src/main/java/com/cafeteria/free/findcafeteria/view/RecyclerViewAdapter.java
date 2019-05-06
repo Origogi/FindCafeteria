@@ -58,7 +58,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.nameTv.setText(cardViewDto.getFacilityName());
         holder.addressTv.setText(cardViewDto.getAddress());
         holder.phoneNumberTv.setText(cardViewDto.getPhone());
-        holder.timeTv.setText(cardViewDto.getStartTime());
+        holder.timeTv.setText(cardViewDto.getTime());
 
         if (cardViewDto.isFavorite()) {
             holder.favorite.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_red));

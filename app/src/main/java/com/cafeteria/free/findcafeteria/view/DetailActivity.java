@@ -189,7 +189,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 .subscribe(it -> updateImage(it));
 
 
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.detail_map);
         mapFragment.getMapAsync(this);

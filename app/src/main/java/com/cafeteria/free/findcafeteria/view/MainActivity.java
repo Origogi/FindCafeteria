@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.util.Logger;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private SearchFragment searchFragment;
     private SettingFragment settingFragment;
     private FavoriteFragment favoriteFragment;
+    private TextView titleTextView;
 
     private ViewPager viewPager;
 
@@ -32,12 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
 
+    private String keyword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+        titleTextView = findViewById(R.id.titleTextView);
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
@@ -49,15 +55,19 @@ public class MainActivity extends AppCompatActivity {
             switch (menuItem.getItemId()) {
                 case R.id.action_search_menu:
                     viewPager.setCurrentItem(0);
+                    titleTextView.setText(keyword);
                     result = true;
                     break;
                 case R.id.action_favorite_menu:
                     viewPager.setCurrentItem(1);
                     result = true;
+                    titleTextView.setText(getString(R.string.app_name));
+
                     break;
                 case R.id.action_setting_menu:
                     viewPager.setCurrentItem(2);
                     result = true;
+                    titleTextView.setText(getString(R.string.app_name));
                     break;
             }
             return result;
@@ -82,6 +92,13 @@ public class MainActivity extends AppCompatActivity {
 
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigationView.getMenu().getItem(position);
+
+                if (position == 0) {
+                    titleTextView.setText(keyword);
+                }
+                else {
+                    titleTextView.setText(getString(R.string.app_name));
+                }
             }
 
             @Override
@@ -99,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
             viewPager.setCurrentItem(0);
 
             if (!TextUtils.isEmpty(keyword)) {
+                titleTextView.setText(keyword);
                 searchFragment.updateView(keyword);
+                this.keyword = keyword;
             }
         });
 
