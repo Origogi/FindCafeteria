@@ -8,4 +8,6 @@
     <string name="timeTransition">timeTransition</string>
     <string name="phoneTransition">phoneTransition</string>
     <string name="cardTransition">cardTransition</string>
+    <string name="iconTransition">iconTransition</string>
+
 </resources>

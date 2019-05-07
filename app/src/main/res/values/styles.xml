@@ -32,12 +32,22 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="IconStyle">
+    <style name="InformationTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center|center_vertical</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">12sp</item>
+
+    </style>
+
+    <style name="InformationIconStyle">
         <item name="android:layout_height">20dp</item>
         <item name="android:layout_width">20dp</item>
     </style>
 
-    <style name="InformationLayout">
+    <style name="InformationLayoutStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginBottom">1dp</item>

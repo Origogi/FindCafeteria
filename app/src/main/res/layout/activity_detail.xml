@@ -29,18 +29,6 @@
                 android:background="#00000000"
                 android:src="@drawable/ic_arrow_back" />
 
-            <TextView
-                android:id="@+id/tv_titlebar"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/backButton"
-                android:padding="8dp"
-                android:text="Cafeteria"
-                android:textColor="@color/cardview_dark_background"
-                android:textSize="20dp"
-                android:transitionName="@string/nameTransition" />
-
 
             <ImageButton
                 android:id="@+id/favoriteButton"
@@ -65,10 +53,10 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.CardView
-                android:transitionName="@string/cardTransition"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
+                android:transitionName="@string/cardTransition"
                 app:cardCornerRadius="3dp"
                 app:cardElevation="5dp">
 
@@ -118,28 +106,31 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <TextView
+                            android:id="@+id/tv_titlebar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Title"
+                            android:padding="5dp"
+                            android:transitionName="@string/nameTransition"
+                            android:textSize="25sp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
                         <LinearLayout
-                            style="@style/InformationLayout"
+                            style="@style/InformationLayoutStyle"
                             android:transitionName="@string/locationTransition">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                style="@style/InformationIconStyle"
                                 android:src="@drawable/ic_place_black_36dp" />
 
                             <TextView
                                 android:id="@+id/address"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|center_vertical"
-                                android:layout_marginLeft="10dp"
-                                android:textColor="#000000"
-                                android:textSize="12dp" />
+                                style="@style/InformationTextStyle" />
                         </LinearLayout>
 
                         <LinearLayout
-                            style="@style/InformationLayout"
-
+                            style="@style/InformationLayoutStyle"
                             android:transitionName="@string/phoneTransition">
 
                             <ImageView
@@ -149,74 +140,47 @@
 
                             <TextView
                                 android:id="@+id/phone"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|center_vertical"
-                                android:layout_marginLeft="10dp"
-                                android:textColor="#000000"
-                                android:textSize="12dp" />
+                                style="@style/InformationTextStyle" />
 
                         </LinearLayout>
 
                         <LinearLayout
-                            style="@style/InformationLayout"
+                            style="@style/InformationLayoutStyle"
 
                             android:transitionName="@string/timeTransition">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                style="@style/InformationIconStyle"
                                 android:src="@drawable/ic_alarm_black_48dp" />
 
                             <TextView
                                 android:id="@+id/time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|center_vertical"
-                                android:layout_marginLeft="10dp"
-                                android:textColor="#000000"
-                                android:textSize="12dp" />
+                                style="@style/InformationTextStyle" />
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            style="@style/InformationLayout"
->
+                        <LinearLayout style="@style/InformationLayoutStyle">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                style="@style/InformationIconStyle"
                                 android:src="@drawable/ic_event_black_48dp" />
 
                             <TextView
                                 android:id="@+id/date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|center_vertical"
-                                android:layout_marginLeft="10dp"
-                                android:textColor="#000000"
-                                android:textSize="12dp" />
+                                style="@style/InformationTextStyle" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            style="@style/InformationLayout"
->
+                        <LinearLayout style="@style/InformationLayoutStyle">
 
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                style="@style/InformationIconStyle"
+
                                 android:src="@drawable/ic_supervisor_account_black_48dp" />
 
                             <TextView
                                 android:id="@+id/target"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|center_vertical"
-                                android:layout_marginLeft="10dp"
-                                android:textColor="#000000"
-                                android:textSize="12dp" />
+                                style="@style/InformationTextStyle" />
                         </LinearLayout>
-
 
 
                     </LinearLayout>

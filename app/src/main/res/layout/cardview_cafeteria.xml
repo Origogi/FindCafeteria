@@ -33,6 +33,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="12dp"
+                android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_not_favorite_red" />
 
             <TextView
@@ -59,62 +60,47 @@
 
                 <LinearLayout
                     android:id="@+id/locationLayout"
-                    style="@style/InformationLayout"
+                    style="@style/InformationLayoutStyle"
                     android:transitionName="@string/locationTransition">
 
                     <ImageView
                         android:id="@+id/call_img"
-                        style="@style/IconStyle"
+                        style="@style/InformationIconStyle"
                         android:src="@drawable/ic_place_black_36dp" />
 
                     <TextView
                         android:id="@+id/address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="5dp"
-                        android:text="서울시 용산구"
-                        android:textSize="12dp" />
+                        style="@style/InformationTextStyle"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/phoneLayout"
                     android:transitionName="@string/phoneTransition"
-                    style="@style/InformationLayout"
+                    style="@style/InformationLayoutStyle"
 >
 
                     <ImageView
-                        style="@style/IconStyle"
+                        style="@style/InformationIconStyle"
                         android:src="@drawable/ic_local_phone_black_36dp" />
 
                     <TextView
                         android:id="@+id/phone_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="5dp"
-                        android:text="010-0000-0000"
-                        android:textSize="12dp" />
+                        style="@style/InformationTextStyle" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/timeLayout"
                     android:transitionName="@string/timeTransition"
-                    style="@style/InformationLayout">
+                    style="@style/InformationLayoutStyle">
 
                     <ImageView
-                        style="@style/IconStyle"
+                        style="@style/InformationIconStyle"
                         android:src="@drawable/ic_alarm_black_48dp" />
 
                     <TextView
                         android:id="@+id/time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="5dp"
-                        android:text="10:00 ~ 17:00"
-                        android:textSize="12dp" />
+                        style="@style/InformationTextStyle" />
                 </LinearLayout>
 
 

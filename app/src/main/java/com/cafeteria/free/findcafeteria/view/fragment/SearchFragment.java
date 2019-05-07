@@ -264,18 +264,22 @@ public class SearchFragment extends Fragment {
         intent.putExtra("data", data);
 
 
+        View name = childView.findViewById(R.id.name);
+
         View time = childView.findViewById(R.id.timeLayout);
         View location = childView.findViewById(R.id.locationLayout);
         View phone = childView.findViewById(R.id.phoneLayout);
         View cardLayout = childView.findViewById(R.id.cardLayout);
 
-        Pair[] pairs = new Pair[4];
+        Pair[] pairs = new Pair[5];
 
         pairs[0] = new Pair<>(time, getString(R.string.timeTransition));
         pairs[1] = new Pair<>(location, getString(R.string.locationTransition));
         pairs[2] = new Pair<>(phone, getString(R.string.phoneTransition));
         pairs[3] = new Pair<>(cardLayout, getString(R.string.cardTransition));
-        
+        pairs[4] = new Pair<>(name, getString(R.string.nameTransition));
+
+
         ActivityOptionsCompat options = (ActivityOptionsCompat) ActivityOptionsCompat.
                 makeSceneTransitionAnimation(getActivity(), pairs);
 
