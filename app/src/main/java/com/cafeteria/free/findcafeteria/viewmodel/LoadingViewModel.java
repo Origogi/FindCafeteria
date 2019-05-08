@@ -4,8 +4,12 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
@@ -20,7 +24,6 @@ import com.cafeteria.free.findcafeteria.util.Logger;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -30,17 +33,43 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LoadingViewModel extends AndroidViewModel {
 
-    MutableLiveData<DataLoadState> loadedComplete = new MutableLiveData<>();
+    private MutableLiveData<DataLoadState> loadedComplete = new MutableLiveData<>();
+    private MutableLiveData<Boolean> networkConnectedLiveData = new MutableLiveData<>();
 
-    DBVersionDao dbVersionDao;
-    CafeteriaDataDao cafeteriaDataDao;
+    private DBVersionDao dbVersionDao;
+    private CafeteriaDataDao cafeteriaDataDao;
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean connected = isNetworkConnected(context);
+
+            if (connected) {
+                context.unregisterReceiver(this);
+            }
+
+            networkConnectedLiveData.setValue(connected);
+        }
+    };
+
 
     public LoadingViewModel(@NonNull Application application) {
         super(application);
-        loadedComplete.setValue(DataLoadState.NOT_YET);
         startToLoad(application);
+
+        loadedComplete.setValue(DataLoadState.NOT_YET);
+        networkConnectedLiveData.setValue(isNetworkConnected(application));
+
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        application.registerReceiver(receiver, intentFilter);
+
     }
 
+    private boolean isNetworkConnected(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
 
     private void startToLoad(Context context) {
         dbVersionDao = AppDatabase.getInstance(context).getDBVersionDao();
@@ -50,7 +79,7 @@ public class LoadingViewModel extends AndroidViewModel {
                 .getInstance()
                 .getVersion()
                 .observeOn(Schedulers.io())
-                .switchMap(version->getCafeteria(version))
+                .switchMap(version -> getCafeteria(version))
                 .subscribe(cafeteriaDataList -> {
                     Logger.d(cafeteriaDataList.size() + "");
 
@@ -69,8 +98,7 @@ public class LoadingViewModel extends AndroidViewModel {
             dbVersionDao.deleteAll();
             dbVersionDao.insert(new DBVersion());
             return CafeteriaDataProvider.getInstance().getCafeteriaObservable();
-        }
-        else {
+        } else {
             List<CafeteriaData> cafeteriaDataList = cafeteriaDataDao.getAllCafeteria();
             if (cafeteriaDataList.isEmpty()) {
                 return CafeteriaDataProvider.getInstance()
@@ -86,4 +114,8 @@ public class LoadingViewModel extends AndroidViewModel {
         return loadedComplete;
     }
 
- }
+    public LiveData<Boolean> getNetworkConnectedLiveData() {
+        return networkConnectedLiveData;
+    }
+
+}

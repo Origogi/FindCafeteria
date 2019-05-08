@@ -27,11 +27,12 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
 
         viewModel = ViewModelProviders.of(this).get(LoadingViewModel.class);
-       // showProgressDialog();
 
-        ImageView loadingImageView = findViewById(R.id.loading);
-        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(loadingImageView);
+        ImageView progressImageView = findViewById(R.id.loading);
+        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(progressImageView);
         Glide.with(this).load(R.raw.spinner).into(imageViewTarget);
+
+        View WarningMessageView = findViewById(R.id.warningLayout);
 
         viewModel.isLoadedComplete().observe(this, result -> {
             if (result == DataLoadState.SUCCESS) {
@@ -49,18 +50,25 @@ public class LoadingActivity extends AppCompatActivity {
 
                 startActivity(intent, options.toBundle());
 
-               // dialog.dismiss();
                 finish();
             }
             else if (result == DataLoadState.FAIL) {
                 //Error popup
             }
         });
+
+        viewModel.getNetworkConnectedLiveData().observe(this, connected -> {
+            if (connected) {
+                progressImageView.setVisibility(View.VISIBLE);
+                WarningMessageView.setVisibility(View.GONE);
+            }
+            else {
+                progressImageView.setVisibility(View.GONE);
+                WarningMessageView.setVisibility(View.VISIBLE);
+
+            }
+        });
     }
 
-    private void showProgressDialog() {
-        dialog = ProgressDialog.show(LoadingActivity.this,"데이터 로드 중",
-                "잠시만 기다려 주세요.",true);
-    }
 
 }

@@ -1,6 +1,7 @@
 package com.cafeteria.free.findcafeteria.view;
 
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.util.Logger;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel viewModel;
 
     private String keyword;
+
+    private BackPressCloseHandler closeHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (position == 0) {
                     titleTextView.setText(keyword);
-                }
-                else {
+                } else {
                     titleTextView.setText(getString(R.string.app_name));
                 }
             }
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel = ViewModelProviders.of(MainActivity.this).get(MainViewModel.class);
 
-        viewModel.getSubmitKeywordLiveData().observe(this, keyword-> {
+        viewModel.getSubmitKeywordLiveData().observe(this, keyword -> {
             viewPager.setCurrentItem(0);
 
             if (!TextUtils.isEmpty(keyword)) {
@@ -122,10 +125,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        searchButton.setOnClickListener(v->{
+        searchButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SearchBarActivity.class);
             startActivityForResult(intent, 100);
         });
+
+        closeHandler = new BackPressCloseHandler(this);
     }
 
     @Override
@@ -136,6 +141,12 @@ public class MainActivity extends AppCompatActivity {
             String keyword = data.getStringExtra("keyword");
             viewModel.submit(keyword);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        closeHandler.onBackPressed();
+        ;
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -149,5 +160,28 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(favoriteFragment);
         adapter.addFragment(settingFragment);
         viewPager.setAdapter(adapter);
+    }
+
+    private class BackPressCloseHandler {
+
+        long backKeyPressedTime = 0;
+        Activity activity;
+
+
+        BackPressCloseHandler(Activity activity) {
+            this.activity = activity;
+        }
+
+        void onBackPressed() {
+            long diff = System.currentTimeMillis() - backKeyPressedTime;
+
+            if (diff > 2000) {
+                backKeyPressedTime = System.currentTimeMillis();
+                Toast.makeText(activity, "종료하려면 뒤로 버튼을 한번 더!", Toast.LENGTH_SHORT).show();
+            } else {
+                activity.finish();
+            }
+        }
+
     }
 }
