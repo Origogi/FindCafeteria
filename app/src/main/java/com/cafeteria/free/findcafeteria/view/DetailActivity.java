@@ -20,6 +20,7 @@ import com.cafeteria.free.findcafeteria.model.room.db.AppDatabase;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
 import com.cafeteria.free.findcafeteria.util.Logger;
+import com.cafeteria.free.findcafeteria.util.MyScaleAnimation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -69,13 +70,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             binding.favoriteButton.setImageDrawable(getApplication().getDrawable(R.drawable.ic_not_favorite_red));
         }
 
-
         binding.favoriteButton.setOnTouchListener(new View.OnTouchListener() {
             boolean checked = cafeteriaData.isFavorite();
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     v.setTag("touched");
+                    v.startAnimation(MyScaleAnimation.instance);
                     if (checked) {
                         ((ImageView)v).setImageDrawable(getApplication().getDrawable(R.drawable.ic_not_favorite_red));
                         checked = false;

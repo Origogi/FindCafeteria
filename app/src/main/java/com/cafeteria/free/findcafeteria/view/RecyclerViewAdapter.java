@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +22,7 @@ import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
 import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
 import com.cafeteria.free.findcafeteria.util.Logger;
+import com.cafeteria.free.findcafeteria.util.MyScaleAnimation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public RecyclerViewAdapter( Context context) {
         this.context = context;
+
     }
 
 
@@ -73,6 +78,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     v.setTag("touched");
+                    v.startAnimation(MyScaleAnimation.instance);
                     if (checked) {
                         ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.ic_not_favorite_red));
                         checked = false;
@@ -108,6 +114,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     holder.startAutoScroll(imageSliderAdapter.getCount());
                 }
             });
+
     }
 
     private void updateImage(ImageSliderAdapter imageSliderAdapter, ImageResponse imageResponse) {
