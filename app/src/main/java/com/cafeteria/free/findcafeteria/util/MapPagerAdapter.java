@@ -70,8 +70,7 @@ public class MapPagerAdapter extends PagerAdapter {
 
         //썸네일용 이미지 한개 가져옴
         thumbnailList = new ArrayList<>();
-        ImageProvider imageProvider = new ImageProvider();
-        Observable<ImageResponse> obser = imageProvider.get(cafeteria.getFacilityName());
+        Observable<ImageResponse> obser = ImageProvider.get(cafeteria.getFacilityName());
         obser.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(it -> {
                     Glide.with(mContext).load(it.imageInfos.get(0).imageUrl).placeholder(R.drawable.loadingimage).error(R.drawable.loadingimage).into(mapinfo_thumbnail);

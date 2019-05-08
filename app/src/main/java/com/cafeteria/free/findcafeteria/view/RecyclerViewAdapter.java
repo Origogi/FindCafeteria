@@ -104,8 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, Glide.with(context));
         holder.viewPager.setAdapter(imageSliderAdapter);
 
-        ImageProvider imageProvider = new ImageProvider();
-        Observable<ImageResponse> observable = imageProvider.get(cardViewDto.getFacilityName());
+        Observable<ImageResponse> observable = ImageProvider.get(cardViewDto.getFacilityName());
         observable
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(it -> {

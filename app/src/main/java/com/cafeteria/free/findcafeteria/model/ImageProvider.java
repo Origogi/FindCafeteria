@@ -13,10 +13,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ImageProvider {
 
-    final String KAKAO_API_KEY = "KakaoAK " + "0aa376ea49fbf83258c162627de6b3bd";
-    final String BASE_URL = "https://dapi.kakao.com/";
+    private static final String KAKAO_API_KEY = "KakaoAK " + "0aa376ea49fbf83258c162627de6b3bd";
+    private static final String BASE_URL = "https://dapi.kakao.com/";
 
-    public Observable<ImageResponse> get(String query) {
+    public static Observable<ImageResponse> get(String query) {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

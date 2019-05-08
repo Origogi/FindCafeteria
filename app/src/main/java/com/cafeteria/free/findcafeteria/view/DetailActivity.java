@@ -37,9 +37,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ActivityDetailBinding binding;
-    String longitude;
-    String latitude;
+    private ActivityDetailBinding binding;
+    private String longitude;
+    private String latitude;
     private int dotsCount;
     private ImageView[] dots;
     private ImageSliderAdapter imageSliderAdapter;
@@ -189,8 +189,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         latitude = cafeteriaData.getLatitude();
         longitude = cafeteriaData.getLongitude();
 
-        ImageProvider imageProvider = new ImageProvider();
-        Observable<ImageResponse> obser = imageProvider.get(cafeteriaData.getFacilityName());
+        Observable<ImageResponse> obser = ImageProvider.get(cafeteriaData.getFacilityName());
         obser.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(it -> updateImage(it));
 
