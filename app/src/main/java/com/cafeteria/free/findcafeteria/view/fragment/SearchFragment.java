@@ -63,7 +63,6 @@ public class SearchFragment extends Fragment {
     private FloatingActionButton mapFab;
     private GestureDetector gestureDetector;
     private View noItemLayout;
-    private ProgressBar progressBar;
 
     private String currentQuery;
 
@@ -142,9 +141,6 @@ public class SearchFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycle_view);
         recyclerView.setLayoutManager(layoutManager);
 
-        progressBar = view.findViewById(R.id.progressBar);
-
-
         noItemLayout = view.findViewById(R.id.no_item_layout);
 
         recyclerViewAdapter = new RecyclerViewAdapter(getContext());
@@ -209,16 +205,13 @@ public class SearchFragment extends Fragment {
             .subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
                 @Override
                 public void onStart() {
-                    progressBar.setVisibility(View.VISIBLE);
                 }
-
 
                 @Override
                 public void onSuccess(List<CafeteriaData> result) {
                     updateRecycleView(result);
                     mapFab.setVisibility(View.VISIBLE);
                     noItemLayout.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.GONE);
 
                 }
 
@@ -232,7 +225,6 @@ public class SearchFragment extends Fragment {
                     showErrorDialog(query);
                     mapFab.setVisibility(View.GONE);
                     noItemLayout.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.GONE);
 
                     recyclerViewAdapter.reset();
                 }
@@ -269,15 +261,13 @@ public class SearchFragment extends Fragment {
         View time = childView.findViewById(R.id.timeLayout);
         View location = childView.findViewById(R.id.locationLayout);
         View phone = childView.findViewById(R.id.phoneLayout);
-        View cardLayout = childView.findViewById(R.id.cardLayout);
 
-        Pair[] pairs = new Pair[5];
+        Pair[] pairs = new Pair[4];
 
         pairs[0] = new Pair<>(time, getString(R.string.timeTransition));
         pairs[1] = new Pair<>(location, getString(R.string.locationTransition));
         pairs[2] = new Pair<>(phone, getString(R.string.phoneTransition));
-        pairs[3] = new Pair<>(cardLayout, getString(R.string.cardTransition));
-        pairs[4] = new Pair<>(name, getString(R.string.nameTransition));
+        pairs[3] = new Pair<>(name, getString(R.string.nameTransition));
 
 
         ActivityOptionsCompat options = (ActivityOptionsCompat) ActivityOptionsCompat.
