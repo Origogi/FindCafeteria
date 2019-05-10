@@ -24,6 +24,9 @@ import com.cafeteria.free.findcafeteria.util.ImageSliderAdapter;
 import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.util.MyScaleAnimation;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.CafeViewHolder> {
 
@@ -105,14 +109,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.viewPager.setAdapter(imageSliderAdapter);
 
         Observable<ImageResponse> observable = ImageProvider.get(cardViewDto.getFacilityName());
-        observable
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(it -> {
-                updateImage(imageSliderAdapter,it);
+
+
+        observable.subscribe(new DisposableObserver<ImageResponse>() {
+            @Override
+            public void onNext(ImageResponse imageResponse) {
+                updateImage(imageSliderAdapter,imageResponse);
                 if(imageSliderAdapter.getCount() > 0) {
                     holder.startAutoScroll(imageSliderAdapter.getCount());
                 }
-            });
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Logger.d((e.toString()));
+
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
 
     }
 
