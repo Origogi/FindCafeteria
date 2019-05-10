@@ -33,6 +33,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
 
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -190,8 +191,22 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         longitude = cafeteriaData.getLongitude();
 
         Observable<ImageResponse> obser = ImageProvider.get(cafeteriaData.getFacilityName());
-        obser.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(it -> updateImage(it));
+
+        obser.subscribe(new DisposableObserver<ImageResponse>() {
+            @Override
+            public void onNext(ImageResponse imageResponse) {
+                updateImage(imageResponse);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Logger.d((e.toString()));
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
