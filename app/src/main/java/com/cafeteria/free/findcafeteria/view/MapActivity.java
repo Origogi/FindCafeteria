@@ -88,8 +88,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapPagerAdapter = new MapPagerAdapter(this, cafeteriaList);
         binding.mapindicator.setAdapter(mapPagerAdapter);
         binding.mapindicator.setClipToPadding(false);
-        binding.mapindicator.setPageMargin(20);
-        binding.mapindicator.setPadding(0, 0, 40, 0);
+        binding.mapindicator.setPageMargin(60);
+//        binding.mapindicator.setPadding(0, 0, 40, 0);
 
         //슬라이드 할때 마커 이동,카메라 이동
         binding.mapindicator.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

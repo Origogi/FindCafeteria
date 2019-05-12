@@ -48,6 +48,11 @@
         <item name="android:layout_width">20dp</item>
     </style>
 
+    <style name="ActionIconStyle">
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">30dp</item>
+    </style>
+
     <style name="InformationLayoutStyle">
         <item name="android:layout_marginStart">15dp</item>
         <item name="android:layout_height">wrap_content</item>

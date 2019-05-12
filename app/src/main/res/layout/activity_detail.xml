@@ -112,6 +112,81 @@
                             android:layout_marginBottom="20dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
+
+                        <LinearLayout
+                            android:layout_marginBottom="20dp"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:gravity="center"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:src="@drawable/ic_local_phone_black_36dp"
+                                    style="@style/ActionIconStyle" />
+
+                                <TextView
+                                    android:textStyle="bold"
+
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="전화하기"/>
+
+
+                            </LinearLayout>
+
+
+
+                            <LinearLayout
+                                android:gravity="center"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:src="@drawable/ic_favorite_red"
+                                    style="@style/ActionIconStyle" />
+
+                                <TextView
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:text="즐겨찾기"/>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:gravity="center"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:src="@drawable/ic_share_black_24dp"
+                                    style="@style/ActionIconStyle" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+
+                                    android:text="공유하기"/>
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
                         <LinearLayout
                             style="@style/InformationLayoutStyle"
                             android:transitionName="@string/locationTransition">
