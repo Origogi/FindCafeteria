@@ -11,42 +11,9 @@
     </data>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <ImageButton
-                android:id="@+id/backButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:background="#00000000"
-                android:src="@drawable/ic_arrow_back" />
-
-
-            <ImageButton
-                android:id="@+id/favoriteButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="15dp"
-                android:background="#00000000"
-                android:src="@drawable/ic_favorite_red" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dp"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/drop_shadow"></View>
-
-        </RelativeLayout>
+        android:layout_height="match_parent">
 
         <ScrollView
             android:background="@color/colorWhite"
@@ -120,19 +87,20 @@
                             android:layout_height="wrap_content">
 
                             <LinearLayout
+                                android:background="?android:attr/selectableItemBackground"
                                 android:gravity="center"
                                 android:layout_weight="1"
                                 android:orientation="vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
-                                <ImageView
-                                    android:src="@drawable/ic_local_phone_black_36dp"
+                                <ImageButton
+                                    android:id="@+id/startCallButton"
+                                    android:src="@drawable/ic_phone"
+                                    android:background="?android:attr/selectableItemBackground"
                                     style="@style/ActionIconStyle" />
 
                                 <TextView
-                                    android:textStyle="bold"
-
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="전화하기"/>
@@ -149,15 +117,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
-                                <ImageView
-                                    android:src="@drawable/ic_favorite_red"
-                                    style="@style/ActionIconStyle" />
+                                <ImageButton
+                                    android:id="@+id/favoriteButton"
+                                    style="@style/ActionIconStyle"
+                                    android:src="@drawable/selector_favorite_button" />
 
                                 <TextView
                                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textStyle="bold"
                                     android:text="즐겨찾기"/>
 
 
@@ -170,14 +138,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
 
-                                <ImageView
+                                <ImageButton
+                                    android:id="@+id/startShareButton"
+                                    android:background="?android:attr/selectableItemBackground"
                                     android:src="@drawable/ic_share_black_24dp"
                                     style="@style/ActionIconStyle" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textStyle="bold"
 
                                     android:text="공유하기"/>
 
@@ -241,11 +210,11 @@
                                 style="@style/InformationTextStyle" />
                         </LinearLayout>
 
-                        <LinearLayout style="@style/InformationLayoutStyle">
+                        <LinearLayout
+                            style="@style/InformationLayoutStyle">
 
                             <ImageView
                                 style="@style/InformationIconStyle"
-
                                 android:src="@drawable/ic_supervisor_account_black_48dp" />
 
                             <TextView
@@ -267,8 +236,20 @@
                         android:layout_margin="15dp" />
                 </LinearLayout>
 
+
+
+
         </ScrollView>
-    </LinearLayout>
+
+        <ImageButton
+            android:layout_margin="15dp"
+            android:id="@+id/backButton"
+            android:src="@drawable/ic_arrow_back_white"
+            android:background="@drawable/shape_backbutton_background"
+            style="@style/ActionIconStyle" />
+
+
+    </RelativeLayout>
 
 
 </layout>

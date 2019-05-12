@@ -251,7 +251,15 @@ public class SearchBarActivity extends AppCompatActivity {
             result += address.getLocality();
         }
 
-        result += " " + address.getSubLocality();
+        if (TextUtils.isEmpty(address.getSubLocality())) {
+
+            if (!TextUtils.isEmpty(address.getSubAdminArea())) {
+                result += " " +address.getSubAdminArea();
+            }
+        }
+        else {
+            result += " " + address.getSubLocality();
+        }
 
         return result;
     }

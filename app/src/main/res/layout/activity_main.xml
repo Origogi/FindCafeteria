@@ -16,7 +16,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:background="@drawable/corner"
+            android:background="@drawable/shape_launcher_background"
             android:src="@drawable/ic_app_icon"/>
 
         <TextView
@@ -40,7 +40,7 @@
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
-            android:background="#00000000"
+            android:background="?android:attr/selectableItemBackground"
             android:src="@drawable/ic_search_black"/>
 
         <View

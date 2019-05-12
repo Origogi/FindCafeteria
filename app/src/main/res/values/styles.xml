@@ -51,6 +51,7 @@
     <style name="ActionIconStyle">
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_width">30dp</item>
+        <item name="android:background">@color/colorWhite</item>
     </style>
 
     <style name="InformationLayoutStyle">

@@ -12,6 +12,7 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cafeteria.free.findcafeteria.R;
@@ -69,32 +70,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.phoneNumberTv.setText(cardViewDto.getPhone());
         holder.timeTv.setText(cardViewDto.getTime());
 
-        if (cardViewDto.isFavorite()) {
-            holder.favorite.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_red));
-        }
-        else {
-            holder.favorite.setImageDrawable(context.getDrawable(R.drawable.ic_not_favorite_red));
-        }
+
+        holder.favorite.setSelected(cardViewDto.isFavorite());
 
         holder.favorite.setOnTouchListener(new View.OnTouchListener() {
-            boolean checked = cardViewDto.isFavorite();
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     v.setTag("touched");
                     v.startAnimation(MyScaleAnimation.instance);
-                    if (checked) {
-                        ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.ic_not_favorite_red));
-                        checked = false;
+
+                    v.setSelected(!v.isSelected());
+
+                    if (v.isSelected()) {
+                        Toast.makeText(context, "즐겨찾기에 추가가 되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        ((ImageView)v).setImageDrawable(context.getDrawable(R.drawable.ic_favorite_red));
-                        checked = true;
+                        Toast.makeText(context, "즐겨찾기에 삭제가 되었습니다.", Toast.LENGTH_SHORT).show();
+
                     }
 
                     new Thread(()->{
                         CafeteriaDataDao dao = AppDatabase.getInstance(context).getCafeteriaDataDao();
-                        cardViewDto.setFavorite(checked);
+                        cardViewDto.setFavorite(v.isSelected());
                         int result = dao.update(cardViewDto);
                         Logger.d("" + result);
                     }).start();

@@ -1,17 +1,20 @@
 package com.cafeteria.free.findcafeteria.view;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.cafeteria.free.findcafeteria.R;
 import com.bumptech.glide.Glide;
+import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityDetailBinding;
 import com.cafeteria.free.findcafeteria.model.ImageProvider;
 import com.cafeteria.free.findcafeteria.model.ImageResponse;
@@ -32,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 
 
@@ -59,35 +61,32 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         setData();
         setUiPageViewController();
 
-        binding.backButton.setOnClickListener(v-> {
-            finish();
+        binding.backButton.setOnClickListener(v -> {
+            super.onBackPressed();
         });
 
         Logger.d(cafeteriaData.toString());
-        if (cafeteriaData.isFavorite()) {
-            binding.favoriteButton.setImageDrawable(getApplication().getDrawable(R.drawable.ic_favorite_red));
-        }
-        else {
-            binding.favoriteButton.setImageDrawable(getApplication().getDrawable(R.drawable.ic_not_favorite_red));
-        }
+
+        binding.favoriteButton.setSelected(cafeteriaData.isFavorite());
 
         binding.favoriteButton.setOnTouchListener(new View.OnTouchListener() {
             boolean checked = cafeteriaData.isFavorite();
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     v.setTag("touched");
+
                     v.startAnimation(MyScaleAnimation.instance);
-                    if (checked) {
-                        ((ImageView)v).setImageDrawable(getApplication().getDrawable(R.drawable.ic_not_favorite_red));
-                        checked = false;
-                    }
-                    else {
-                        ((ImageView)v).setImageDrawable(getApplication().getDrawable(R.drawable.ic_favorite_red));
-                        checked = true;
+                    v.setSelected(!v.isSelected());
+
+                    if (v.isSelected()) {
+                        Toast.makeText(DetailActivity.this, "즐겨찾기에 추가가 되었습니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(DetailActivity.this, "즐겨찾기에 삭제가 되었습니다.", Toast.LENGTH_SHORT).show();
                     }
 
-                    new Thread(()->{
+                    new Thread(() -> {
                         CafeteriaDataDao dao = AppDatabase.getInstance(getApplication()).getCafeteriaDataDao();
                         cafeteriaData.setFavorite(checked);
                         int result = dao.update(cafeteriaData);
@@ -100,8 +99,44 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
-    }
+        String phone = cafeteriaData.getPhone();
 
+        if (TextUtils.isEmpty(phone)) {
+            binding.startCallButton.setEnabled(false);
+        } else {
+            binding.startCallButton.setOnClickListener(v -> {
+
+                Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+                startActivity(callIntent);
+            });
+        }
+
+
+        binding.startShareButton.setOnClickListener(v -> {
+
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+
+            String shareContent = "";
+
+            //시설명
+            shareContent += cafeteriaData.getFacilityName() + "\n\n";
+
+            //주소
+            shareContent += "주소 : " + cafeteriaData.getAddress() + "\n";
+
+            //전화번호
+            shareContent += "전화번호 : " + cafeteriaData.getPhone();
+
+            intent.putExtra(Intent.EXTRA_TEXT, shareContent);
+
+            Intent chooser = Intent.createChooser(intent, "공유");
+            startActivity(chooser);
+
+        });
+
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

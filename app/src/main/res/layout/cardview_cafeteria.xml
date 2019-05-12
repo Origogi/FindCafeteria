@@ -34,7 +34,7 @@
                 android:layout_height="30dp"
                 android:layout_margin="12dp"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_not_favorite_red" />
+                android:src="@drawable/selector_favorite_button" />
 
             <TextView
                 android:id="@+id/name"

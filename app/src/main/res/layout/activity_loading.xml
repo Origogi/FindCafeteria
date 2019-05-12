@@ -12,7 +12,7 @@
         android:transitionName="@string/iconTransition"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/corner"
+        android:background="@drawable/shape_launcher_background"
         android:src="@drawable/ic_app_icon"/>
 
     <ImageView

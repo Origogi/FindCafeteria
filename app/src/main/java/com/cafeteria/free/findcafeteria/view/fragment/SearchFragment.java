@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -65,6 +66,8 @@ public class SearchFragment extends Fragment {
     private View noItemLayout;
 
     private String currentQuery;
+
+    private boolean isDestroyed = false;
 
     private RecyclerView.OnItemTouchListener itemTouchListener = new RecyclerView.OnItemTouchListener() {
         @Override
@@ -129,10 +132,31 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        Logger.d("");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Logger.d("");
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Logger.d("");
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+
+        return initView(view);
+    }
+
+    @NonNull
+    private View initView(View view) {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
@@ -195,7 +219,20 @@ public class SearchFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+
+    }
+
     public void updateView(String query) {
+        Logger.d("");
+
+        if (isDestroyed) {
+            initView(getView());
+        }
+
         currentQuery = query;
 
         Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(getContext(), query);
