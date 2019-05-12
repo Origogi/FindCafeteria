@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="activity"
             type="com.cafeteria.free.findcafeteria.view.DetailActivity" />
@@ -39,21 +38,23 @@
 
                         <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
                             android:id="@+id/homeslider"
+                            android:scaleType="centerCrop"
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fitsSystemWindows="true"
                             android:transitionName="@string/imageTransition"
                             tools:listitem="@layout/viewpager_image" />
 
                         <LinearLayout
+                            android:background="@drawable/shape_dots_background"
                             android:id="@+id/viewPagerCountDots"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:gravity="center"
                             android:orientation="horizontal"
-                            android:paddingBottom="10dp">
+                            android:paddingTop="5dp"
+                           >
 
                         </LinearLayout>
 
@@ -81,6 +82,8 @@
 
 
                         <LinearLayout
+                            android:padding="10dp"
+                            android:background="@drawable/shape_action_icon_background"
                             android:layout_marginBottom="20dp"
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
@@ -103,7 +106,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="전화하기"/>
+                                    android:text="전화하기"
+                                    android:textSize="8sp" />
 
 
                             </LinearLayout>
@@ -120,13 +124,14 @@
                                 <ImageButton
                                     android:id="@+id/favoriteButton"
                                     style="@style/ActionIconStyle"
+                                    android:background="@android:color/transparent"
                                     android:src="@drawable/selector_favorite_button" />
 
                                 <TextView
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="즐겨찾기"/>
+                                    android:text="즐겨찾기"
+                                    android:textSize="8sp" />
 
 
                             </LinearLayout>
@@ -145,6 +150,7 @@
                                     style="@style/ActionIconStyle" />
 
                                 <TextView
+                                    android:textSize="8sp"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
 

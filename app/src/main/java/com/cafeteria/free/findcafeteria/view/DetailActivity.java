@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -43,8 +46,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private ActivityDetailBinding binding;
     private String longitude;
     private String latitude;
-    private int dotsCount;
-    private ImageView[] dots;
     private ImageSliderAdapter imageSliderAdapter;
     private CafeteriaData cafeteriaData;
     private GoogleMap mMap;
@@ -59,7 +60,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         binding.homeslider.setAdapter(imageSliderAdapter);
 
         setData();
-        setUiPageViewController();
 
         binding.backButton.setOnClickListener(v -> {
             super.onBackPressed();
@@ -164,12 +164,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
-    private void setUiPageViewController() {
+    private void setUiPageViewController(int count) {
+        ImageView[] dots;
 
-        dotsCount = 3;
-        dots = new ImageView[dotsCount];
+        dots = new ImageView[count];
 
-        for (int i = 0; i < dotsCount; i++) {
+        for (int i = 0; i < count; i++) {
             dots[i] = new ImageView(this);
             dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
 
@@ -177,13 +177,21 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
-            params.setMargins(4, 0, 4, 0);
+            params.setMargins(20, 5, 20, 0);
+
 
             binding.viewPagerCountDots.addView(dots[i], params);
         }
-        dots[0].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
+
+        Animation expandAni = AnimationUtils.loadAnimation(this, R.anim.expansion);
+        Animation reduceAni = AnimationUtils.loadAnimation(this, R.anim.reduction);
+
+
+        dots[0].startAnimation(expandAni);
 
         binding.homeslider.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            int prevIndex = 0;
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -191,13 +199,10 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
             @Override
             public void onPageSelected(int position) {
-                for (int i = 0; i < dotsCount; i++) {
-                    dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
 
-                }
-                if (dots != null) {
-                    dots[position % dotsCount].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
-                }
+                dots[prevIndex].startAnimation(reduceAni);
+                dots[position].startAnimation(expandAni);
+                prevIndex = position;
             }
 
             @Override
@@ -255,12 +260,24 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         //3개만 가져오는걸로 변경
         List<String> images = new ArrayList<>();
 
-        for (int i = 0; i < 3 && i < imageResponse.imageInfos.size(); i++) {
+        int imageCount = 0;
+
+        if (imageResponse.imageInfos.size() > 5) {
+            imageCount = 5;
+        }
+        else {
+            imageCount = imageResponse.imageInfos.size();
+        }
+
+        for (int i = 0; i < 5 && i < imageCount; i++) {
             images.add(imageResponse.imageInfos.get(i).imageUrl);
         }
 
         imageSliderAdapter.addImageUri(images);
         imageSliderAdapter.notifyDataSetChanged();
+
+        setUiPageViewController(imageCount);
+
     }
 
     @Override
