@@ -2,14 +2,18 @@ package com.cafeteria.free.findcafeteria.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityMapBinding;
@@ -135,6 +139,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.565953, 126.976852), 11)); //기본 서울시청
 
+        gMap.setPadding(0,0,0,400);
+
         // 마커 추가
         List<LatLng> latLngList = new ArrayList<>();
         for (int i = 0; i < cafeteriaList.size(); i++) {
@@ -216,5 +222,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         binding.mapindicator.setCurrentItem(Integer.parseInt(marker.getSnippet()));
         return true;
     }
+
+
+
+
 
 }

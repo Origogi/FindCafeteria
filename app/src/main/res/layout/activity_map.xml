@@ -30,16 +30,12 @@
             android:layout_marginBottom="10dp"
             android:id="@+id/mapindicator"
             android:overScrollMode="never"
-
             android:layout_width="match_parent"
             android:paddingEnd="@dimen/card_padding"
             android:paddingLeft="@dimen/card_padding"
             android:paddingRight="@dimen/card_padding"
             android:paddingStart="@dimen/card_padding"
             android:foregroundGravity="center"
-
-
-
             android:layout_height="90dp"
             >
         </android.support.v4.view.ViewPager>

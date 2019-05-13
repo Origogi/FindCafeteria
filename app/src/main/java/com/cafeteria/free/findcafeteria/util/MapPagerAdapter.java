@@ -1,8 +1,11 @@
 package com.cafeteria.free.findcafeteria.util;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,22 +26,22 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.subjects.PublishSubject;
 
 
 public class MapPagerAdapter extends PagerAdapter {
 
-    private Context mContext;
+    private Activity activity;
     private LayoutInflater mLayoutInflater;
     private List<CafeteriaData> cafeteriaDataList;
     private List<String> thumbnailList;
 
 
-    public MapPagerAdapter(Context mContext, List<CafeteriaData> cafeteriaDataList) {
-        this.mContext = mContext;
-        this.mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public MapPagerAdapter(Activity activity, List<CafeteriaData> cafeteriaDataList) {
+        this.activity = activity;
+        this.mLayoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.cafeteriaDataList = cafeteriaDataList;
     }
-
 
     //뷰페이저를 리프레쉬하려면 이 메소드 써야한대요
     @Override
@@ -62,7 +65,6 @@ public class MapPagerAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.viewpager_mapinfo, container, false);
 
         ImageView mapinfo_thumbnail = itemView.findViewById(R.id.mapinfo_thumbnail);
-        TextView mapinfo_index = itemView.findViewById(R.id.mapinfo_index);
         TextView mapinfo_cafename = itemView.findViewById(R.id.mapinfo_cafename);
         TextView mapinfo_location = itemView.findViewById(R.id.mapinfo_location);
 
@@ -73,29 +75,55 @@ public class MapPagerAdapter extends PagerAdapter {
         Observable<ImageResponse> obser = ImageProvider.get(cafeteria.getFacilityName());
         obser.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(it -> {
-                    Glide.with(mContext).load(it.imageInfos.get(0).imageUrl).placeholder(R.drawable.loadingimage).error(R.drawable.loadingimage).into(mapinfo_thumbnail);
+                    Glide.with(activity).load(it.imageInfos.get(0).imageUrl).placeholder(R.drawable.loadingimage).error(R.drawable.loadingimage).into(mapinfo_thumbnail);
                 });
 
-        mapinfo_index.setText(String.valueOf(position + 1) + ". ");
         mapinfo_cafename.setText(cafeteria.getFacilityName());
         mapinfo_location.setText(cafeteria.getAddress());
 
-        itemView.setOnClickListener(v -> startDetailActivity(cafeteria));
+        itemView.setOnClickListener(v -> startDetailActivity(itemView, cafeteria));
 
         container.addView(itemView);
         return itemView;
     }
 
-    private void startDetailActivity(CafeteriaData data) {
-        Intent intent = new Intent(mContext, DetailActivity.class);
-        intent.putExtra("data", data);
-        mContext.startActivity(intent);
-    }
+
+//    private void startDetailActivity(CafeteriaData data) {
+////        Intent intent = new Intent(activity, DetailActivity.class);
+////        intent.putExtra("data", data);
+////        activity.startActivity(intent);
+//
+//        selectedCafeteriaData.onNext(data);
+//    }
 
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
+    }
+
+
+    private void startDetailActivity(View childView, CafeteriaData data) {
+        Intent intent = new Intent(activity, DetailActivity.class);
+        intent.putExtra("data", data);
+
+
+        View name = childView.findViewById(R.id.mapinfo_cafename);
+        View layout = childView.findViewById(R.id.cardLayout);
+        View image = childView.findViewById(R.id.mapinfo_thumbnail);
+
+
+        Pair[] pairs = new Pair[3];
+
+        pairs[0] = new Pair<>(layout, activity.getString(R.string.cardTransition));
+        pairs[1] = new Pair<>(name, activity.getString(R.string.nameTransition));
+        pairs[2] = new Pair<>(image, activity.getString(R.string.imageTransition));
+
+
+        ActivityOptionsCompat options = (ActivityOptionsCompat) ActivityOptionsCompat.
+                makeSceneTransitionAnimation(activity, pairs);
+
+        activity.startActivity(intent, options.toBundle());
     }
 
 

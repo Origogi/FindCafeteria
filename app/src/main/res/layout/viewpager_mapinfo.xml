@@ -2,6 +2,8 @@
 
 
 <android.support.v7.widget.CardView
+    android:id="@+id/cardLayout"
+    android:transitionName="@string/cardTransition"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -15,11 +17,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
+                android:transitionName="@string/imageTransition"
+                android:layout_margin="5dp"
                 android:id="@+id/mapinfo_thumbnail"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
@@ -27,50 +32,52 @@
                 android:src="@drawable/loadingimage"
                 />
 
+
             <LinearLayout
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/mapinfo_thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical"
-                android:paddingLeft="5dp">
+                android:layout_marginTop="3dp"
+                android:orientation="vertical">
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/mapinfo_cafename"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textStyle="bold"
+                    android:text="Title"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="15sp"
+                     />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/mapinfo_index"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="19sp"
-                        android:textStyle="bold" />
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_place_black_36dp"
+                        style="@style/InformationIconStyle" />
+
 
                     <TextView
-                        android:id="@+id/mapinfo_cafename"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/mapinfo_index"
-                        android:singleLine="true"
-                        android:textSize="19sp"
-                        android:textStyle="bold" />
-
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:orientation="horizontal">
-
-                    <TextView
+                        android:layout_gravity="center"
+                        android:text="Address"
                         android:id="@+id/mapinfo_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                        android:textSize="10sp" />
+
+
+
+                    </LinearLayout>
+
+
             </LinearLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
     </FrameLayout>
 
 </android.support.v7.widget.CardView>

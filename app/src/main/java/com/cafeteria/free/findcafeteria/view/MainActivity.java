@@ -1,15 +1,19 @@
 package com.cafeteria.free.findcafeteria.view;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private BackPressCloseHandler closeHandler;
 
+    private View titleBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         titleTextView = findViewById(R.id.titleTextView);
+        titleBar = findViewById(R.id.titlebar);
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
@@ -126,8 +133,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         searchButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SearchBarActivity.class);
-            startActivityForResult(intent, 100);
+            startSearchBarActivity();
         });
 
         closeHandler = new BackPressCloseHandler(this);
@@ -182,6 +188,21 @@ public class MainActivity extends AppCompatActivity {
                 activity.finish();
             }
         }
-
     }
+
+    @SuppressLint("RestrictedApi")
+    private void startSearchBarActivity() {
+        Intent intent = new Intent(MainActivity.this, SearchBarActivity.class);
+
+        Pair[] pairs = new Pair[1];
+
+        pairs[0] = new Pair<>(titleBar, getString(R.string.cardTransition));
+
+
+        ActivityOptionsCompat options = (ActivityOptionsCompat) ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, pairs);
+
+        startActivityForResult(intent, 100, options.toBundle());
+    }
+
 }

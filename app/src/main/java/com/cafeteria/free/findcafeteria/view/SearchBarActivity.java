@@ -131,7 +131,7 @@ public class SearchBarActivity extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.backButton);
 
         backButton.setOnClickListener(v -> {
-            finish();
+            super.onBackPressed();
         });
 
         ImageButton myLocationButton = findViewById(R.id.myLocationButton);
