@@ -157,6 +157,7 @@ public class SearchFragment extends Fragment {
 
     @NonNull
     private View initView(View view) {
+        Logger.d("");
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
@@ -203,6 +204,11 @@ public class SearchFragment extends Fragment {
         });
 
 
+        viewModel.getSubmitKeywordLiveData().observe(this, keyword-> {
+            updateView(keyword);
+
+        });
+
         return view;
     }
 
@@ -226,7 +232,7 @@ public class SearchFragment extends Fragment {
 
     }
 
-    public void updateView(String query) {
+    private void updateView(String query) {
         Logger.d("");
 
         if (isDestroyed) {

@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (!TextUtils.isEmpty(keyword)) {
                 titleTextView.setText(keyword);
-                searchFragment.updateView(keyword);
+//                searchFragment.updateView(keyword);
                 this.keyword = keyword;
             }
         });
