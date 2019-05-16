@@ -75,7 +75,9 @@ public class MapPagerAdapter extends PagerAdapter {
         Observable<ImageResponse> obser = ImageProvider.get(cafeteria.getFacilityName());
         obser.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(it -> {
-                    Glide.with(activity).load(it.imageInfos.get(0).imageUrl).placeholder(R.drawable.loadingimage).error(R.drawable.loadingimage).into(mapinfo_thumbnail);
+                    if (it.imageInfos.size() > 0) {
+                        Glide.with(activity).load(it.imageInfos.get(0).imageUrl).placeholder(R.drawable.loadingimage).error(R.drawable.loadingimage).into(mapinfo_thumbnail);
+                    }
                 });
 
         mapinfo_cafename.setText(cafeteria.getFacilityName());
