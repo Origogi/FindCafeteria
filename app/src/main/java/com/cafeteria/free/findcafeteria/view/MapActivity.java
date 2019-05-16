@@ -125,6 +125,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+        binding.backButton.setOnClickListener(v -> {
+            super.onBackPressed();
+        });
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapActivity.this::onMapReady);
