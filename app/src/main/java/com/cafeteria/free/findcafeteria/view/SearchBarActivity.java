@@ -266,6 +266,13 @@ public class SearchBarActivity extends AppCompatActivity {
 
     private void summitKeyword(String keyword) {
         Logger.d(keyword);
+
+        if (TextUtils.isEmpty(keyword)) {
+            Toast.makeText(this, "검색어를 먼저 입력하세요", Toast.LENGTH_SHORT).show();
+            searchEditText.requestFocus();
+            return;
+        }
+
         Intent resultIntent = new Intent();
         resultIntent.putExtra("keyword", keyword);
         setResult(RESULT_OK, resultIntent);

@@ -205,6 +205,7 @@ public class SearchFragment extends Fragment {
 
 
         viewModel.getSubmitKeywordLiveData().observe(this, keyword-> {
+
             updateView(keyword);
 
         });
