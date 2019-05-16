@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
                     viewPager.setCurrentItem(1);
                     result = true;
                     titleTextView.setText(getString(R.string.app_name));
-
                     break;
                 case R.id.action_setting_menu:
                     viewPager.setCurrentItem(2);

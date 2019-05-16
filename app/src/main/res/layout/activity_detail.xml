@@ -9,7 +9,6 @@
             type="com.cafeteria.free.findcafeteria.view.DetailActivity" />
     </data>
 
-
     <RelativeLayout
         android:transitionName="@string/cardTransition"
         android:layout_width="match_parent"
@@ -240,11 +239,20 @@
                         class="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
-                        android:layout_margin="15dp" />
+                        android:layout_margin="15dp"  />
+
+
+                    <ImageView
+                        android:layout_margin="15dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/img_notfound"
+                        android:visibility="gone"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_warning"
+                        android:tint="@color/colorPrimary"
+                        />
                 </LinearLayout>
-
-
-
 
         </ScrollView>
 
