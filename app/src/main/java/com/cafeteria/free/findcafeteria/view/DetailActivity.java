@@ -142,6 +142,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
         //TODO crash~~~~
         //latitude 이게 null인 case가 존재하는 거 같음
         Logger.d(latitude + "/" + longitude);
@@ -248,9 +249,16 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.detail_map);
+
+        if (latitude == null || longitude == null) {
+            Toast.makeText(this, "위치를 찾을 수 없습니다!", Toast.LENGTH_SHORT).show();
+            mapFragment.getView().setVisibility(View.GONE);
+            binding.imgNotfound.setVisibility(View.VISIBLE);
+            return;
+        }
+
         mapFragment.getMapAsync(this);
 
     }
