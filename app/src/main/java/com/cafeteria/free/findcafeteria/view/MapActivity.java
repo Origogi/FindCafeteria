@@ -2,18 +2,15 @@ package com.cafeteria.free.findcafeteria.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.text.TextUtils;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityMapBinding;
@@ -34,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -71,7 +69,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             @Override
             public void onSuccess(List<CafeteriaData> cafeteriaData) {
-                cafeteriaList = cafeteriaData;
+                cafeteriaList = cafeteriaData.stream().filter(data ->
+                        (!TextUtils.isEmpty(data.getLatitude()) && !TextUtils.isEmpty(data.getLongitude()))
+                ).collect(Collectors.toList());
                 initView();
             }
 
@@ -139,7 +139,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.565953, 126.976852), 11)); //기본 서울시청
 
-        gMap.setPadding(0,0,0,400);
+        gMap.setPadding(0, 0, 0, 400);
 
         // 마커 추가
         List<LatLng> latLngList = new ArrayList<>();
@@ -222,9 +222,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         binding.mapindicator.setCurrentItem(Integer.parseInt(marker.getSnippet()));
         return true;
     }
-
-
-
 
 
 }
