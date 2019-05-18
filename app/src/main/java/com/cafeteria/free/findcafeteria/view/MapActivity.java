@@ -95,6 +95,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         binding.mapindicator.setPageMargin(60);
 //        binding.mapindicator.setPadding(0, 0, 40, 0);
 
+
         //슬라이드 할때 마커 이동,카메라 이동
         binding.mapindicator.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -103,21 +104,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             @Override
             public void onPageSelected(int position) {
-                LatLng loc = new LatLng(Double.parseDouble(cafeteriaList.get(position).getLatitude()), Double.parseDouble(cafeteriaList.get(position).getLongitude()));
-                CameraUpdate center = CameraUpdateFactory.newLatLngZoom(loc, 14);
-                gMap.animateCamera(center);
 
-                if (selectedMarker != null) {
-                    selectedMarker.setIcon(bitmapDescriptorFromVector(MapActivity.this,R.drawable.ic_restaurant_menu));
-                    selectedMarker.setZIndex(0);
-                }
+                runOnUiThread(() ->{
+                    LatLng loc = new LatLng(Double.parseDouble(cafeteriaList.get(position).getLatitude()), Double.parseDouble(cafeteriaList.get(position).getLongitude()));
+                    CameraUpdate center = CameraUpdateFactory.newLatLngZoom(loc, 14);
+                    gMap.animateCamera(center);
 
-                //선택한 마커 이미지 변경
-                if (markers.size() != 0) {
-                    selectedMarker = markers.get(position);
-                    selectedMarker.setZIndex(99);
-                    selectedMarker.setIcon(bitmapDescriptorFromVector(MapActivity.this,R.drawable.ic_arrow_back));
-                }
+                    if (selectedMarker != null) {
+                        selectedMarker.setIcon(bitmapDescriptorFromVector(MapActivity.this,R.drawable.ic_restaurant_menu));
+                        selectedMarker.setZIndex(0);
+                    }
+
+                    //선택한 마커 이미지 변경
+                    if (markers.size() != 0) {
+                        selectedMarker = markers.get(position);
+                        selectedMarker.setZIndex(99);
+                        selectedMarker.setIcon(null);
+                    }
+                });
+
             }
 
             @Override
@@ -132,6 +137,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapActivity.this::onMapReady);
+
     }
 
 
@@ -175,13 +181,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorDrawableResourceId) {
-        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
