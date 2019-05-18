@@ -108,7 +108,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 gMap.animateCamera(center);
 
                 if (selectedMarker != null) {
-                    selectedMarker.setIcon(bitmapDescriptorFromVector(MapActivity.this, R.drawable.ic_restaurant_menu));
+                    selectedMarker.setIcon(bitmapDescriptorFromVector(MapActivity.this,R.drawable.ic_restaurant_menu));
                     selectedMarker.setZIndex(0);
                 }
 
@@ -116,7 +116,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (markers.size() != 0) {
                     selectedMarker = markers.get(position);
                     selectedMarker.setZIndex(99);
-                    selectedMarker.setIcon(null);
+                    selectedMarker.setIcon(bitmapDescriptorFromVector(MapActivity.this,R.drawable.ic_arrow_back));
                 }
             }
 
