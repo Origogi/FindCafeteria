@@ -163,7 +163,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             CafeteriaData cafeteria = cafeteriaList.get(i);
             LatLng latLng = new LatLng(Double.parseDouble(cafeteria.getLatitude()), Double.parseDouble(cafeteria.getLongitude()));
             latLngList.add(latLng);
-            markers.put(i, addMarker(cafeteria, i));
+
+            Marker marker = addMarker(cafeteria, i);
+            marker.setTag(i);
+            markers.put(i, marker);
         }
 
         updateCamera(latLngList);
@@ -178,19 +181,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.title(cafeteria.getFacilityName());
         markerOptions.position(position);
-        markerOptions.snippet(String.valueOf(index));
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
         return gMap.addMarker(markerOptions);
-    }
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorDrawableResourceId) {
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     //카메라 중앙으로 이동
@@ -230,8 +223,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public boolean onMarkerClick(Marker marker) {
         //해당 뷰페이지 이동 -> 스니펫에 인덱스를 넣어 태그로 이용함. ( 마커를 클릭할때와 뷰페이지를 연결 )
-        Logger.d(marker.getSnippet());
-        binding.mapindicator.setCurrentItem(Integer.parseInt(marker.getSnippet()));
+        binding.mapindicator.setCurrentItem((Integer) marker.getTag());
         return true;
     }
 
