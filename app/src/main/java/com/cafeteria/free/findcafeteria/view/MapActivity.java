@@ -30,7 +30,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import io.reactivex.Maybe;
@@ -39,7 +41,7 @@ import io.reactivex.observers.DisposableMaybeObserver;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    public ArrayList<Marker> markers = new ArrayList<>();
+    public Map<Integer , Marker> markers = new HashMap<>();
     public Marker selectedMarker;  // 현재 선택 돼 있는 마커를 지정
     private GoogleMap gMap;
     private List<CafeteriaData> cafeteriaList;
@@ -111,7 +113,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     gMap.animateCamera(center);
 
                     if (selectedMarker != null) {
-                        selectedMarker.setIcon(bitmapDescriptorFromVector(MapActivity.this,R.drawable.ic_restaurant_menu));
+                        selectedMarker.hideInfoWindow();
+                        selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                         selectedMarker.setZIndex(0);
                     }
 
@@ -120,6 +123,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         selectedMarker = markers.get(position);
                         selectedMarker.setZIndex(99);
                         selectedMarker.setIcon(null);
+                        selectedMarker.showInfoWindow();
                     }
                 });
 
@@ -158,7 +162,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             CafeteriaData cafeteria = cafeteriaList.get(i);
             LatLng latLng = new LatLng(Double.parseDouble(cafeteria.getLatitude()), Double.parseDouble(cafeteria.getLongitude()));
             latLngList.add(latLng);
-            markers.add(addMarker(cafeteria, i));
+            markers.put(i, addMarker(cafeteria, i));
         }
 
         updateCamera(latLngList);
@@ -173,9 +177,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.title(cafeteria.getFacilityName());
         markerOptions.position(position);
-        markerOptions.snippet(String.valueOf(index));
 
-        markerOptions.icon(bitmapDescriptorFromVector(this, R.drawable.ic_restaurant_menu));
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
         return gMap.addMarker(markerOptions);
     }
