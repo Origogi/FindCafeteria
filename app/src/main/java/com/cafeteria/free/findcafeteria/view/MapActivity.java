@@ -16,6 +16,7 @@ import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.databinding.ActivityMapBinding;
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
+import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.util.MapPagerAdapter;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -177,7 +178,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.title(cafeteria.getFacilityName());
         markerOptions.position(position);
-
+        markerOptions.snippet(String.valueOf(index));
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
         return gMap.addMarker(markerOptions);
@@ -229,6 +230,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public boolean onMarkerClick(Marker marker) {
         //해당 뷰페이지 이동 -> 스니펫에 인덱스를 넣어 태그로 이용함. ( 마커를 클릭할때와 뷰페이지를 연결 )
+        Logger.d(marker.getSnippet());
         binding.mapindicator.setCurrentItem(Integer.parseInt(marker.getSnippet()));
         return true;
     }
