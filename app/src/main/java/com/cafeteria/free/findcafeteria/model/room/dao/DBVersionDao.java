@@ -21,7 +21,7 @@ public interface DBVersionDao {
     public DBVersion get();
 
     @Update
-    public void update(DBVersion version);
+    public int update(DBVersion version);
 
     @Query("DELETE FROM version_table")
     public void deleteAll();

@@ -13,6 +13,10 @@ public class DBVersion {
     long id;
     int version;
 
+    public DBVersion(int version) {
+        this.version = version;
+    }
+
     public long getId() {
         return id;
     }

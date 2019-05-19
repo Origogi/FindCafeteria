@@ -94,11 +94,21 @@ public class LoadingViewModel extends AndroidViewModel {
     private Observable<List<CafeteriaData>> getCafeteria(Integer version) {
         DBVersion dbVersion = dbVersionDao.get();
 
-        if (null != dbVersion && version != dbVersion.getVersion()) {
-            dbVersionDao.deleteAll();
-            dbVersionDao.insert(new DBVersion());
+        if (null == dbVersion) {
+            Logger.d("version empty");
+            dbVersionDao.insert(new DBVersion(version));
+            return CafeteriaDataProvider.getInstance()
+                    .getCafeteriaObservable();
+        }
+        else if (null != dbVersion && version != dbVersion.getVersion()) {
+            Logger.d("old version=" + dbVersion.getVersion() + ", new version=" + version);
+            dbVersion.setVersion(version);
+            dbVersionDao.update(dbVersion);
             return CafeteriaDataProvider.getInstance().getCafeteriaObservable();
-        } else {
+        }
+        else {
+            Logger.d("version not changed");
+
             List<CafeteriaData> cafeteriaDataList = cafeteriaDataDao.getAllCafeteria();
             if (cafeteriaDataList.isEmpty()) {
                 return CafeteriaDataProvider.getInstance()
