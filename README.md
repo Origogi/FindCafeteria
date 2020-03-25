@@ -40,6 +40,8 @@
 <img alt='다운로드하기 Google Play' src='https://user-images.githubusercontent.com/35194820/77502996-c3ad6e80-6e9f-11ea-8c5d-0eef7fe8fbf3.JPG' width="500"/>
 </div><br>
 
+## Screen shot
+
  <img src="https://user-images.githubusercontent.com/35194820/77503595-57336f00-6ea1-11ea-8f08-dfb923b51019.png" width="30%">  <img src="https://user-images.githubusercontent.com/35194820/77503596-57cc0580-6ea1-11ea-9572-34a319806573.png" width="30%"> <img src="https://user-images.githubusercontent.com/35194820/77503598-58649c00-6ea1-11ea-9042-dcc821311646.png" width="30%"> 
  
   <img src="https://user-images.githubusercontent.com/35194820/77503599-58649c00-6ea1-11ea-81cd-118cd04bf3de.png" width="30%">  <img src="https://user-images.githubusercontent.com/35194820/77503601-58fd3280-6ea1-11ea-807d-acd302b45f2d.png" width="30%"> <img src="https://user-images.githubusercontent.com/35194820/77503591-5569ab80-6ea1-11ea-8af3-ee327e7560cd.png" width="30%"> 
