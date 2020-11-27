@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Desktop-FindCafeteria.iml" filepath="$PROJECT_DIR$/.idea/modules/Desktop-FindCafeteria.iml" group="FindCafeteria" />
       <module fileurl="file://$PROJECT_DIR$/FindCafeteria.iml" filepath="$PROJECT_DIR$/FindCafeteria.iml" group="FindCafeteria" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FindCafeteria-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FindCafeteria-app.iml" group="FindCafeteria/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="FindCafeteria/app" />
     </modules>
   </component>

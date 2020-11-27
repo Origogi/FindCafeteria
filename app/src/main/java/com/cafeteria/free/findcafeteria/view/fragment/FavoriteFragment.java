@@ -1,6 +1,7 @@
 package com.cafeteria.free.findcafeteria.view.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
+import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.view.DetailActivity;
 import com.cafeteria.free.findcafeteria.view.RecyclerViewAdapter;
 import com.cafeteria.free.findcafeteria.viewmodel.MainViewModel;
@@ -30,14 +32,6 @@ import com.cafeteria.free.findcafeteria.viewmodel.MainViewModel;
  * create an instance of this fragment.
  */
 public class FavoriteFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
@@ -76,33 +70,6 @@ public class FavoriteFragment extends Fragment {
 
     public FavoriteFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavoriteFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FavoriteFragment newInstance(String param1, String param2) {
-        FavoriteFragment fragment = new FavoriteFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -149,27 +116,45 @@ public class FavoriteFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Logger.d("onAttach()");
     }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Logger.d("onResume()");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Logger.d("onPause()");
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Logger.d("onStop()");
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Logger.d("onStart()");
+
+    }
 
     @Override
     public void onDetach() {
         super.onDetach();
+
+        Logger.d("onDetach()");
         mListener = null;
     }
 

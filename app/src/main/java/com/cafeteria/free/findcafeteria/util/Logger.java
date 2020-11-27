@@ -11,7 +11,7 @@ public class Logger {
     }
 
     public static void d(String msg) {
-//        Log.d(LOG_TAG, String.format(FORMAT, getCallerInfo(), msg));
+        Log.d(LOG_TAG, String.format(FORMAT, getCallerInfo(), msg));
     }
 
     public static void l(String msg) {
