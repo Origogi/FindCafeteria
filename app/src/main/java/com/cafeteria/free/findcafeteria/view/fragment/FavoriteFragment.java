@@ -1,9 +1,7 @@
 package com.cafeteria.free.findcafeteria.view.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,27 +16,17 @@ import android.widget.ImageView;
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
-import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.view.DetailActivity;
 import com.cafeteria.free.findcafeteria.view.RecyclerViewAdapter;
 import com.cafeteria.free.findcafeteria.viewmodel.MainViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FavoriteFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FavoriteFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class FavoriteFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
     private GestureDetector gestureDetector;
     private View noItemLayout;
-
-    private OnFragmentInteractionListener mListener;
 
     private RecyclerView.OnItemTouchListener itemTouchListener = new RecyclerView.OnItemTouchListener() {
         @Override
@@ -116,62 +104,6 @@ public class FavoriteFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Logger.d("onAttach()");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Logger.d("onResume()");
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Logger.d("onPause()");
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Logger.d("onStop()");
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Logger.d("onStart()");
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        Logger.d("onDetach()");
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 
     private void startDetailActivity(CafeteriaData data) {
         Intent intent = new Intent(getActivity(), DetailActivity.class);

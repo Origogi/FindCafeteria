@@ -16,8 +16,6 @@ public class SettingFragment extends Fragment {
     private View removeHistoryLayout;
     private View removeFavoriteLayout;
 
-    private OnFragmentInteractionListener mListener;
-
     public SettingFragment() {
     }
 
@@ -68,20 +66,4 @@ public class SettingFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 }

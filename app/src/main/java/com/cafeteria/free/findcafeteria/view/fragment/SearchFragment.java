@@ -1,8 +1,6 @@
 package com.cafeteria.free.findcafeteria.view.fragment;
 
-import android.app.ActivityOptions;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,11 +20,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+
 
 import com.cafeteria.free.findcafeteria.R;
 import com.cafeteria.free.findcafeteria.model.CafeteriaDataProvider;
+import com.cafeteria.free.findcafeteria.model.room.dao.CafeteriaDataDao;
+import com.cafeteria.free.findcafeteria.model.room.db.AppDatabase;
 import com.cafeteria.free.findcafeteria.model.room.entity.CafeteriaData;
 import com.cafeteria.free.findcafeteria.util.Logger;
 import com.cafeteria.free.findcafeteria.view.DetailActivity;
@@ -34,21 +33,13 @@ import com.cafeteria.free.findcafeteria.view.MapActivity;
 import com.cafeteria.free.findcafeteria.view.RecyclerViewAdapter;
 import com.cafeteria.free.findcafeteria.viewmodel.MainViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableMaybeObserver;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SearchFragment extends Fragment {
 
 
@@ -90,23 +81,9 @@ public class SearchFragment extends Fragment {
 
     };
 
-    private OnFragmentInteractionListener mListener;
-
     public SearchFragment() {
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Logger.d("");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Logger.d("");
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,14 +91,11 @@ public class SearchFragment extends Fragment {
         Logger.d("");
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-
-
         return initView(view);
     }
 
     @NonNull
     private View initView(View view) {
-        Logger.d("");
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
@@ -176,19 +150,6 @@ public class SearchFragment extends Fragment {
     }
 
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-
-    }
-
     private void updateView(String query) {
         Logger.d("");
 
@@ -231,9 +192,6 @@ public class SearchFragment extends Fragment {
             });
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 
     private void updateRecycleView(List<CafeteriaData> list) {
         recyclerViewAdapter.reset();
