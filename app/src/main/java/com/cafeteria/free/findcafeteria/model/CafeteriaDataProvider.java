@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.MaybeSubject;
 import io.reactivex.subjects.PublishSubject;
@@ -36,7 +37,7 @@ public class CafeteriaDataProvider {
 
     public Observable<Integer> getVersion() {
 
-        PublishSubject<Integer> subject =  PublishSubject.create();
+        PublishSubject<Integer> subject = PublishSubject.create();
 
         versionRefer.addValueEventListener(new ValueEventListener() {
             @Override
@@ -63,17 +64,17 @@ public class CafeteriaDataProvider {
 
     public Observable<List<CafeteriaData>> getCafeteriaObservable() {
 
-        PublishSubject<List<CafeteriaData>> subject =  PublishSubject.create();
+        PublishSubject<List<CafeteriaData>> subject = PublishSubject.create();
 
         recordsRefer.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Logger.d("size=" + dataSnapshot.getChildrenCount());
 
-                new Thread(()->{
+                new Thread(() -> {
                     List<CafeteriaData> cafeteriaDataList = new ArrayList<>();
 
-                    dataSnapshot.getChildren().forEach((data)-> {
+                    dataSnapshot.getChildren().forEach((data) -> {
 
                         CafeteriaData cafeteriaData = data.getValue(CafeteriaData.class);
                         cafeteriaDataList.add(cafeteriaData);
@@ -93,29 +94,39 @@ public class CafeteriaDataProvider {
         return subject;
     }
 
-    public Maybe<List<CafeteriaData>> getCafeteriaDataFilteredAddress(Context context, String keyword) {
+    public Single<List<CafeteriaData>> getCafeteriaDataFilteredAddress(Context context, String keyword) {
         Logger.d("search from list=" + keyword);
 
-        MaybeSubject<List<CafeteriaData>> maybeSubject = MaybeSubject.create();
+        return Single.create(sub -> {
+                    CafeteriaDataDao cafeteriaDataDao = AppDatabase.getInstance(context).getCafeteriaDataDao();
+                    List<CafeteriaData> filteredData = cafeteriaDataDao.getAllCafeteria().stream().filter(data ->
+                            data.getAddress().contains(keyword) || data.getAddress2().contains(keyword)
+                    ).collect(Collectors.toList());
 
-        if (TextUtils.isEmpty(keyword)) {
-            throw new IllegalArgumentException("Keyword is empty");
-        }
-
-        new Thread(()-> {
-            CafeteriaDataDao cafeteriaDataDao = AppDatabase.getInstance(context).getCafeteriaDataDao();
-            List<CafeteriaData> filteredData = cafeteriaDataDao.getAllCafeteria().stream().filter( data ->
-                    data.getAddress().contains(keyword) || data.getAddress2().contains(keyword)
-            ).collect(Collectors.toList());
-
-            if ( filteredData.isEmpty() ) {
-                maybeSubject.onComplete();
-            }
-            else {
-                maybeSubject.onSuccess(filteredData);
-            }
-        }).start();
-
-        return maybeSubject;
+                    sub.onSuccess(filteredData);
+                }
+        );
+//
+//        MaybeSubject<List<CafeteriaData>> maybeSubject = MaybeSubject.create();
+//
+//        if (TextUtils.isEmpty(keyword)) {
+//            throw new IllegalArgumentException("Keyword is empty");
+//        }
+//
+//        new Thread(()-> {
+//            CafeteriaDataDao cafeteriaDataDao = AppDatabase.getInstance(context).getCafeteriaDataDao();
+//            List<CafeteriaData> filteredData = cafeteriaDataDao.getAllCafeteria().stream().filter( data ->
+//                    data.getAddress().contains(keyword) || data.getAddress2().contains(keyword)
+//            ).collect(Collectors.toList());
+//
+//            if ( filteredData.isEmpty() ) {
+//                maybeSubject.onComplete();
+//            }
+//            else {
+//                maybeSubject.onSuccess(filteredData);
+//            }
+//        }).start();
+//
+//        return maybeSubject;
     }
 }

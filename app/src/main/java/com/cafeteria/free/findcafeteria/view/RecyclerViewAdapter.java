@@ -1,8 +1,13 @@
 package com.cafeteria.free.findcafeteria.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,9 +46,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private List<CafeteriaData> cardViewDtos = new ArrayList<>();
     private Context context;
+    private GestureDetector gestureDetector;
 
-    public RecyclerViewAdapter( Context context) {
+
+    public RecyclerViewAdapter(Context context) {
         this.context = context;
+        gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
 
     }
 
@@ -59,6 +72,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new CafeViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerViewAdapter.CafeViewHolder holder, int position) {
         CafeteriaData cardViewDto = cardViewDtos.get(position);
@@ -70,39 +84,52 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.phoneNumberTv.setText(cardViewDto.getPhone());
         holder.timeTv.setText(cardViewDto.getTime());
 
-
         holder.favorite.setSelected(cardViewDto.isFavorite());
 
-        holder.favorite.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    v.setTag("touched");
-                    v.startAnimation(MyScaleAnimation.instance);
-
-                    v.setSelected(!v.isSelected());
-
-                    if (v.isSelected()) {
-                        Toast.makeText(context, "즐겨찾기에 추가가 되었습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(context, "즐겨찾기에 삭제가 되었습니다.", Toast.LENGTH_SHORT).show();
-
-                    }
-
-                    new Thread(()->{
-                        CafeteriaDataDao dao = AppDatabase.getInstance(context).getCafeteriaDataDao();
-                        cardViewDto.setFavorite(v.isSelected());
-                        int result = dao.update(cardViewDto);
-                        Logger.d("" + result);
-                    }).start();
-
-                    return false;
-                }
-                return true;
+        holder.itemView.setOnTouchListener((v, e) -> {
+            if (gestureDetector.onTouchEvent(e)) {
+                startDetailActivity(holder.itemView, cardViewDto);
+                return false;
             }
+            return true;
         });
-        
+
+        holder.viewPager.setOnTouchListener((v, e) -> {
+            if (gestureDetector.onTouchEvent(e)) {
+                startDetailActivity(holder.itemView, cardViewDto);
+
+                return false;
+            }
+            return true;
+        });
+
+
+        holder.favorite.setOnTouchListener((v, event) -> {
+            if (gestureDetector.onTouchEvent(event)) {
+
+                v.startAnimation(MyScaleAnimation.instance);
+                v.setSelected(!v.isSelected());
+
+                if (v.isSelected()) {
+                    Toast.makeText(context, "즐겨찾기에 추가가 되었습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "즐겨찾기에 삭제가 되었습니다.", Toast.LENGTH_SHORT).show();
+                }
+
+                cardViewDto.setFavorite(v.isSelected());
+
+                new Thread(() -> {
+                    CafeteriaDataDao dao = AppDatabase.getInstance(context).getCafeteriaDataDao();
+                    cardViewDto.setFavorite(v.isSelected());
+                    int result = dao.update(cardViewDto);
+                    Logger.d("" + result);
+                }).start();
+                return false;
+            }
+            return true;
+
+        });
+
         ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(context, Glide.with(context));
         holder.viewPager.setAdapter(imageSliderAdapter);
 
@@ -112,8 +139,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         observable.subscribe(new DisposableObserver<ImageResponse>() {
             @Override
             public void onNext(ImageResponse imageResponse) {
-                updateImage(imageSliderAdapter,imageResponse);
-                if(imageSliderAdapter.getCount() > 0) {
+                updateImage(imageSliderAdapter, imageResponse);
+                if (imageSliderAdapter.getCount() > 0) {
                     holder.startAutoScroll(imageSliderAdapter.getCount());
                 }
             }
@@ -134,7 +161,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private void updateImage(ImageSliderAdapter imageSliderAdapter, ImageResponse imageResponse) {
         ArrayList<String> images = new ArrayList<>();
 
-        for (int i = 0;i<3 && i<imageResponse.imageInfos.size();i++) {
+        for (int i = 0; i < 3 && i < imageResponse.imageInfos.size(); i++) {
             images.add(imageResponse.imageInfos.get(i).imageUrl);
         }
         imageSliderAdapter.addImageUri(images);
@@ -191,14 +218,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             isRunning = true;
 
             disposable = Observable.interval(2000L, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(idx ->{
-                    int currentIdx = (int)(idx % imageCount);
-                    viewPager.setCurrentItem(currentIdx);
-                });
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(idx -> {
+                        int currentIdx = (int) (idx % imageCount);
+                        viewPager.setCurrentItem(currentIdx);
+                    });
         }
     }
 
 
+    private void startDetailActivity(View childView, CafeteriaData data) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("data", data);
+
+
+        View name = childView.findViewById(R.id.name);
+
+        View time = childView.findViewById(R.id.timeLayout);
+        View location = childView.findViewById(R.id.locationLayout);
+        View phone = childView.findViewById(R.id.phoneLayout);
+
+        Pair[] pairs = new Pair[4];
+
+        pairs[0] = new Pair<>(time, context.getString(R.string.timeTransition));
+        pairs[1] = new Pair<>(location, context.getString(R.string.locationTransition));
+        pairs[2] = new Pair<>(phone, context.getString(R.string.phoneTransition));
+        pairs[3] = new Pair<>(name, context.getString(R.string.nameTransition));
+
+
+        ActivityOptionsCompat options = (ActivityOptionsCompat) ActivityOptionsCompat.
+                makeSceneTransitionAnimation((Activity) context, pairs);
+
+        context.startActivity(intent, options.toBundle());
+    }
 
 }

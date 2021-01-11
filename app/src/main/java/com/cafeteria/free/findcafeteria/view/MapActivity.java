@@ -38,7 +38,10 @@ import java.util.stream.Collectors;
 
 import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -63,15 +66,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getData() {
         String query = getIntent().getStringExtra("query");
 
-        Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(this, query);
-        observable.observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
-            @Override
-            public void onStart() {
-                cafeteriaList = new ArrayList<>();
-            }
 
+        CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(this, query).subscribe(new DisposableSingleObserver<List<CafeteriaData>>() {
             @Override
-            public void onSuccess(List<CafeteriaData> cafeteriaData) {
+            public void onSuccess(@NonNull List<CafeteriaData> cafeteriaData) {
                 cafeteriaList = cafeteriaData.stream().filter(data ->
                         (!TextUtils.isEmpty(data.getLatitude()) && !TextUtils.isEmpty(data.getLongitude()))
                 ).collect(Collectors.toList());
@@ -79,12 +77,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onError(@NonNull Throwable e) {
 
-            }
-
-            @Override
-            public void onComplete() {
             }
         });
     }

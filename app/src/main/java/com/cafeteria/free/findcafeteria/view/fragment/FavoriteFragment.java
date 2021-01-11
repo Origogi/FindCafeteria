@@ -28,38 +28,6 @@ public class FavoriteFragment extends Fragment {
     private GestureDetector gestureDetector;
     private View noItemLayout;
 
-    private RecyclerView.OnItemTouchListener itemTouchListener = new RecyclerView.OnItemTouchListener() {
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View childView = rv.findChildViewUnder(e.getX(), e.getY());
-
-            if (childView != null && gestureDetector.onTouchEvent(e)) {
-                ImageView favorite = childView.findViewById(R.id.favorite_img);
-
-                if (TextUtils.isEmpty((String) favorite.getTag())) {
-                    int currentPosition = rv.getChildAdapterPosition(childView);
-                    startDetailActivity(recyclerViewAdapter.get(currentPosition));
-                }
-                favorite.setTag("");
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-        }
-
-    };
-
-    public FavoriteFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,7 +53,6 @@ public class FavoriteFragment extends Fragment {
             }
         });
 
-        recyclerView.addOnItemTouchListener(itemTouchListener);
 
         MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
 

@@ -37,8 +37,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.reactivex.Maybe;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class SearchFragment extends Fragment {
 
@@ -52,38 +55,6 @@ public class SearchFragment extends Fragment {
     private String currentQuery;
 
     private boolean isDestroyed = false;
-
-    private RecyclerView.OnItemTouchListener itemTouchListener = new RecyclerView.OnItemTouchListener() {
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View childView = rv.findChildViewUnder(e.getX(), e.getY());
-
-            if (childView != null && gestureDetector.onTouchEvent(e)) {
-                ImageView favorite = childView.findViewById(R.id.favorite_img);
-
-                if (TextUtils.isEmpty((String) favorite.getTag())) {
-                    int currentPosition = rv.getChildAdapterPosition(childView);
-                    startDetailActivity(childView, recyclerViewAdapter.get(currentPosition));
-                }
-                favorite.setTag("");
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-        }
-
-    };
-
-    public SearchFragment() {
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,8 +87,6 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        recyclerView.addOnItemTouchListener(itemTouchListener);
-
         mapFab = view.findViewById(R.id.map_fab);
         mapFab.setVisibility(View.GONE);
 
@@ -135,14 +104,7 @@ public class SearchFragment extends Fragment {
 
         MainViewModel viewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
 
-        viewModel.getFavoriteCafeteriaLiveData().observe(this, favorites -> {
-            if (!TextUtils.isEmpty(currentQuery)) {
-                updateView(currentQuery);
-            }
-        });
-
-
-        viewModel.getSubmitKeywordLiveData().observe(this, keyword-> {
+        viewModel.getSubmitKeywordLiveData().observe(this, keyword -> {
             updateView(keyword);
         });
 
@@ -159,37 +121,33 @@ public class SearchFragment extends Fragment {
 
         currentQuery = query;
 
-        Maybe<List<CafeteriaData>> observable = CafeteriaDataProvider.getInstance().getCafeteriaDataFilteredAddress(getContext(), query);
+        CafeteriaDataProvider.getInstance()
+                .getCafeteriaDataFilteredAddress(getContext(), query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<List<CafeteriaData>>() {
+                    @Override
+                    public void onSuccess(List<CafeteriaData> result) {
 
-        observable
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(new DisposableMaybeObserver<List<CafeteriaData>>() {
-                @Override
-                public void onStart() {
-                }
+                        if (result.isEmpty()) {
+                            showErrorDialog(query);
+                            mapFab.setVisibility(View.GONE);
+                            noItemLayout.setVisibility(View.VISIBLE);
 
-                @Override
-                public void onSuccess(List<CafeteriaData> result) {
-                    updateRecycleView(result);
-                    mapFab.setVisibility(View.VISIBLE);
-                    noItemLayout.setVisibility(View.GONE);
+                            recyclerViewAdapter.reset();
+                        } else {
+                            updateRecycleView(result);
+                            mapFab.setVisibility(View.VISIBLE);
+                            noItemLayout.setVisibility(View.GONE);
+                        }
 
-                }
+                    }
 
-                @Override
-                public void onError(Throwable error) {
-                    error.printStackTrace();
-                }
-
-                @Override
-                public void onComplete() {
-                    showErrorDialog(query);
-                    mapFab.setVisibility(View.GONE);
-                    noItemLayout.setVisibility(View.VISIBLE);
-
-                    recyclerViewAdapter.reset();
-                }
-            });
+                    @Override
+                    public void onError(Throwable error) {
+                        error.printStackTrace();
+                    }
+                });
     }
 
 
