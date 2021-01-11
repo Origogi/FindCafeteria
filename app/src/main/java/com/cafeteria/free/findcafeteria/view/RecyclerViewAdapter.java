@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -48,6 +49,46 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context context;
     private GestureDetector gestureDetector;
 
+    class DiffCallback extends DiffUtil.Callback {
+
+        List<CafeteriaData> newItems;
+        List<CafeteriaData> oldItems;
+
+
+        DiffCallback(List<CafeteriaData> newItems, List<CafeteriaData> oldItems) {
+            this.newItems = newItems;
+            this.oldItems = oldItems;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldItems.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newItems.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldIndex, int newIndex) {
+
+            CafeteriaData oldItem = oldItems.get(oldIndex);
+            CafeteriaData newItem = newItems.get(newIndex);
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldIndex, int newIndex) {
+
+            CafeteriaData oldItem = oldItems.get(oldIndex);
+            CafeteriaData newItem = newItems.get(newIndex);
+
+            return oldItem.equals(newItem);
+        }
+    }
+
+
 
     public RecyclerViewAdapter(Context context) {
         this.context = context;
@@ -62,8 +103,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public void setCardViewDtos(List<CafeteriaData> cafeteriaDataList) {
-        this.cardViewDtos = cafeteriaDataList;
-        notifyDataSetChanged();
+
+        DiffCallback diffCallback = new DiffCallback(cafeteriaDataList, cardViewDtos);
+
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+
+        diffResult.dispatchUpdatesTo(this);
+        cardViewDtos.clear();
+        cardViewDtos.addAll(cafeteriaDataList);
+
+
     }
 
     @Override
